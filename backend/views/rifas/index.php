@@ -11,6 +11,10 @@ use yii\helpers\Url;
 
 $this->title = 'Rifas';
 $this->params['breadcrumbs'][] = $this->title;
+echo newerton\fancybox3\FancyBox::widget([
+    'target' => '.data-fancybox',
+]);
+
 ?>
 
 <div class="container-fluid">
@@ -65,20 +69,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             'id',
                             'name',
+                            [
+                                'label'          => 'Imagen',
+                                'attribute'      => 'main_image',
+                                'format'         => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    return Html::a(Html::img(Url::base()."/".$model->main_image,['height'=>'100']),Url::base()."/".$model->main_image,['title'=>'Ver Imagen','class' => 'data-fancybox']);
+                                }
+
+                            ],
                             'description:ntext',
                             'terms:ntext',
-                            'ticket_init',
-                            'ticket_end',
+                            //'ticket_init',
+                            //'ticket_end',
                             //'opportunities',
                             //'date_init',
                             //'main_image',
+
                             //'status',
 
                             [
                                 'class' => 'hail812\adminlte3\yii\grid\ActionColumn',
                                 'header'        => 'Actions',
                                 'headerOptions' => ['style'=>'text-align:center'],
-                                'template'      => '{update} {delete}',
+                                'template'      => '{view} {update} {delete}',
                                 'buttons'       => [
                                     'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);

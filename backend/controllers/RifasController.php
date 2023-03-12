@@ -8,6 +8,7 @@ use backend\models\Rifas;
 use backend\models\RifasSearch;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -78,7 +79,9 @@ class RifasController extends Controller
      */
     public function actionCreate()
     {
-        $model       = new Rifas();
+        $model           = new Rifas();
+        $model->scenario = 'create';
+
         $modelPromos = new Promos();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -87,7 +90,16 @@ class RifasController extends Controller
             }else{
                 $model->date_init = null;
             }//end if
-            $model->save();
+
+            $model->imagen = UploadedFile::getInstance($model,'imagen');
+            if(!empty($model->imagen)){
+                $imageName          = $model->imagen->name;
+                $model->imagen->saveAs('uploads/rifas/'.$imageName);
+                $model->main_image = 'uploads/rifas/'.$imageName;
+            }else{
+                $model->main_image = null;
+            }//end if
+            $model->save(false);
 
             #-- Save Promotion
             $modelPromos->load(Yii::$app->request->post());
@@ -113,8 +125,8 @@ class RifasController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model       = $this->findModel($id);
-        $modelPromos = !empty($model->promos) ? $model->promos[0] : new Promos;
+        $model         = $this->findModel($id);
+        $modelPromos   = !empty($model->promos) ? $model->promos[0] : new Promos;
 
         if ($model->load(Yii::$app->request->post())) {
             if(!empty($model->date_init)){
@@ -122,7 +134,15 @@ class RifasController extends Controller
             }else{
                 $model->date_init = null;
             }//end if
-            $model->save();
+
+
+            $model->imagen = UploadedFile::getInstance($model,'imagen');
+            if(!empty($model->imagen)){
+                $imageName          = $model->imagen->name;
+                $model->imagen->saveAs('uploads/rifas/'.$imageName);
+                $model->main_image = 'uploads/rifas/'.$imageName;
+            }//end if
+            $model->save(false);
 
             #--Promos
             $modelPromos->load(Yii::$app->request->post());

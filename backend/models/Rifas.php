@@ -19,6 +19,8 @@ use Yii;
  */
 class Rifas extends \yii\db\ActiveRecord
 {
+    public $imagen;
+
     /**
      * {@inheritdoc}
      */
@@ -33,13 +35,16 @@ class Rifas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'date_init', 'main_image', 'status', 'ticket_init', 'ticket_end'], 'required'],
+            [['imagen'],'required','on'=>'create'],
+            [['name', 'date_init', 'status', 'ticket_init', 'ticket_end'], 'required'],
             [['description', 'terms'], 'string'],
             [['ticket_init', 'ticket_end', 'status'], 'integer'],
             [['date_init'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['main_image'], 'string', 'max' => 2500],
             [['name'], 'unique'],
+
+            [['imagen'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 190,'maxWidth'=>1000,'minHeight'=>190,'maxHeight'=>1000,'maxSize'=>1024 * 1024 * 2],
         ];
     }
 

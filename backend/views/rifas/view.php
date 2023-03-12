@@ -11,6 +11,9 @@ $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Rifas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+echo newerton\fancybox3\FancyBox::widget([
+    'target' => '.data-fancybox',
+]);
 ?>
 <div class="row-fluid">
     <div class="col-xs-12">
@@ -37,10 +40,52 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name',
                             'description:ntext',
                             'terms:ntext',
-                            'opportunities',
-                            'date_init',
-                            'main_image',
-                            'status',
+                            'ticket_init',
+                            'ticket_end',
+                            [
+                                'attribute' => 'date_init',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: left",
+                                ],
+                                'value'     =>function($model){
+                                    return date('d-M-Y',strtotime($model->date_init));
+                                }
+                            ],
+                            [
+                                'label'          => 'Imagen',
+                                'attribute'      => 'main_image',
+                                'format'         => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    return Html::a(Html::img(Url::base()."/".$model->main_image,['height'=>'100']),Url::base()."/".$model->main_image,['title'=>'Ver Imagen','class' => 'data-fancybox']);
+                                }
+
+                            ],
+                            [
+                                'label' => 'Promoción',
+                                'format' => 'html',
+                                'value'     =>function($model){
+                                    return "Obten : ".$model->promos[0]->buy_ticket." Boleto Gratis, En la compra de :".$model->promos[0]->get_ticket." Boleto";
+                                }
+
+                            ],
+                            [
+                                'label' => 'Estatus',
+                                'attribute' => 'status',
+                                'format' => 'html',
+                                'contentOptions' => ['align'=> 'center'],
+                                'value' => function($model){
+                                    if($model->status == 1){
+                                        return "<div class='col-4 alert-success'>Activo</div>";
+                                    }else{
+                                        return "<div class='col-4 alert-danger'>Inactivo</div>";
+                                    }//end if
+                                }
+                            ],
+
                         ],
                     ]) ?>
                 </div>

@@ -34,9 +34,16 @@ use kartik\date\DatePicker;
             ]
         ])
     ?>
-    <?= $form->field($model, 'main_image',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['maxlength' => true]) ?>
-
+    
     <?= $form->field($model, 'status',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Activo', '0' => 'Inactivo', ], ['prompt' => 'Seleccione una opción'])?>   
+
+    <div class="row">
+        <?= $form->field($model, 'imagen',['options'=>['class'=>'col-12 mt-3 bg-light']])->fileInput()->label('<div>Imagen: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño de Imagen: 1000px X 1000px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+        <div id="preview" class="col-12 mt-3" align="center"></div>
+    </div>
+
+    <!-- <?//= $form->field($model, 'main_image',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['maxlength' => true]) ?> -->
+
 </div>
 
 <div class="clearfix"></div>
@@ -56,5 +63,38 @@ use kartik\date\DatePicker;
     <?= Html::submitButton('<i class="fas fa-check-circle"></i> Aceptar', ['class' => 'btn btn-success']) ?>
 </div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
+
+<?php
+$script = <<< JS
+    $(function(e){
+        var preview_img = '/$model->main_image';
+        image = document.createElement('img');
+        image.src = preview_img;
+        image.classList.add('img-fluid');
+        preview.innerHTML = '';
+        preview.append(image);
+        //alert(preview_img);
+    });
+
+    document.getElementById("rifas-imagen").onchange = function(e) {
+        if(e.target.files[0] === undefined){
+            document.getElementById('preview').innerHTML = "";
+        }else{
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(){
+                let preview = document.getElementById('preview'),
+                    image = document.createElement('img');
+
+                image.src = reader.result;
+                image.classList.add('img-fluid');
+
+                preview.innerHTML = '';
+                preview.append(image);
+            };
+        }
+    }
+JS;
+$this->registerJs($script);
 
