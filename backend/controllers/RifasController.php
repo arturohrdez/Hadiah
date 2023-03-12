@@ -7,8 +7,10 @@ use backend\models\Promos;
 use backend\models\Rifas;
 use backend\models\RifasSearch;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+
 
 /**
  * RifasController implements the CRUD actions for Rifas model.
@@ -21,6 +23,17 @@ class RifasController extends Controller
     public function behaviors()
     {
         return [
+            'access'=>[
+                'class'=> AccessControl::className(),
+                'only' => ['index','create','update','delete'],
+                'rules' => [
+                    [
+                        'allow' =>true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
+
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
