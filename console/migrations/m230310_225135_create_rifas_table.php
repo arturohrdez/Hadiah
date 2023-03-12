@@ -13,14 +13,15 @@ class m230310_225135_create_rifas_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%rifas}}', [
-            'id'            => $this->primaryKey(),
-            'name'          => $this->string(255)->notNull()->unique(),
-            'description'   => $this->text(),
-            'terms'         => $this->text(),
-            'opportunities' => $this->integer(255),
-            'date_init'     => $this->dateTime()->notNull(),
-            'main_image'    => $this->string(2500)->notnull(),
-            'status'        => $this->integer(2)->notnull(),
+            'id'          => $this->primaryKey(),
+            'name'        => $this->string(255)->notNull()->unique(),
+            'description' => $this->text(),
+            'terms'       => $this->text(),
+            'ticket_init' => $this->integer(35),
+            'ticket_end'  => $this->integer(35),
+            'date_init'   => $this->dateTime()->notNull(),
+            'main_image'  => $this->string(2500)->notnull(),
+            'status'      => $this->integer(2)->notnull(),
         ]);
     }
 

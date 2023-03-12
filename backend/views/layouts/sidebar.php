@@ -39,7 +39,7 @@ use yii\helpers\Url;
             <?php
             $items   = [];
             $items[] = ['label' => 'Inicio', 'icon' => 'fas fa-home', 'url' => [Url::to('/site/index')], 'target' => ''];
-            $items[] = ['label' => 'Rifas', 'icon' => 'fas fa-id-card', 'url' => [Url::to('/rifas/index')], 'target' => ''];
+            $items[] = ['label' => 'Rifas', 'icon' => 'fa fa-bolt', 'url' => [Url::to('/rifas/index')], 'target' => ''];
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => $items, //[
                     /*[

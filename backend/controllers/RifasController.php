@@ -3,11 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
+use backend\models\Promos;
 use backend\models\Rifas;
 use backend\models\RifasSearch;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * RifasController implements the CRUD actions for Rifas model.
@@ -64,7 +65,9 @@ class RifasController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Rifas();
+        $model       = new Rifas();
+        $modelPromos = new Promos();
+
 
         if ($model->load(Yii::$app->request->post())) {
             if(!empty($model->date_init)){
@@ -80,7 +83,7 @@ class RifasController extends Controller
         }//end if
 
         return $this->renderAjax('create', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 

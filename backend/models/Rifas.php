@@ -11,7 +11,8 @@ use Yii;
  * @property string $name
  * @property string|null $description
  * @property string|null $terms
- * @property int|null $opportunities
+ * @property int|null $ticket_init
+ * @property int|null $ticket_end
  * @property string $date_init
  * @property string $main_image
  * @property int $status
@@ -32,9 +33,9 @@ class Rifas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'date_init', 'main_image', 'status'], 'required'],
+            [['name', 'date_init', 'main_image', 'status', 'ticket_init', 'ticket_end'], 'required'],
             [['description', 'terms'], 'string'],
-            [['opportunities', 'status'], 'required'],
+            [['ticket_init', 'ticket_end', 'status'], 'integer'],
             [['date_init'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['main_image'], 'string', 'max' => 2500],
@@ -49,10 +50,11 @@ class Rifas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Nombre',
+            'name' => 'Titulo',
             'description' => 'Descripción',
             'terms' => 'Terminos y Condiciones',
-            'opportunities' => 'Num. de Boletos',
+            'ticket_init' => 'Primer Boleto',
+            'ticket_end' => 'Último Boleto',
             'date_init' => 'Fecha Rifa',
             'main_image' => 'Imagen',
             'status' => 'Estatus',

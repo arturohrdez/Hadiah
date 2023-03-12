@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;use yii\helpers\Url;
+use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\RifasSearch */
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="container-fluid">
     <div class="loading text-center"></div>
-    <div id="divEditForm" class="col-sm-12 col-md-12 col-lg-6 offset-lg-3" style="display: none;"></div>
+    <div id="divEditForm" class="col-sm-12 col-md-12 col-lg-8 offset-lg-2" style="display: none;"></div>
 </div>
 
 <div class="backend\models\Rifas-index">
@@ -66,7 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name',
                             'description:ntext',
                             'terms:ntext',
-                            'opportunities',
+                            'ticket_init',
+                            'ticket_end',
+                            //'opportunities',
                             //'date_init',
                             //'main_image',
                             //'status',
@@ -75,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'hail812\adminlte3\yii\grid\ActionColumn',
                                 'header'        => 'Actions',
                                 'headerOptions' => ['style'=>'text-align:center'],
-                                'template'      => '{view} {update} {delete}',
+                                'template'      => '{update} {delete}',
                                 'buttons'       => [
                                     'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);

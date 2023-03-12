@@ -17,7 +17,7 @@ class RifasSearch extends Rifas
     public function rules()
     {
         return [
-            [['id', 'opportunities', 'status'], 'integer'],
+            [['id', 'ticket_init', 'ticket_end', 'status'], 'integer'],
             [['name', 'description', 'terms', 'date_init', 'main_image'], 'safe'],
         ];
     }
@@ -59,7 +59,8 @@ class RifasSearch extends Rifas
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'opportunities' => $this->opportunities,
+            'ticket_init' => $this->ticket_init,
+            'ticket_end' => $this->ticket_end,
             'date_init' => $this->date_init,
             'status' => $this->status,
         ]);
