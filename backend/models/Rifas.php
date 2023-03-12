@@ -60,4 +60,14 @@ class Rifas extends \yii\db\ActiveRecord
             'status' => 'Estatus',
         ];
     }
+
+     /**
+     * Gets query for [[Rifa]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPromos()
+    {
+        return $this->hasMany(Promos::className(), ['rifa_id' => 'id']);
+    }
 }

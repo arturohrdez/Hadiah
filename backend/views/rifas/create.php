@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <button type="button" class="btn close text-white" onclick='closeForm("rifasForm")'>×</button>
                 </div>
                 <?=$this->render('_form', [
-                    'model' => $model
+                    'model' => $model,
+                    'modelPromos' => $modelPromos
                 ]) ?>
             </div>
         </div>

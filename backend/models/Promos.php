@@ -30,7 +30,7 @@ class Promos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rifa_id', 'buy_ticket', 'get_ticket'], 'required'],
+            [['rifa_id', 'buy_ticket', 'get_ticket'], 'required', 'on'=>'normal'],
             [['rifa_id', 'buy_ticket', 'get_ticket'], 'integer'],
             [['rifa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rifas::class, 'targetAttribute' => ['rifa_id' => 'id']],
         ];
@@ -44,8 +44,8 @@ class Promos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'rifa_id' => 'Rifa ID',
-            'buy_ticket' => 'Buy Ticket',
-            'get_ticket' => 'Get Ticket',
+            'buy_ticket' => 'Compra Ticket',
+            'get_ticket' => 'Obten Ticket Gratis',
         ];
     }
 

@@ -68,22 +68,26 @@ class RifasController extends Controller
         $model       = new Rifas();
         $modelPromos = new Promos();
 
-
         if ($model->load(Yii::$app->request->post())) {
             if(!empty($model->date_init)){
                 $model->date_init = date('Y-m-d',strtotime($model->date_init));
             }else{
                 $model->date_init = null;
             }//end if
-
             $model->save();
+
+            #-- Save Promotion
+            $modelPromos->load(Yii::$app->request->post());
+            $modelPromos->rifa_id = $model->id;
+            $modelPromos->save();
 
             Yii::$app->session->setFlash('success', "Se registro correctamente la Rifa :  <strong>".$model->name."</strong>");
             return $this->redirect(['index']);
         }//end if
 
         return $this->renderAjax('create', [
-            'model' => $model
+            'model'       => $model,
+            'modelPromos' => $modelPromos
         ]);
     }
 
@@ -96,16 +100,27 @@ class RifasController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model       = $this->findModel($id);
+        $modelPromos = !empty($model->promos) ? $model->promos[0] : new Promos;
 
-         if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
             if(!empty($model->date_init)){
                 $model->date_init = date('Y-m-d',strtotime($model->date_init));
             }else{
                 $model->date_init = null;
             }//end if
-
             $model->save();
+
+            #--Promos
+            $modelPromos->load(Yii::$app->request->post());
+            if(!empty($modelPromos->buy_ticket) && !empty($modelPromos->get_ticket)){
+                $modelPromos->rifa_id = $model->id;
+                $modelPromos->save();
+            }else{
+                if(!empty($modelPromos->id)){
+                    $modelPromos->delete();
+                }//end if
+            }//end if
 
             Yii::$app->session->setFlash('success', "Se actualizo correctamente la Rifa :  <strong>".$model->name."</strong>");
             return $this->redirect(['index']);
@@ -114,6 +129,7 @@ class RifasController extends Controller
 
         return $this->renderAjax('update', [
             'model' => $model,
+            'modelPromos' => $modelPromos
         ]);
     }
 
