@@ -12,6 +12,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'css/vendor/bootstrap/css/bootstrap.min.css',
         'css/vendor/animate.css/animate.min.css',
         'css/vendor/bootstrap-icons/bootstrap-icons.css',
         'css/vendor/boxicons/css/boxicons.min.css',
