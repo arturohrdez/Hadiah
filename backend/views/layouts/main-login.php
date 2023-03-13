@@ -24,8 +24,9 @@ $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionic
 <div class="login-box">
     <div class="login-logo">
         <a href="<?=Yii::$app->homeUrl?>">
-            <b class="text-white">Hadiah</b> </br> 
-            <!-- <span class="text-white"></span> -->
+            <b class="text-white">HADIAH</b> 
+            </br> 
+            <span class="text-white">Sistema de Rifas</span>
         </a>
     </div>
     <!-- /.login-logo -->

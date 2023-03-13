@@ -1,8 +1,23 @@
 <?php
+use yii\helpers\Url;
+
 $this->title = 'Panel';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Rifas',
+                'text'  => 'Administra la creación, modificación y eliminación de Rifas',
+                'icon'  => 'fas fa-id-card',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/rifas/index'])
+            ]) ?>
+        </div>
+    </div>
+    
     <!-- <div class="row">
         <div class="col-lg-6">
             <?= \hail812\adminlte\widgets\Alert::widget([

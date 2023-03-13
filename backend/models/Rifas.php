@@ -44,7 +44,7 @@ class Rifas extends \yii\db\ActiveRecord
             [['main_image'], 'string', 'max' => 2500],
             [['name'], 'unique'],
 
-            [['imagen'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 190,'maxWidth'=>1000,'minHeight'=>190,'maxHeight'=>1000,'maxSize'=>1024 * 1024 * 2],
+            [['imagen'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 190,'maxWidth'=>1500,'minHeight'=>190,'maxHeight'=>1500,'maxSize'=>1024 * 1024 * 2],
         ];
     }
 
