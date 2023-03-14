@@ -10,9 +10,6 @@ $this->title = 'Rifas';
 <!-- ======= Hero Section ======= -->
 <?php 
 if(!empty($rifas)){
-    echo "<pre>";
-    var_dump(Url::base());
-    echo "</pre>";
 ?>
 <section id="hero">
     <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
