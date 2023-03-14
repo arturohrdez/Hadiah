@@ -16,6 +16,10 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+//Backend
+use backend\models\Rifas;
+
+
 /**
  * Site controller
  */
@@ -74,8 +78,9 @@ class SiteController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
-        return $this->render('index');
+    {   
+        $modelRifas = Rifas::find()->where(['status' => 1])->all();
+        return $this->render('index',['rifas'=>$modelRifas]);
     }
 
     /**
