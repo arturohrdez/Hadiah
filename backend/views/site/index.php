@@ -10,7 +10,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Rifas',
                 'text'  => 'Administra la creación, modificación y eliminación de Rifas',
-                'icon'  => 'fas fa-id-card',
+                'icon'  => 'fa fa-bolt',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/rifas/index'])

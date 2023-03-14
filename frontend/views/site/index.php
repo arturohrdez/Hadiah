@@ -23,7 +23,7 @@ if(!empty($rifas)){
                 $rifa_image       = $rifa->main_image;
             ?>
             <!-- Slide 1 -->
-            <div class="carousel-item active" style="background-image: url('<?php echo "http://localhost:81/".$rifa_image; ?>')">
+            <div class="carousel-item active" style="background-image: url('<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>')">
                 <div class="carousel-container">
                     <div class="container">
                         <h2 class="animate__animated animate__fadeInDown">
@@ -32,7 +32,7 @@ if(!empty($rifas)){
                         <p class="animate__animated animate__fadeInUp fs-4">
                             <?php echo nl2br($rifa_description);?>
                         </p>
-                        <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">Ver Más</a>
+                        <a href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>" class="btn-get-started animate__animated animate__fadeInUp">Comprar Boletos</a>
                     </div>
                 </div>
             </div>

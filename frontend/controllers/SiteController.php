@@ -261,4 +261,27 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
+    public static function addcero($digitos,$number){
+        return str_pad($number, $digitos, "0", STR_PAD_LEFT);
+    }//end function
+
+    public function actionRifa(){
+        $rifaId = Yii::$app->request->get()["id"];
+        $model  = Rifas::find()->where(["id" => $rifaId])->one();
+
+        $init    = $model->ticket_init;
+        $end     = $model->ticket_end;
+        $digitos = strlen($end);
+        $tickets = [];
+
+        for ($i=$init; $i <= $end ; $i++) { 
+            $tickets[$i] = self::addcero($digitos,$i);
+        }//end foreach
+
+        return $this->render('rifaDetail', [
+            'model'  => $model,
+            'tickets' => $tickets,
+        ]);
+    }//end function
 }
