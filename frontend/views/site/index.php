@@ -3,7 +3,6 @@
 /** @var yii\web\View $this */
 use yii\bootstrap4\Html;
 use yii\helpers\Url;
-use Yii;
 
 $this->title = 'Rifas';
 ?>
@@ -27,7 +26,7 @@ if(!empty($rifas)){
                 $rifa_image       = $rifa->main_image;
             ?>
             <!-- Slide 1 -->
-            <div class="carousel-item active" style="background-image: url('<?php echo Yii::getAlias('@backend')."/web/".$rifa_image; ?>')">
+            <div class="carousel-item active" style="background-image: url('<?php echo "http://localhost:81/".$rifa_image; ?>')">
                 <div class="carousel-container">
                     <div class="container">
                         <h2 class="animate__animated animate__fadeInDown">
