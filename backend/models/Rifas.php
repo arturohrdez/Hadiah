@@ -75,4 +75,14 @@ class Rifas extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Promos::className(), ['rifa_id' => 'id']);
     }
+
+    /**
+     * Gets query for [[Tickets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTickets()
+    {
+        return $this->hasMany(Tickets::className(), ['rifa_id' => 'id']);
+    }
 }

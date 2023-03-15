@@ -19,7 +19,6 @@ use frontend\models\ContactForm;
 //Backend
 use backend\models\Rifas;
 
-
 /**
  * Site controller
  */
@@ -274,14 +273,23 @@ class SiteController extends Controller
         $end     = $model->ticket_end;
         $digitos = strlen($end);
         $tickets = [];
-
         for ($i=$init; $i <= $end ; $i++) { 
             $tickets[$i] = self::addcero($digitos,$i);
         }//end foreach
 
+        //Tickers apartados o comprados
+        $tickets_ac = $model->tickets;
+
         return $this->render('rifaDetail', [
             'model'  => $model,
             'tickets' => $tickets,
+            'tickets_ac' => $tickets_ac
         ]);
+    }//end function
+
+    public function actionApartar(){
+        $rifaId = Yii::$app->request->get()["id"];
+        return $this->renderAjax('_apartarPopup');
+
     }//end function
 }
