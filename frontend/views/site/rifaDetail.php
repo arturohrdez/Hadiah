@@ -18,7 +18,7 @@ use yii\helpers\Html;
 		<div class="row">
 			<div class="col-lg-12 entries">
 				<article class="entry">
-					<div class="entry-img">
+					<div class="entry-img text-center">
 						<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
 					</div>
 					<h2 class="entry-title fs-1 text-danger">
@@ -55,7 +55,7 @@ use yii\helpers\Html;
 					</div>
 
 					<div id="div_selected" class="row pt-3 pb-2 bg-black" style="display: none;">
-						<?php echo Html::hiddenInput('tn_sel', $value = "",['id'=>'tn_sel']); ?>
+						<?php echo Html::hiddenInput('tn_sel', $value = null,['id'=>'tn_sel']); ?>
 						<div id="div_options" class="col-12 text-white text-center">
 							<p class="fs-3 text-warning">
 								<span class="n_t">0</span> - Boletos Seleccionados
@@ -67,12 +67,12 @@ use yii\helpers\Html;
 						</div>
 					</div>
 
-					<div class="row mt-5">
+					<div class="row mt-5 overflow-scroll" style="max-height: 300px;">
 							<?php 
 							$init = $model->ticket_init;
 							$end  = $model->ticket_end;
 							for ($i=$init; $i <= $end ; $i++) { 
-								echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
+								echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
 							}
 							?>
 					</div>
@@ -82,16 +82,34 @@ use yii\helpers\Html;
 	</div>
 </section>
 
+<script type="text/javascript">
+	function ticketRemove(t){
+		var tn_sel = $("#tn_sel").val();
+		var exp     = tn_sel.split(',');
+		var pos_del = exp.indexOf(t);
 
+		if(pos_del > -1){
+			exp.splice(pos_del, 1);
+			$("#tn_sel").val(exp.join(','));
+
+			let n_t = exp.length;
+			$(".n_t").text(n_t);
+			if(n_t == 0){
+				$("#div_selected").hide();
+			}//end if
+
+			$("#t_"+t).remove();
+			$("#tn_"+t).removeClass('btn-success');
+			$("#tn_"+t).addClass('btn-outline-success');
+		}//end function
+	}//end function
+</script>
 
 <?php 
 $script = <<< JS
 	$(function(e){
 		var tn_sel = $("#tn_sel").val("");
 	});
-
-
-
 
 	$(".btn_ticket").on("click",function(e){
 		var tn     = $(this).data("tn");
@@ -101,8 +119,13 @@ $script = <<< JS
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
 			elements = exp;
-			elements.push(tn);
-			$("#tn_sel").val(elements.join(','));
+
+			let search_ti = tn_sel.indexOf(tn)
+			if(search_ti == -1){
+				elements.push(tn);
+				$("#tn_sel").val(elements.join(','));
+			}//end if
+
 		}else{
 			elements.push(tn);
 			$("#tn_sel").val(elements.join(','));
@@ -114,7 +137,7 @@ $script = <<< JS
 		let t_selectBtn = "";
 		for (var i = n_t-1; i >= 0; i--) {
 			//console.log(elements[i]);
-			t_selectBtn = t_selectBtn + "<button class='btn_ticketDel btn btn-danger ml-2' type='button' data-tn='"+elements[i]+"'>"+elements[i]+"</button>";
+			t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
 		}//end foreach*
 
 		$(".t_opt").html(t_selectBtn);
@@ -124,18 +147,6 @@ $script = <<< JS
 		$("#div_selected").show();
 		$(this).removeClass('btn-outline-success');
 		$(this).addClass('btn-success');
-	});
-
-	$(".btn_ticketDel").on("click",function(e){
-		alert("entra");
-		/*var tn     = $(this).data("tn");
-		var tn_sel = $("#tn_sel").val();
-
-		var exp  = tn_sel.split(',');
-		let pos_del = tn_sel.indexOf(tn) // (pos) es la posición para abreviar
-
-		console.log(exp)
-		console.log(pos_del)*/
 	});
 JS;
 $this->registerJs($script);

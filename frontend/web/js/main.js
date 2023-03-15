@@ -134,14 +134,14 @@
   /**
    * Initiate portfolio lightbox 
    */
-  const portfolioLightbox = GLightbox({
+  /*const portfolioLightbox = GLightbox({
     selector: '.portfolio-lightbox'
-  });
+  });*/
 
   /**
    * Portfolio details slider
    */
-  new Swiper('.portfolio-details-slider', {
+  /*new Swiper('.portfolio-details-slider', {
     speed: 400,
     loop: true,
     autoplay: {
@@ -153,16 +153,16 @@
       type: 'bullets',
       clickable: true
     }
-  });
+  });*/
 
   /**
    * Initiate portfolio details lightbox 
    */
-  const portfolioDetailsLightbox = GLightbox({
+  /*const portfolioDetailsLightbox = GLightbox({
     selector: '.portfolio-details-lightbox',
     width: '90%',
     height: '90vh'
-  });
+  });*/
 
   /**
    * Skills animation
