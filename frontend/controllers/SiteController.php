@@ -265,26 +265,95 @@ class SiteController extends Controller
         return str_pad($number, $digitos, "0", STR_PAD_LEFT);
     }//end function
 
-    public function actionRifa(){
-        $rifaId = Yii::$app->request->get()["id"];
-        $model  = Rifas::find()->where(["id" => $rifaId])->one();
-
-        $init    = $model->ticket_init;
-        $end     = $model->ticket_end;
+    public static function createTickets($init,$end){
         $digitos = strlen($end);
         $tickets = [];
         for ($i=$init; $i <= $end ; $i++) { 
             $tickets[$i] = self::addcero($digitos,$i);
         }//end foreach
 
-        //Tickers apartados o comprados
-        $tickets_ac = $model->tickets;
+        Yii::$app->session->set('tickets', $tickets);
+        return $tickets;
+    }//end function
+
+    public static function dumpTicketAC($tickets_ac = []){
+        $ticketsAC = []; 
+        if(empty($tickets_ac)){
+            return $ticketsAC;
+        }//end if
+        
+        foreach ($tickets_ac as $ticket_) {
+            $ticketsAC[] = $ticket_->ticket;
+        }//end foreach
+        return $ticketsAC;
+    }//end function
+
+    public function actionRifa(){
+        Yii::$app->session->set('countClick',0);
+        Yii::$app->session->set('tickets_play_all',[]);
+        Yii::$app->session->set('tickets', []);
+        $rifaId = Yii::$app->request->get()["id"];
+        $model  = Rifas::find()->where(["id" => $rifaId])->one();
+
+        $init    = $model->ticket_init;
+        $end     = $model->ticket_end;
+        $tickets = self::createTickets($init,$end);
+
+        //Tickets apartados y vendidos
+        $tickets_ac = self::dumpTicketAC($model->tickets);
 
         return $this->render('rifaDetail', [
-            'model'  => $model,
-            'tickets' => $tickets,
+            'model'      => $model,
+            'tickets'    => $tickets,
             'tickets_ac' => $tickets_ac
         ]);
+    }//end function
+
+    public function actionPromos(){
+
+        $arrexample = ["028"=>["1342","3234"],"093"=>["123","4443"]];
+        return json_encode($arrexample);
+
+        /*//Count Clicks
+        Yii::$app->session->set('countClick',Yii::$app->session->get('countClick')+1);
+        $post     = Yii::$app->request->post();
+        $rifaId   = $post["id"];
+        $elements = $post["tickets"];
+        $tn       = $post["tn"];
+
+        $tickets = Yii::$app->session->get('tickets');
+        $model   = Rifas::find()->where(["id" => $rifaId])->one();
+
+        if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
+            //Tickets apartados y vendidos
+            $tickets_ac = self::dumpTicketAC($model->tickets);
+            $allTickets = array_merge($elements,$tickets_ac);
+
+            foreach ($allTickets as $element) {
+                if (($key = array_search($element, $tickets)) !== false) {
+                    unset($tickets[$key]);
+                }//end if
+            }//end foreach
+
+            //Random Number 
+            $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
+            if(is_array($keys_random)){
+                foreach ($keys_random as $key_random) {
+                    $tickets_play[$tn][] = $tickets[$key_random];
+                }//end foreahc
+            }else{
+                $tickets_play[$tn][] = $tickets[$keys_random];
+            }//end if
+
+            $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
+            array_push($dump_tickets_play_all, $tickets_play);
+            Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+            Yii::$app->session->set('countClick',0);
+
+            $json_tickets_play = json_encode(Yii::$app->session->get('tickets_play_all'));
+
+            return $json_tickets_play;
+        }//end if*/
     }//end function
 
     public function actionApartar(){

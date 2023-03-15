@@ -91,11 +91,12 @@ echo newerton\fancybox3\FancyBox::widget([
 							$init = $model->ticket_init;
 							$end  = $model->ticket_end;
 
-							$promo_buy = $model->promos[0]->buy_ticket;
-							$promo_get = $model->promos[0]->get_ticket;
-
-							for ($i=$init; $i <= $end ; $i++) { 
-								echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
+							for ($i=$init; $i <= $end ; $i++) {
+								if(!in_array($tickets[$i], $tickets_ac)){
+									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
+								}else{
+									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn btn-secondary text-black mb-3']).'</div>';
+								}//end if
 							}
 							?>
 					</div>
@@ -105,6 +106,7 @@ echo newerton\fancybox3\FancyBox::widget([
 	</div>
 </section>
 
+<?php $URL_promos = Url::to(['site/promos']) ;?>
 <script type="text/javascript">
 	function ticketRemove(t){
 		var tn_sel = $("#tn_sel").val();
@@ -134,43 +136,63 @@ $script = <<< JS
 		var tn_sel = $("#tn_sel").val("");
 	});
 
-
-	function promos(buy,get,elements){
-		let tickets_ac = $tickets_ac;
-		
-		console.log(buy)
-		console.log(get)
-		console.log(elements)
-
-		console.log(tickets_ac);
+	function promos(elements,tn){
+		var url_p = "$URL_promos";
+		/*console.log(url_p);*/
+		return $.ajax({
+			url: url_p,
+			type: 'POST',
+			data: {"id": $model->id,"tickets":elements,"tn":tn},
+			dataType: 'JSON',
+			success: function(response) {
+	        },
+	        error: function() {
+	            console.log('Error occured');
+	        }
+		});
 	}//end function
 
+	function oportunities(options){
+		console.log(options);
+
+		/*for (var i = options.length - 1; i >= 0; i--) {
+			console.log(options[i]['021']);
+			
+		}*/
+	}//end function
+
+
 	$(".btn_ticket").on("click",function(e){
-		var buy = $promo_buy;
-		var get = $promo_get;
 		var tn     = $(this).data("tn");
 		var tn_sel = $("#tn_sel").val();
 		let elements = [];
+		var promos_ = null;
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
 			elements = exp;
-
 			let search_ti = tn_sel.indexOf(tn)
 			if(search_ti == -1){
 				elements.push(tn);
 				$("#tn_sel").val(elements.join(','));
-				promos(buy,get,elements);
+				promos(elements,tn).done(function(response){
+					oportunities(response);
+				});
 			}//end if
-
 		}else{
 			elements.push(tn);
 			$("#tn_sel").val(elements.join(','));
-			promos(buy,get,elements);
+			promos(elements,tn).done(function(response){
+				oportunities(response);
+			});
 		}//end if
 
+		//console.log(promos);
+		
+		//Tickets number
 		let n_t = elements.length;
 		$(".n_t").text(n_t);
 
+		//Tickets selected
 		let t_selectBtn = "";
 		for (var i = n_t-1; i >= 0; i--) {
 			//console.log(elements[i]);
@@ -178,8 +200,7 @@ $script = <<< JS
 		}//end foreach*
 		$(".t_opt").html(t_selectBtn);
 
-		//console.log(t_selectBtn)
-
+		//Show Div Selected
 		$("#div_selected").show();
 		$(this).removeClass('btn-outline-success');
 		$(this).addClass('btn-success');
