@@ -310,32 +310,36 @@ class SiteController extends Controller
     }//end function
 
     public function actionPromos(){
-
-        $arrexample = ["028"=>["1342","3234"],"093"=>["123","4443"]];
-        return json_encode($arrexample);
-
-        /*//Count Clicks
+        //Count Clicks
         Yii::$app->session->set('countClick',Yii::$app->session->get('countClick')+1);
-        $post     = Yii::$app->request->post();
-        $rifaId   = $post["id"];
-        $elements = $post["tickets"];
-        $tn       = $post["tn"];
+        $post         = Yii::$app->request->post();
+        $rifaId       = $post["id"];
+        $elements     = $post["tickets"];
+        $elements_rnd = $post["tickets_rnd"];
+        $tn           = $post["tn"];
 
         $tickets = Yii::$app->session->get('tickets');
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
-
         if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
             //Tickets apartados y vendidos
             $tickets_ac = self::dumpTicketAC($model->tickets);
             $allTickets = array_merge($elements,$tickets_ac);
 
+
+            //Aquí hace otro merge con los tickets random
+            if(!empty($elements_rnd)){
+                $elements_rnd = explode(",", $elements_rnd);
+                $allTickets = array_merge($allTickets,$elements_rnd);
+            }//end if
+
+            //Elimina los Tickets seleccionados del conjunto de Tickets
             foreach ($allTickets as $element) {
                 if (($key = array_search($element, $tickets)) !== false) {
                     unset($tickets[$key]);
                 }//end if
             }//end foreach
 
-            //Random Number 
+            //Obtiene un número aleatorio del conjunto de Tickets
             $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
             if(is_array($keys_random)){
                 foreach ($keys_random as $key_random) {
@@ -345,16 +349,18 @@ class SiteController extends Controller
                 $tickets_play[$tn][] = $tickets[$keys_random];
             }//end if
 
-            $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
-            array_push($dump_tickets_play_all, $tickets_play);
+
+
+            $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+            $dump_tickets_play_all[$tn] = $tickets_play[$tn];
             Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
             Yii::$app->session->set('countClick',0);
-
             $json_tickets_play = json_encode(Yii::$app->session->get('tickets_play_all'));
-
             return $json_tickets_play;
-        }//end if*/
+        }//end if
     }//end function
+
+    
 
     public function actionApartar(){
         $rifaId = Yii::$app->request->get()["id"];

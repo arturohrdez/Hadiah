@@ -60,9 +60,10 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div id="div_selected" class="row pt-3 pb-2 bg-black" style="display: block;">
-						<?php echo Html::hiddenInput('tn_sel', $value = null,['id'=>'tn_sel']); ?>
-						<?php echo Html::hiddenInput('tn_rand', $value = null,['id'=>'tn_rand']); ?>
+					<div id="div_selected" class="row pt-3 pb-2 bg-black" style="display: none;">
+						<?php echo Html::hiddenInput('tn_sel', $value = null, ['id'=>'tn_sel']); ?>
+						<?php echo Html::hiddenInput('tn_rand', $value = null, ['id'=>'tn_rand']); ?>
+
 						<div id="div_options" class="col-12 text-white text-center">
 							<p class="fs-3 text-warning">
 								<span class="n_t">0</span> - Boletos Seleccionados
@@ -78,8 +79,8 @@ echo newerton\fancybox3\FancyBox::widget([
 								<div>12234 [0009]</div>
 								<div>12234 [0009]</div> -->
 							</div>
-							<div class="col-12" style="text-align: center;">
-								<button class="btn btn-secondary col-3 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false">
+							<div class="col-12 mt-3" style="text-align: center;">
+								<button id="btnSend" class="btn btn-secondary col-3 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
 									APARTAR									
 								</button>
 							</div>
@@ -109,10 +110,30 @@ echo newerton\fancybox3\FancyBox::widget([
 <?php $URL_promos = Url::to(['site/promos']) ;?>
 <script type="text/javascript">
 	function ticketRemove(t){
+		
+		/*//Tickets
 		var tn_sel = $("#tn_sel").val();
 		var exp     = tn_sel.split(',');
-		var pos_del = exp.indexOf(t);
+		
+		//Tickets random
+		var tn_rand      = $("#tn_rand").val();
+		var exp_rand     = tn_rand.split(',');
+		var tn_rand_s    = $("#t_n_"+t).data('tr');
 
+		console.log(tn_sel);
+		console.log(tn_rand);
+
+		var pos_del_rand = exp_rand.indexOf(tn_rand_s);
+		if(pos_del_rand > -1){
+			exp_rand.splice(pos_del_rand, 1);
+			$("#tn_rand").val(exp_rand.join(','));
+
+			$("#t_n_"+t).remove();
+			$("#tn_"+tn_rand_s).removeClass('btn-success');
+			$("#tn_"+tn_rand_s).addClass('btn-outline-success');
+		}//end if
+
+		var pos_del = exp.indexOf(t);
 		if(pos_del > -1){
 			exp.splice(pos_del, 1);
 			$("#tn_sel").val(exp.join(','));
@@ -126,24 +147,30 @@ echo newerton\fancybox3\FancyBox::widget([
 			$("#t_"+t).remove();
 			$("#tn_"+t).removeClass('btn-success');
 			$("#tn_"+t).addClass('btn-outline-success');
-		}//end function
+		}//end if*/
+
 	}//end function
 </script>
 
 <?php 
 $script = <<< JS
 	$(function(e){
-		var tn_sel = $("#tn_sel").val("");
+		$("#tn_sel").val("");
+		$("#tn_rand").val("");
 	});
 
 	function promos(elements,tn){
 		var url_p = "$URL_promos";
+		var elements_ran = $("#tn_rand").val();
 		/*console.log(url_p);*/
 		return $.ajax({
 			url: url_p,
 			type: 'POST',
-			data: {"id": $model->id,"tickets":elements,"tn":tn},
-			dataType: 'JSON',
+			data: {"id": $model->id,"tickets":elements,"tickets_rnd":elements_ran,"tn":tn},
+			beforeSend: function(data){
+				$("#div_oportunities").html('<div class="spinner-border text-danger p-5" role="status"><span class="visually-hidden">Loading...</span></div>');
+				$("#btnSend").hide();
+			},
 			success: function(response) {
 	        },
 	        error: function() {
@@ -153,25 +180,47 @@ $script = <<< JS
 	}//end function
 
 	function oportunities(options){
-		console.log(options);
+		let elements   = JSON.parse(options);
+		let ticket_ran = [];
+		let div_oportunities = "";
+		for (let key in elements) {
+			//console.log(key)
+			//console.log(elements[key]);
+			for (var i = elements[key].length - 1; i >= 0; i--) {
+				//console.log(elements[key][i]);
+				$("#tn_"+elements[key][i]).removeClass('btn-outline-success');
+				$("#tn_"+elements[key][i]).addClass('btn-success');
 
-		/*for (var i = options.length - 1; i >= 0; i--) {
-			console.log(options[i]['021']);
-			
-		}*/
+
+				div_oportunities = div_oportunities + "<div id='t_n_"+key+"' data-tr='"+elements[key][i]+"'>"+key+" - ["+elements[key][i]+"] </div>";
+				
+				ticket_ran.push(elements[key][i]);
+			}//end foreach
+			//console.log(elements[key].length);
+		}//end for
+
+		//tickets_randoms
+		$("#tn_rand").val(ticket_ran.join(","));
+		$("#div_oportunities").html(div_oportunities);
+		$("#btnSend").show();
 	}//end function
 
 
 	$(".btn_ticket").on("click",function(e){
-		var tn     = $(this).data("tn");
-		var tn_sel = $("#tn_sel").val();
+		var tn       = $(this).data("tn");
+		var tn_sel   = $("#tn_sel").val();
+		var tn_rand  = $("#tn_rand").val();
 		let elements = [];
-		var promos_ = null;
+		var promos_  = null;
+
+		//alert(tn_rand);
+
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
 			elements = exp;
-			let search_ti = tn_sel.indexOf(tn)
-			if(search_ti == -1){
+			let search_ti = tn_sel.indexOf(tn);
+			let search_tr = tn_rand.indexOf(tn);
+			if(search_ti == -1 && search_tr == -1){
 				elements.push(tn);
 				$("#tn_sel").val(elements.join(','));
 				promos(elements,tn).done(function(response){
