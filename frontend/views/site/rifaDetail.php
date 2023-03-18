@@ -107,10 +107,27 @@ echo newerton\fancybox3\FancyBox::widget([
 	</div>
 </section>
 
-<?php $URL_promos = Url::to(['site/promos']) ;?>
+<?php 
+$URL_promos = Url::to(['site/promos']) ;
+$URL_remove = Url::to(['site/ticketremove']) ;
+?>
 <script type="text/javascript">
 	function ticketRemove(t){
-		
+		var url_r = "<?php echo $URL_remove ?>";
+		$.ajax({
+			url: url_r,
+			type: 'POST',
+			data: {},
+			beforeSend: function(data){
+			},
+			success: function(response) {
+				console.log(response);
+	        },
+	        error: function() {
+	            console.log('Error occured');
+	        }
+		});
+
 		/*//Tickets
 		var tn_sel = $("#tn_sel").val();
 		var exp     = tn_sel.split(',');

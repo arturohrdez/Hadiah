@@ -360,7 +360,14 @@ class SiteController extends Controller
         }//end if
     }//end function
 
-    
+    public function actionTicketremove(){
+        echo "<pre>";
+        var_dump(Yii::$app->session->get('tickets_play_all'));
+        echo "</pre>";
+        die();
+    }//end function
+
+
 
     public function actionApartar(){
         $rifaId = Yii::$app->request->get()["id"];
