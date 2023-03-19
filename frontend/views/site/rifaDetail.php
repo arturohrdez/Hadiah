@@ -73,16 +73,14 @@ echo newerton\fancybox3\FancyBox::widget([
 								Para eliminar haz clic en el boleto.
 							</p>
 							<div>Oportunidades:</div>
-							<div id="div_oportunities" class="col-12">
-								<!-- <div id="t_r_2222">12234 [0009]</div>
-								<div>12234 [0009]</div>
-								<div>12234 [0009]</div>
-								<div>12234 [0009]</div> -->
-							</div>
-							<div class="col-12 mt-3" style="text-align: center;">
-								<button id="btnSend" class="btn btn-secondary col-3 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
-									APARTAR									
-								</button>
+							<div id="div_oportunities" class="col-12"></div>
+							<div class="row mt-3" style="text-align: center;">
+								<div id="loadRemove" style="display: none;"></div>
+								<div>
+									<button id="btnSend" class="btn btn-success bg-gradient data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
+										<i class="bi bi-plus-square"></i> APARTAR <i class="bi bi-plus-square"></i> 								
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -117,55 +115,64 @@ $URL_remove = Url::to(['site/ticketremove']) ;
 		$.ajax({
 			url: url_r,
 			type: 'POST',
-			data: {},
+			data: {"tn":t},
 			beforeSend: function(data){
+				$(".btn_ticket").attr("disabled",true);
+				$("#loadRemove").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
+				$("#btnSend").hide();
+				$("#loadRemove").show();
 			},
 			success: function(response) {
-				console.log(response);
+				//Tickets
+				var tn_sel = $("#tn_sel").val();
+				var exp     = tn_sel.split(',');
+				
+				//Tickets random
+				var tn_rand      = $("#tn_rand").val();
+				var exp_rand     = tn_rand.split(',');
+				var pos_del_rand = null;
+				let ticketRandomRemove = JSON.parse(response);
+				$("#t_n_"+t).remove();
+				for (let key in ticketRandomRemove) {
+					pos_del_rand = exp_rand.indexOf(ticketRandomRemove[key]);
+					if(pos_del_rand > -1){
+						exp_rand.splice(pos_del_rand, 1);
+						$("#tn_rand").val(exp_rand.join(','));
+
+						
+						$("#tn_"+ticketRandomRemove[key]).removeClass('btn-success');
+						$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-success');
+					}//end if
+					//console.log(ticketRandomRemove[key]);
+				}//end for
+			
+
+				var pos_del = exp.indexOf(t);
+				if(pos_del > -1){
+					exp.splice(pos_del, 1);
+					$("#tn_sel").val(exp.join(','));
+
+					let n_t = exp.length;
+					$(".n_t").text(n_t);
+					if(n_t == 0){
+						$("#div_selected").hide();
+					}//end if
+
+					$("#t_"+t).remove();
+					$("#tn_"+t).removeClass('btn-success');
+					$("#tn_"+t).addClass('btn-outline-success');
+				}//end if
+
+				$(".btn_ticket").attr("disabled",false);
+				$("#loadRemove").html("");
+				$("#loadRemove").hide();
+				//$("#div_oportunities").html('<div class="spinner-border text-danger p-5" role="status"><span class="visually-hidden">Loading...</span></div>');
+				$("#btnSend").show();
 	        },
 	        error: function() {
 	            console.log('Error occured');
 	        }
 		});
-
-		/*//Tickets
-		var tn_sel = $("#tn_sel").val();
-		var exp     = tn_sel.split(',');
-		
-		//Tickets random
-		var tn_rand      = $("#tn_rand").val();
-		var exp_rand     = tn_rand.split(',');
-		var tn_rand_s    = $("#t_n_"+t).data('tr');
-
-		console.log(tn_sel);
-		console.log(tn_rand);
-
-		var pos_del_rand = exp_rand.indexOf(tn_rand_s);
-		if(pos_del_rand > -1){
-			exp_rand.splice(pos_del_rand, 1);
-			$("#tn_rand").val(exp_rand.join(','));
-
-			$("#t_n_"+t).remove();
-			$("#tn_"+tn_rand_s).removeClass('btn-success');
-			$("#tn_"+tn_rand_s).addClass('btn-outline-success');
-		}//end if
-
-		var pos_del = exp.indexOf(t);
-		if(pos_del > -1){
-			exp.splice(pos_del, 1);
-			$("#tn_sel").val(exp.join(','));
-
-			let n_t = exp.length;
-			$(".n_t").text(n_t);
-			if(n_t == 0){
-				$("#div_selected").hide();
-			}//end if
-
-			$("#t_"+t).remove();
-			$("#tn_"+t).removeClass('btn-success');
-			$("#tn_"+t).addClass('btn-outline-success');
-		}//end if*/
-
 	}//end function
 </script>
 
@@ -185,7 +192,8 @@ $script = <<< JS
 			type: 'POST',
 			data: {"id": $model->id,"tickets":elements,"tickets_rnd":elements_ran,"tn":tn},
 			beforeSend: function(data){
-				$("#div_oportunities").html('<div class="spinner-border text-danger p-5" role="status"><span class="visually-hidden">Loading...</span></div>');
+				$(".btn_ticket").attr("disabled",true);
+				$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
 				$("#btnSend").hide();
 			},
 			success: function(response) {
@@ -197,23 +205,24 @@ $script = <<< JS
 	}//end function
 
 	function oportunities(options){
-		let elements   = JSON.parse(options);
-		let ticket_ran = [];
+		let elements         = JSON.parse(options);
+		let ticket_ran       = [];
 		let div_oportunities = "";
+
 		for (let key in elements) {
-			//console.log(key)
-			//console.log(elements[key]);
+			div_oportunities += "<div id='t_n_"+key+"'>"+key+" [";
 			for (var i = elements[key].length - 1; i >= 0; i--) {
-				//console.log(elements[key][i]);
 				$("#tn_"+elements[key][i]).removeClass('btn-outline-success');
 				$("#tn_"+elements[key][i]).addClass('btn-success');
 
+				if(i < elements[key].length-1){
+					div_oportunities += ",";
+				}
+				div_oportunities += elements[key][i];
 
-				div_oportunities = div_oportunities + "<div id='t_n_"+key+"' data-tr='"+elements[key][i]+"'>"+key+" - ["+elements[key][i]+"] </div>";
-				
 				ticket_ran.push(elements[key][i]);
 			}//end foreach
-			//console.log(elements[key].length);
+			div_oportunities += "] </div>";
 		}//end for
 
 		//tickets_randoms
@@ -241,14 +250,18 @@ $script = <<< JS
 				elements.push(tn);
 				$("#tn_sel").val(elements.join(','));
 				promos(elements,tn).done(function(response){
+					//Muestra oportunidades
 					oportunities(response);
+					$(".btn_ticket").attr("disabled",false);
 				});
 			}//end if
 		}else{
 			elements.push(tn);
 			$("#tn_sel").val(elements.join(','));
 			promos(elements,tn).done(function(response){
+				//Muestra oportunidades
 				oportunities(response);
+				$(".btn_ticket").attr("disabled",false);
 			});
 		}//end if
 

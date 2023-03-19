@@ -361,10 +361,13 @@ class SiteController extends Controller
     }//end function
 
     public function actionTicketremove(){
-        echo "<pre>";
-        var_dump(Yii::$app->session->get('tickets_play_all'));
-        echo "</pre>";
-        die();
+        $tn                 = Yii::$app->request->post()["tn"];
+        $tickets_play_all   = Yii::$app->session->get('tickets_play_all');
+        $ticketRandomRemove = $tickets_play_all[$tn];
+        unset($tickets_play_all[$tn]);
+        Yii::$app->session->set('tickets_play_all',$tickets_play_all);
+        $ticketRandomRemove = json_encode($ticketRandomRemove);
+        return $ticketRandomRemove;
     }//end function
 
 
