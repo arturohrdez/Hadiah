@@ -27,26 +27,26 @@ echo newerton\fancybox3\FancyBox::widget([
 					<div class="entry-img text-center">
 						<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
 					</div>
-					<h2 class="entry-title fs-1 text-danger">
+					<h2 class="entry-title fs-1 text-danger text-center">
 						<?php echo $model->name; ?>
 					</h2>
 					<div class="entry-content">
-						<blockquote>
-							<p class="fs-3">
+						<p>
+							<div class="entry-title text-danger text-center fs-2">
 								<?php 
 									$diassemana = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado"];
 									$meses      = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 									echo $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init)) ; 
 								?>
-							</p>
-						</blockquote>
+							</div>
+						</p>
 						<p>
-							<div class="alert alert-warning text-center fs-3">
+							<div class="alert alert-warning text-center fs-5">
 								<?php echo nl2br($model->terms); ?>
 							</div>
 						</p>
 						<p>
-							<div class="alert alert-info text-center fs-3">
+							<div class="alert alert-info text-center fs-5">
 								<?php echo nl2br($model->description); ?>
 							</div>
 						</p>
@@ -118,6 +118,7 @@ $URL_remove = Url::to(['site/ticketremove']) ;
 			data: {"tn":t},
 			beforeSend: function(data){
 				$(".btn_ticket").attr("disabled",true);
+				$(".btn_ticketDel").attr("disabled",true);
 				$("#loadRemove").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
 				$("#btnSend").hide();
 				$("#loadRemove").show();
@@ -143,7 +144,6 @@ $URL_remove = Url::to(['site/ticketremove']) ;
 						$("#tn_"+ticketRandomRemove[key]).removeClass('btn-success');
 						$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-success');
 					}//end if
-					//console.log(ticketRandomRemove[key]);
 				}//end for
 			
 
@@ -164,9 +164,9 @@ $URL_remove = Url::to(['site/ticketremove']) ;
 				}//end if
 
 				$(".btn_ticket").attr("disabled",false);
+				$(".btn_ticketDel").attr("disabled",false);
 				$("#loadRemove").html("");
 				$("#loadRemove").hide();
-				//$("#div_oportunities").html('<div class="spinner-border text-danger p-5" role="status"><span class="visually-hidden">Loading...</span></div>');
 				$("#btnSend").show();
 	        },
 	        error: function() {
