@@ -18,6 +18,7 @@ use frontend\models\ContactForm;
 
 //Backend
 use backend\models\Rifas;
+use backend\models\Tickets;
 
 /**
  * Site controller
@@ -432,11 +433,21 @@ class SiteController extends Controller
         return $ticketRemove;
     }//end function
 
+    public function actionSearchticket(){
+        $ticket_s = Yii::$app->request->post()["ticket_serarch"];
+        $model    = Tickets::find()->where(['ticket' => $ticket_s])->one();
+
+        
+        echo "<pre>";
+        var_dump($model);
+        echo "</pre>";
+        die();
+    }//end function
+
 
 
     public function actionApartar(){
         $rifaId = Yii::$app->request->get()["id"];
         return $this->renderAjax('_apartarPopup');
-
     }//end function
 }

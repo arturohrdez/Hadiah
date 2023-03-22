@@ -1,6 +1,7 @@
 <?php 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap4\ActiveForm;
 
 echo newerton\fancybox3\FancyBox::widget([
     'target' => '.data-fancybox-modal'
@@ -56,6 +57,14 @@ echo newerton\fancybox3\FancyBox::widget([
 					<div class="row mt-5 bg-primary">
 						<div class="col-12 fs-2 text-center text-white p-2">
 							<i class="bi bi-arrow-down-circle-fill"></i> SELECCIONA ABAJO TU NÚMERO DE LA SUERTE <i class="bi bi-arrow-down-circle-fill"></i>
+						</div>
+					</div>
+
+					<div class="row mt-3">
+						<div class="col-12">
+							<?php $form = yii\bootstrap4\ActiveForm::begin(['action'=>Url::to(['/site/searchticket']),'options'=>['enctype'=>'multipart/form-data','id'=>'searchTiecketForm']]); ?>
+							<?php echo  Html::input('text','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
+							<?php yii\bootstrap4\ActiveForm::end(); ?>
 						</div>
 					</div>
 
@@ -189,6 +198,38 @@ $script = <<< JS
 		$("#tn_sel").val("");
 		$("#tn_rand").val("");
 	});
+
+	$("#searchTiecketForm").on('submit', function(event) {
+		event.preventDefault();
+		/* Act on the event */
+	});
+
+
+	$("#ticket_s").on('keyup',function(event) {
+		/* Act on the event */
+		let ticket_s = $(this).val();
+		if(ticket_s != ""){
+			var action_ = $("#searchTiecketForm").attr("action");
+			var type_ = $("#searchTiecketForm").attr("method");
+			var formData_ = $("#searchTiecketForm").serialize();
+
+			$.ajax({
+				url: action_,
+				type: type_,
+				dataType: 'html',
+				data: formData_,
+			})
+			.done(function() {
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			});
+			
+			//console.log(ticket_s);
+		}//end if
+	});
+
 
 	function promos(elements,tn,tn_rand){
 		var url_p        = "$URL_promos";
