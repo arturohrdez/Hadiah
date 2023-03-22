@@ -44,8 +44,8 @@ class Promos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'rifa_id' => 'Rifa ID',
-            'buy_ticket' => 'Compra Boleto',
-            'get_ticket' => 'Obten Boleto Gratis',
+            'buy_ticket' => 'Boleto',
+            'get_ticket' => 'Oportunidades',
         ];
     }
 

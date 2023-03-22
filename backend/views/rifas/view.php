@@ -68,7 +68,7 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'label' => 'Promoción',
                                 'format' => 'html',
                                 'value'     =>function($model){
-                                    return "Obten : ".$model->promos[0]->buy_ticket." Boleto Gratis, En la compra de :".$model->promos[0]->get_ticket." Boleto";
+                                    return "Obten : ".$model->promos[0]->get_ticket." Oportunidades, En la compra de :".$model->promos[0]->buy_ticket." Boleto";
                                 }
 
                             ],

@@ -54,8 +54,8 @@ use kartik\date\DatePicker;
     </div>
     <?= $form->field($modelPromos, 'id')->hiddenInput(['option' => 'value'])->label(false); ?>
     <?= $form->field($modelPromos, 'rifa_id')->hiddenInput(['option' => 'value'])->label(false); ?>
-    <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value']); ?>
     <?= $form->field($modelPromos, 'buy_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value']); ?>
+    <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value']); ?>
 </div>
 
 <div class=" card-footer" align="right">

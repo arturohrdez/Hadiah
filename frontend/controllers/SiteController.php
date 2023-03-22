@@ -295,6 +295,7 @@ class SiteController extends Controller
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
+        $promos_ = !empty($model->promos) ? 1 : 0;
         $init    = $model->ticket_init;
         $end     = $model->ticket_end;
         $tickets = self::createTickets($init,$end);
@@ -305,7 +306,8 @@ class SiteController extends Controller
         return $this->render('rifaDetail', [
             'model'      => $model,
             'tickets'    => $tickets,
-            'tickets_ac' => $tickets_ac
+            'tickets_ac' => $tickets_ac,
+            'promos_'    => (int) $promos_
         ]);
     }//end function
 
@@ -320,17 +322,86 @@ class SiteController extends Controller
 
         $tickets = Yii::$app->session->get('tickets');
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
-        if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
-            //Tickets apartados y vendidos
-            $tickets_ac = self::dumpTicketAC($model->tickets);
-            $allTickets = array_merge($elements,$tickets_ac);
 
-
-            //Aquí hace otro merge con los tickets random
-            if(!empty($elements_rnd)){
-                $elements_rnd = explode(",", $elements_rnd);
-                $allTickets = array_merge($allTickets,$elements_rnd);
+        if(!empty($model->promos)){
+            if($model->promos[0]->buy_ticket > 1){
+                $return = ["status"=>"NA"];
+                return json_encode($return);
             }//end if
+
+            if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
+                //Tickets apartados y vendidos
+                $tickets_ac = self::dumpTicketAC($model->tickets);
+                $allTickets = array_merge($elements,$tickets_ac);
+
+
+                //Aquí hace otro merge con los tickets random
+                if(!empty($elements_rnd)){
+                    $elements_rnd = explode(",", $elements_rnd);
+                    $allTickets = array_merge($allTickets,$elements_rnd);
+                }//end if
+
+                //Elimina los Tickets seleccionados del conjunto de Tickets
+                foreach ($allTickets as $element) {
+                    if (($key = array_search($element, $tickets)) !== false) {
+                        unset($tickets[$key]);
+                    }//end if
+                }//end foreach
+
+                //Obtiene un número aleatorio del conjunto de Tickets
+                $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
+                if(is_array($keys_random)){
+                    foreach ($keys_random as $key_random) {
+                        $tickets_play[$tn][] = $tickets[$key_random];
+                    }//end foreahc
+                }else{
+                    $tickets_play[$tn][] = $tickets[$keys_random];
+                }//end if
+
+
+
+                $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+                $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+                Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+                Yii::$app->session->set('countClick',0);
+                //$json_tickets_play = Yii::$app->session->get('tickets_play_all');
+                $return            = ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+                return json_encode($return);
+            }else{
+                $return = ["status"=>"NA"];
+                return json_encode($return);
+
+                /*//Tickets apartados y vendidos
+                $tickets_ac = self::dumpTicketAC($model->tickets);
+                $allTickets = array_merge($elements,$tickets_ac);
+
+
+                //Aquí hace otro merge con los tickets random
+                if(!empty($elements_rnd)){
+                    $elements_rnd = explode(",", $elements_rnd);
+                    $allTickets = array_merge($allTickets,$elements_rnd);
+                }//end if
+
+                //Elimina los Tickets seleccionados del conjunto de Tickets
+                foreach ($allTickets as $element) {
+                    if (($key = array_search($element, $tickets)) !== false) {
+                        unset($tickets[$key]);
+                    }//end if
+                }//end foreach
+
+                $tickets_play[$tn]          = $tn;
+                $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+                $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+                Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+                //$json_tickets_play = json_encode(Yii::$app->session->get('tickets_play_all'));
+                $return            = ["status"=>false,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+                return json_encode($return);*/
+            }//end if
+        }else{
+            //No existe promo
+            //Tickets apartados y vendidos
+            $tickets_ac        = self::dumpTicketAC($model->tickets);
+            $allTickets        = array_merge($elements,$tickets_ac);
 
             //Elimina los Tickets seleccionados del conjunto de Tickets
             foreach ($allTickets as $element) {
@@ -339,35 +410,26 @@ class SiteController extends Controller
                 }//end if
             }//end foreach
 
-            //Obtiene un número aleatorio del conjunto de Tickets
-            $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
-            if(is_array($keys_random)){
-                foreach ($keys_random as $key_random) {
-                    $tickets_play[$tn][] = $tickets[$key_random];
-                }//end foreahc
-            }else{
-                $tickets_play[$tn][] = $tickets[$keys_random];
-            }//end if
-
-
-
-            $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+            $tickets_play[$tn]                = $tn;
+            $dump_tickets_play_all            = Yii::$app->session->get('tickets_play_all');
             $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+            
+            Yii::$app->session->set('ticket',$tickets);
             Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
-            Yii::$app->session->set('countClick',0);
-            $json_tickets_play = json_encode(Yii::$app->session->get('tickets_play_all'));
-            return $json_tickets_play;
+            //$json_tickets_play = json_encode(Yii::$app->session->get('tickets_play_all'));
+            $return            = ["status"=>false,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+            return json_encode($return);
         }//end if
     }//end function
 
     public function actionTicketremove(){
-        $tn                 = Yii::$app->request->post()["tn"];
-        $tickets_play_all   = Yii::$app->session->get('tickets_play_all');
-        $ticketRandomRemove = $tickets_play_all[$tn];
+        $tn               = Yii::$app->request->post()["tn"];
+        $tickets_play_all = Yii::$app->session->get('tickets_play_all');
+        $ticketRemove_    = $tickets_play_all[$tn];
         unset($tickets_play_all[$tn]);
         Yii::$app->session->set('tickets_play_all',$tickets_play_all);
-        $ticketRandomRemove = json_encode($ticketRandomRemove);
-        return $ticketRandomRemove;
+        $ticketRemove = json_encode($ticketRemove_);
+        return $ticketRemove;
     }//end function
 
 

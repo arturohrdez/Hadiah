@@ -5,7 +5,6 @@ use yii\helpers\Url;
 echo newerton\fancybox3\FancyBox::widget([
     'target' => '.data-fancybox-modal'
 ]);
-
 ?>
 <section id="breadcrumbs" class="breadcrumbs">
 	<div class="container">
@@ -72,10 +71,13 @@ echo newerton\fancybox3\FancyBox::widget([
 							<p class="fs-5 text-warning">
 								Para eliminar haz clic en el boleto.
 							</p>
-							<div>Oportunidades:</div>
-							<div id="div_oportunities" class="col-12"></div>
+
+							<div id="load_tickets" class="col-12" style="display: none;">
+								<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>
+							</div>
+
+							<div id="div_oportunities" class="col-12" style="display: none;"></div>
 							<div class="row mt-3" style="text-align: center;">
-								<div id="loadRemove" style="display: none;"></div>
 								<div>
 									<button id="btnSend" class="btn btn-success bg-gradient data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
 										<i class="bi bi-plus-square"></i> APARTAR <i class="bi bi-plus-square"></i> 								
@@ -106,8 +108,9 @@ echo newerton\fancybox3\FancyBox::widget([
 </section>
 
 <?php 
-$URL_promos = Url::to(['site/promos']) ;
-$URL_remove = Url::to(['site/ticketremove']) ;
+$URL_promos     = Url::to(['site/promos']) ;
+$URL_remove     = Url::to(['site/ticketremove']) ;
+$promos_related = $promos_;
 ?>
 <script type="text/javascript">
 	function ticketRemove(t){
@@ -117,36 +120,17 @@ $URL_remove = Url::to(['site/ticketremove']) ;
 			type: 'POST',
 			data: {"tn":t},
 			beforeSend: function(data){
-				$(".btn_ticket").attr("disabled",true);
+				//$(".btn_ticket").attr("disabled",true);
 				$(".btn_ticketDel").attr("disabled",true);
-				$("#loadRemove").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
 				$("#btnSend").hide();
-				$("#loadRemove").show();
+				$("#load_tickets").show();
 			},
 			success: function(response) {
+				$("#load_tickets").hide();
+
 				//Tickets
 				var tn_sel = $("#tn_sel").val();
 				var exp     = tn_sel.split(',');
-				
-				//Tickets random
-				var tn_rand      = $("#tn_rand").val();
-				var exp_rand     = tn_rand.split(',');
-				var pos_del_rand = null;
-				let ticketRandomRemove = JSON.parse(response);
-				$("#t_n_"+t).remove();
-				for (let key in ticketRandomRemove) {
-					pos_del_rand = exp_rand.indexOf(ticketRandomRemove[key]);
-					if(pos_del_rand > -1){
-						exp_rand.splice(pos_del_rand, 1);
-						$("#tn_rand").val(exp_rand.join(','));
-
-						
-						$("#tn_"+ticketRandomRemove[key]).removeClass('btn-success');
-						$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-success');
-					}//end if
-				}//end for
-			
-
 				var pos_del = exp.indexOf(t);
 				if(pos_del > -1){
 					exp.splice(pos_del, 1);
@@ -162,8 +146,31 @@ $URL_remove = Url::to(['site/ticketremove']) ;
 					$("#tn_"+t).removeClass('btn-success');
 					$("#tn_"+t).addClass('btn-outline-success');
 				}//end if
+				
+				//Tickets random
+				var tn_rand      = $("#tn_rand").val();
+				var exp_rand     = tn_rand.split(',');
+				if(exp_rand != ""){
+					/*console.log("entra");
+					console.log(exp_rand);*/
 
-				$(".btn_ticket").attr("disabled",false);
+					var pos_del_rand = null;
+					let ticketRandomRemove = JSON.parse(response);
+					$("#t_n_"+t).remove();
+					for (let key in ticketRandomRemove) {
+						pos_del_rand = exp_rand.indexOf(ticketRandomRemove[key]);
+						if(pos_del_rand > -1){
+							exp_rand.splice(pos_del_rand, 1);
+							$("#tn_rand").val(exp_rand.join(','));
+
+							
+							$("#tn_"+ticketRandomRemove[key]).removeClass('btn-success');
+							$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-success');
+						}//end if
+					}//end for
+				}//end if
+
+				//$(".btn_ticket").attr("disabled",false);
 				$(".btn_ticketDel").attr("disabled",false);
 				$("#loadRemove").html("");
 				$("#loadRemove").hide();
@@ -183,17 +190,17 @@ $script = <<< JS
 		$("#tn_rand").val("");
 	});
 
-	function promos(elements,tn){
-		var url_p = "$URL_promos";
-		var elements_ran = $("#tn_rand").val();
-		/*console.log(url_p);*/
+	function promos(elements,tn,tn_rand){
+		var url_p        = "$URL_promos";
+		var elements_ran = tn_rand;
+
 		return $.ajax({
 			url: url_p,
 			type: 'POST',
 			data: {"id": $model->id,"tickets":elements,"tickets_rnd":elements_ran,"tn":tn},
 			beforeSend: function(data){
-				$(".btn_ticket").attr("disabled",true);
-				$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
+				//$(".btn_ticket").attr("disabled",true);
+				$("#load_tickets").show();
 				$("#btnSend").hide();
 			},
 			success: function(response) {
@@ -205,9 +212,9 @@ $script = <<< JS
 	}//end function
 
 	function oportunities(options){
-		let elements         = JSON.parse(options);
+		let elements         = options;
 		let ticket_ran       = [];
-		let div_oportunities = "";
+		let div_oportunities = '<div id="lbl_oportunities">Oportunidades:</div>';
 
 		for (let key in elements) {
 			div_oportunities += "<div id='t_n_"+key+"'>"+key+" [";
@@ -228,7 +235,7 @@ $script = <<< JS
 		//tickets_randoms
 		$("#tn_rand").val(ticket_ran.join(","));
 		$("#div_oportunities").html(div_oportunities);
-		$("#btnSend").show();
+		$("#div_oportunities").show();
 	}//end function
 
 
@@ -238,8 +245,15 @@ $script = <<< JS
 		var tn_rand  = $("#tn_rand").val();
 		let elements = [];
 		var promos_  = null;
-
+		//let promos_related_ = $promos_related;
 		//alert(tn_rand);
+		//console.log(promos_related_);
+		
+		/*if(promos_related_ == 0){
+			$("#div_tickets").show();
+			$("#div_tickets").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
+			//alert("entra");
+		}//end if*/
 
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
@@ -247,36 +261,66 @@ $script = <<< JS
 			let search_ti = tn_sel.indexOf(tn);
 			let search_tr = tn_rand.indexOf(tn);
 			if(search_ti == -1 && search_tr == -1){
+				//$(".btn_ticket").attr("disabled",true);
 				elements.push(tn);
 				$("#tn_sel").val(elements.join(','));
-				promos(elements,tn).done(function(response){
+				promos(elements,tn,tn_rand).done(function(response){
+					promos_         = JSON.parse(response);
+					if(promos_.status == true){
+						//$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
+						//$("#div_oportunities").show();
+						oportunities(promos_.tickets_play);
+					}else{
+						if(promos_.status == "NA"){
+							alert("Error 403 (Forbidden)");
+							return false;
+						}
+					}//end if
+
 					//Muestra oportunidades
-					oportunities(response);
-					$(".btn_ticket").attr("disabled",false);
+					//$(".btn_ticket").attr("disabled",false);
+					$("#load_tickets").hide()
+					$("#btnSend").show();
 				});
 			}//end if
 		}else{
 			elements.push(tn);
 			$("#tn_sel").val(elements.join(','));
-			promos(elements,tn).done(function(response){
+			//$(".btn_ticket").attr("disabled",true);
+			promos(elements,tn,tn_rand).done(function(response){
+				promos_         = JSON.parse(response);
+				if(promos_.status == true){
+					//$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
+					//$("#div_oportunities").show();
+					oportunities(promos_.tickets_play);
+				}else{
+					if(promos_.status == "NA"){
+						alert("Error 403 (Forbidden)");
+						return false;
+					}
+				}//end if
+
 				//Muestra oportunidades
-				oportunities(response);
-				$(".btn_ticket").attr("disabled",false);
+				//oportunities(response);
+				//$(".btn_ticket").attr("disabled",false);
+				$("#load_tickets").hide();
+				$("#btnSend").show();
 			});
 		}//end if
 
+
+
 		//console.log(promos);
 		
-		//Tickets number
+		//Tickets Count
 		let n_t = elements.length;
-		$(".n_t").text(n_t);
+		$(".n_t").text(n_t);	
 
 		//Tickets selected
 		let t_selectBtn = "";
 		for (var i = n_t-1; i >= 0; i--) {
-			//console.log(elements[i]);
 			t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
-		}//end foreach*
+		}//end foreach
 		$(".t_opt").html(t_selectBtn);
 
 		//Show Div Selected
