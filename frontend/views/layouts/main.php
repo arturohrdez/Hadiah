@@ -36,11 +36,11 @@ AppAsset::register($this);
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a href="/" class="active fs-5">Inicio</a></li>
-                <li><a href="#faq" class="fs-5">Preguntas Frecuentes</a></li>
-                <li><a href="#about" class="fs-5">Nosotros</a></li>
-                <li><a href="#contactus" class="fs-5">Contacto</a></li>
-                <li><a href="#" class="getstarted fs-5">Comprar Boletos</a></li>
+                <li><a href="/" class="active fs-6">Inicio</a></li>
+                <li><a href="#faq" class="fs-6">Preguntas Frecuentes</a></li>
+                <li><a href="#about" class="fs-6">Nosotros</a></li>
+                <li><a href="#contactus" class="fs-6">Contacto</a></li>
+                <li><a href="#" class="getstarted fs-6">Comprar Boletos</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
