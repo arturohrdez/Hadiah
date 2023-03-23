@@ -112,14 +112,6 @@ echo newerton\fancybox3\FancyBox::widget([
 									}//end if
 								}//end foreach
 							}//end foreach
-							
-							/*for ($i=$init; $i <= $end ; $i++) {
-								if(!in_array($tickets[$i], $tickets_ac)){
-									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
-								}else{
-									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn btn-secondary text-black mb-3']).'</div>';
-								}//end if
-							}//end for*/
 							?>
 					</div>
 				</article>
@@ -131,7 +123,6 @@ echo newerton\fancybox3\FancyBox::widget([
 <?php 
 $URL_promos     = Url::to(['site/promos']) ;
 $URL_remove     = Url::to(['site/ticketremove']) ;
-$promos_related = null;
 ?>
 <script type="text/javascript">
 	function ticketRemove(t){
@@ -215,8 +206,6 @@ $script = <<< JS
 		event.preventDefault();
 		/* Act on the event */
 	});
-
-
 	$("#ticket_s").on('keyup',function(event) {
 		/* Act on the event */
 		let ticket_s = $(this).val();
@@ -241,7 +230,6 @@ $script = <<< JS
 			//console.log(ticket_s);
 		}//end if
 	});
-
 
 	function promos(elements,tn,tn_rand){
 		var url_p        = "$URL_promos";
@@ -297,8 +285,6 @@ $script = <<< JS
 		var tn_sel   = $("#tn_sel").val();
 		var tn_rand  = $("#tn_rand").val();
 		let elements = [];
-		var promos_  = null;
-		//let promos_related_ = $promos_related;
 		//alert(tn_rand);
 		//console.log(promos_related_);
 		

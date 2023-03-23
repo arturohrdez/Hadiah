@@ -273,7 +273,7 @@ class SiteController extends Controller
             $tickets[$i] = self::addcero($digitos,$i);
         }//end foreach
 
-        $tickets_div = array_chunk($tickets,5000);
+        $tickets_div = array_chunk($tickets,10000);
         
         Yii::$app->session->set('tickets', $tickets_div);
         return $tickets_div;
@@ -342,6 +342,17 @@ class SiteController extends Controller
                     $elements_rnd = explode(",", $elements_rnd);
                     $allTickets = array_merge($allTickets,$elements_rnd);
                 }//end if
+
+
+                $lotes = count($tickets);
+                echo "<pre>";
+                var_dump($lotes);
+                echo "</pre>";
+                echo "<pre>";
+                var_dump($tn);
+                echo "</pre>";
+                die();
+
 
                 //Elimina los Tickets seleccionados del conjunto de Tickets
                 foreach ($allTickets as $element) {
