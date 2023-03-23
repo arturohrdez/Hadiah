@@ -273,8 +273,10 @@ class SiteController extends Controller
             $tickets[$i] = self::addcero($digitos,$i);
         }//end foreach
 
-        Yii::$app->session->set('tickets', $tickets);
-        return $tickets;
+        $tickets_div = array_chunk($tickets,5000);
+        
+        Yii::$app->session->set('tickets', $tickets_div);
+        return $tickets_div;
     }//end function
 
     public static function dumpTicketAC($tickets_ac = []){
@@ -296,59 +298,18 @@ class SiteController extends Controller
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
-        $promos_ = !empty($model->promos) ? 1 : 0;
-        // $init    = $model->ticket_init;
-        // $end     = $model->ticket_end;
-        //$tickets = self::createTickets($init,$end);
+        //$promos_ = !empty($model->promos) ? 1 : 0;
+        $init    = $model->ticket_init;
+        $end     = $model->ticket_end;
+        $tickets_list = self::createTickets($init,$end);
 
         //Tickets apartados y vendidos
         $tickets_ac = self::dumpTicketAC($model->tickets);
 
-        //Ticket Range
-        $ciclos      = round($model->ticket_end / 10000);
-        $all_tickets = [];
-        $init        = $model->ticket_init;
-        //$end         = $model->ticket_end;
-        for ($i=1; $i <= $ciclos ; $i++) { 
-            if($i == 1){
-                $end = 10000;
-            }//end if
-
-            if($i < $ciclos){
-                $init = $end + 1;
-                $end  = $end + 10000;
-            }
-
-            if($i == $ciclos){
-                $init = $end + 1;
-                $end  = $model->ticket_end;
-            }
-
-            echo "<h1>{$i}</h1><br>";
-            echo "<pre>";
-            var_dump($init);
-            echo "</pre>";
-            echo "<pre>";
-            var_dump($end);
-            echo "</pre>";
-            //$all_tickets[$i] = self::createTickets($init,$end);
-            /*for ($j=$count; $j <= 10000; $j++) { 
-                $all_tickets[$i][$j] = ;
-                $count++;
-            }//end for*/
-        }//end for
-
-        /*echo "<pre>";
-        var_dump($tickets);
-        echo "</pre>";*/
-        die();
-
-
         return $this->render('rifaDetail', [
-            'model'      => $model,
-            'tickets'    => $tickets,
-            'tickets_ac' => $tickets_ac,
-            'promos_'    => (int) $promos_
+            'model'        => $model,
+            'tickets_list' => $tickets_list,
+            'tickets_ac'   => $tickets_ac
         ]);
     }//end function
 

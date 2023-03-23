@@ -102,15 +102,24 @@ echo newerton\fancybox3\FancyBox::widget([
 							<?php 
 							$init = $model->ticket_init;
 							$end  = $model->ticket_end;
+
+							foreach ($tickets_list as $ticket_l) {
+								foreach ($ticket_l as $tickets) {
+									if(!in_array($tickets, $tickets_ac)){
+										echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets]).'</div>';
+									}else{
+										echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
+									}//end if
+								}//end foreach
+							}//end foreach
 							
-							
-							for ($i=$init; $i <= $end ; $i++) {
+							/*for ($i=$init; $i <= $end ; $i++) {
 								if(!in_array($tickets[$i], $tickets_ac)){
 									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
 								}else{
 									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn btn-secondary text-black mb-3']).'</div>';
 								}//end if
-							}//end for
+							}//end for*/
 							?>
 					</div>
 				</article>
@@ -122,7 +131,7 @@ echo newerton\fancybox3\FancyBox::widget([
 <?php 
 $URL_promos     = Url::to(['site/promos']) ;
 $URL_remove     = Url::to(['site/ticketremove']) ;
-$promos_related = $promos_;
+$promos_related = null;
 ?>
 <script type="text/javascript">
 	function ticketRemove(t){
