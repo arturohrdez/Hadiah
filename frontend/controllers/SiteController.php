@@ -310,17 +310,37 @@ class SiteController extends Controller
         $init        = $model->ticket_init;
         //$end         = $model->ticket_end;
         for ($i=1; $i <= $ciclos ; $i++) { 
-            $all_tickets[$i] = self::createTickets($init,$end);
-            //if($i == )
+            if($i == 1){
+                $end = 10000;
+            }//end if
+
+            if($i < $ciclos){
+                $init = $end + 1;
+                $end  = $end + 10000;
+            }
+
+            if($i == $ciclos){
+                $init = $end + 1;
+                $end  = $model->ticket_end;
+            }
+
+            echo "<h1>{$i}</h1><br>";
+            echo "<pre>";
+            var_dump($init);
+            echo "</pre>";
+            echo "<pre>";
+            var_dump($end);
+            echo "</pre>";
+            //$all_tickets[$i] = self::createTickets($init,$end);
             /*for ($j=$count; $j <= 10000; $j++) { 
                 $all_tickets[$i][$j] = ;
                 $count++;
             }//end for*/
         }//end for
 
-        echo "<pre>";
+        /*echo "<pre>";
         var_dump($tickets);
-        echo "</pre>";
+        echo "</pre>";*/
         die();
 
 
