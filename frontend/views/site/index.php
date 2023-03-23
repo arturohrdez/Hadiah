@@ -29,9 +29,6 @@ if(!empty($rifas)){
                         <h2 class="animate__animated animate__fadeInDown">
                             <?php echo $rifa_title; ?>
                         </h2>
-                        <p class="animate__animated animate__fadeInUp fs-4">
-                            <?php echo nl2br($rifa_description);?>
-                        </p>
                         <a href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>" class="btn-get-started animate__animated animate__fadeInUp">Comprar Boletos</a>
                     </div>
                 </div>
