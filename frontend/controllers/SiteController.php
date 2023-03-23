@@ -297,12 +297,32 @@ class SiteController extends Controller
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
         $promos_ = !empty($model->promos) ? 1 : 0;
-        $init    = $model->ticket_init;
-        $end     = $model->ticket_end;
-        $tickets = self::createTickets($init,$end);
+        // $init    = $model->ticket_init;
+        // $end     = $model->ticket_end;
+        //$tickets = self::createTickets($init,$end);
 
         //Tickets apartados y vendidos
         $tickets_ac = self::dumpTicketAC($model->tickets);
+
+        //Ticket Range
+        $ciclos      = round($model->ticket_end / 10000);
+        $all_tickets = [];
+        $init        = $model->ticket_init;
+        //$end         = $model->ticket_end;
+        for ($i=1; $i <= $ciclos ; $i++) { 
+            $all_tickets[$i] = self::createTickets($init,$end);
+            //if($i == )
+            /*for ($j=$count; $j <= 10000; $j++) { 
+                $all_tickets[$i][$j] = ;
+                $count++;
+            }//end for*/
+        }//end for
+
+        echo "<pre>";
+        var_dump($tickets);
+        echo "</pre>";
+        die();
+
 
         return $this->render('rifaDetail', [
             'model'      => $model,

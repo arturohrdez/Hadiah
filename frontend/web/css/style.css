@@ -2115,3 +2115,13 @@ section {
 #footer .credits a:hover {
   color: white;
 }
+
+
+#ticket_s::placeholder{
+  text-align: center;
+  font-weight: bold;
+}
+
+#ticket_s{
+  text-align: center;
+}

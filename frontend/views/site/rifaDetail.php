@@ -60,11 +60,13 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div class="row mt-3">
-						<div class="col-12">
-							<?php $form = yii\bootstrap4\ActiveForm::begin(['action'=>Url::to(['/site/searchticket']),'options'=>['enctype'=>'multipart/form-data','id'=>'searchTiecketForm']]); ?>
-							<?php echo  Html::input('text','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
-							<?php yii\bootstrap4\ActiveForm::end(); ?>
+					<div class="row pt-3 pb-3 bg-primary">
+						<div class="d-flex justify-content-center bd-highlight">
+							<div class="col-6">
+								<?php $form = yii\bootstrap4\ActiveForm::begin(['action'=>Url::to(['/site/searchticket']),'options'=>['enctype'=>'multipart/form-data','id'=>'searchTiecketForm']]); ?>
+								<?php echo  Html::input('text','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
+								<?php yii\bootstrap4\ActiveForm::end(); ?>
+							</div>
 						</div>
 					</div>
 
@@ -100,14 +102,15 @@ echo newerton\fancybox3\FancyBox::widget([
 							<?php 
 							$init = $model->ticket_init;
 							$end  = $model->ticket_end;
-
+							
+							
 							for ($i=$init; $i <= $end ; $i++) {
 								if(!in_array($tickets[$i], $tickets_ac)){
 									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets[$i]]).'</div>';
 								}else{
 									echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets[$i], ['id'=>'tn_'.$tickets[$i], 'class' => 'btn btn-secondary text-black mb-3']).'</div>';
 								}//end if
-							}
+							}//end for
 							?>
 					</div>
 				</article>
