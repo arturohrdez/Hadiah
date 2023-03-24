@@ -62,10 +62,9 @@ echo newerton\fancybox3\FancyBox::widget([
 
 					<div class="row pt-3 pb-3 bg-primary">
 						<div class="d-flex justify-content-center bd-highlight">
-							<div class="col-6">
-								<?php $form = yii\bootstrap4\ActiveForm::begin(['action'=>Url::to(['/site/searchticket']),'options'=>['enctype'=>'multipart/form-data','id'=>'searchTiecketForm']]); ?>
-								<?php echo  Html::input('text','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
-								<?php yii\bootstrap4\ActiveForm::end(); ?>
+							<div class="col-6 text-center">
+								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'NUM. BOLETO','autocomplete'=>'off']) ?>
+								<?php echo  Html::button("BUSCAR BOLETO", ['id'=>'btn_ticket_search','class' => 'btn btn-danger mt-2','style'=>'font-weight: bold;']); ?>
 							</div>
 						</div>
 					</div>
@@ -98,21 +97,11 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div class="row mt-5 overflow-scroll" style="max-height: 300px;">
-							<?php 
-							$init = $model->ticket_init;
-							$end  = $model->ticket_end;
-
-							foreach ($tickets_list as $ticket_l) {
-								foreach ($ticket_l as $tickets) {
-									if(!in_array($tickets, $tickets_ac)){
-										echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets]).'</div>';
-									}else{
-										echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
-									}//end if
-								}//end foreach
-							}//end foreach
-							?>
+					<div id="list_tickets" class="row mt-5 overflow-scroll" style="max-height: 300px;">
+						<div id="loading_tickets_list" class="col-12 text-center mb-5" style="display: none;">
+							<strong class="fs-3">Generando Boletos ...</strong><br>
+							<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>
+						</div>
 					</div>
 				</article>
 			</div>
@@ -121,8 +110,9 @@ echo newerton\fancybox3\FancyBox::widget([
 </section>
 
 <?php 
-$URL_promos     = Url::to(['site/promos']) ;
-$URL_remove     = Url::to(['site/ticketremove']) ;
+$digitos     = strlen($model->ticket_end);
+$URL_remove  = Url::to(['site/ticketremove']);
+$URL_tickets = Url::to(['site/loadtickets']);
 ?>
 <script type="text/javascript">
 	function ticketRemove(t){
@@ -197,175 +187,39 @@ $URL_remove     = Url::to(['site/ticketremove']) ;
 
 <?php 
 $script = <<< JS
+	function loadTickets(){
+		$.ajax({
+			url : "$URL_tickets",
+			type: "POST",
+			dataType: "HTML",
+			data: {"id":$model->id},
+			beforeSend: function(){
+				$("#loading_tickets_list").show();
+				//console.log("beforeSend");
+			},
+			success: function (data) {
+				$("#list_tickets").html(data);
+				$("#loading_tickets_list").hide();
+			}//sucess
+		});
+	}//
+
 	$(function(e){
 		$("#tn_sel").val("");
 		$("#tn_rand").val("");
+		loadTickets();
 	});
 
-	$("#searchTiecketForm").on('submit', function(event) {
-		event.preventDefault();
-		/* Act on the event */
-	});
-	$("#ticket_s").on('keyup',function(event) {
-		/* Act on the event */
-		let ticket_s = $(this).val();
-		if(ticket_s != ""){
-			var action_ = $("#searchTiecketForm").attr("action");
-			var type_ = $("#searchTiecketForm").attr("method");
-			var formData_ = $("#searchTiecketForm").serialize();
-
-			$.ajax({
-				url: action_,
-				type: type_,
-				dataType: 'html',
-				data: formData_,
-			})
-			.done(function() {
-				console.log("success");
-			})
-			.fail(function() {
-				console.log("error");
-			});
-			
-			//console.log(ticket_s);
+	//Format Number
+	$("#ticket_s").on("keyup",function(e){
+		let n = $(this).val();
+		let i = n.replace(/^(0+)/g, '');
+		let f = "";
+		if(n != ""){
+			f = i.padStart({$digitos},"0");
+			$(this).val(f);
 		}//end if
 	});
 
-	function promos(elements,tn,tn_rand){
-		var url_p        = "$URL_promos";
-		var elements_ran = tn_rand;
-
-		return $.ajax({
-			url: url_p,
-			type: 'POST',
-			data: {"id": $model->id,"tickets":elements,"tickets_rnd":elements_ran,"tn":tn},
-			beforeSend: function(data){
-				//$(".btn_ticket").attr("disabled",true);
-				$("#load_tickets").show();
-				$("#btnSend").hide();
-			},
-			success: function(response) {
-	        },
-	        error: function() {
-	            console.log('Error occured');
-	        }
-		});
-	}//end function
-
-	function oportunities(options){
-		let elements         = options;
-		let ticket_ran       = [];
-		let div_oportunities = '<div id="lbl_oportunities">Oportunidades:</div>';
-
-		for (let key in elements) {
-			div_oportunities += "<div id='t_n_"+key+"'>"+key+" [";
-			for (var i = elements[key].length - 1; i >= 0; i--) {
-				$("#tn_"+elements[key][i]).removeClass('btn-outline-success');
-				$("#tn_"+elements[key][i]).addClass('btn-success');
-
-				if(i < elements[key].length-1){
-					div_oportunities += ",";
-				}
-				div_oportunities += elements[key][i];
-
-				ticket_ran.push(elements[key][i]);
-			}//end foreach
-			div_oportunities += "] </div>";
-		}//end for
-
-		//tickets_randoms
-		$("#tn_rand").val(ticket_ran.join(","));
-		$("#div_oportunities").html(div_oportunities);
-		$("#div_oportunities").show();
-	}//end function
-
-
-	$(".btn_ticket").on("click",function(e){
-		var tn       = $(this).data("tn");
-		var tn_sel   = $("#tn_sel").val();
-		var tn_rand  = $("#tn_rand").val();
-		let elements = [];
-		//alert(tn_rand);
-		//console.log(promos_related_);
-		
-		/*if(promos_related_ == 0){
-			$("#div_tickets").show();
-			$("#div_tickets").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
-			//alert("entra");
-		}//end if*/
-
-		if(tn_sel.length > 0){
-			var exp  = tn_sel.split(',');
-			elements = exp;
-			let search_ti = tn_sel.indexOf(tn);
-			let search_tr = tn_rand.indexOf(tn);
-			if(search_ti == -1 && search_tr == -1){
-				//$(".btn_ticket").attr("disabled",true);
-				elements.push(tn);
-				$("#tn_sel").val(elements.join(','));
-				promos(elements,tn,tn_rand).done(function(response){
-					promos_         = JSON.parse(response);
-					if(promos_.status == true){
-						//$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
-						//$("#div_oportunities").show();
-						oportunities(promos_.tickets_play);
-					}else{
-						if(promos_.status == "NA"){
-							alert("Error 403 (Forbidden)");
-							return false;
-						}
-					}//end if
-
-					//Muestra oportunidades
-					//$(".btn_ticket").attr("disabled",false);
-					$("#load_tickets").hide()
-					$("#btnSend").show();
-				});
-			}//end if
-		}else{
-			elements.push(tn);
-			$("#tn_sel").val(elements.join(','));
-			//$(".btn_ticket").attr("disabled",true);
-			promos(elements,tn,tn_rand).done(function(response){
-				promos_         = JSON.parse(response);
-				if(promos_.status == true){
-					//$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
-					//$("#div_oportunities").show();
-					oportunities(promos_.tickets_play);
-				}else{
-					if(promos_.status == "NA"){
-						alert("Error 403 (Forbidden)");
-						return false;
-					}
-				}//end if
-
-				//Muestra oportunidades
-				//oportunities(response);
-				//$(".btn_ticket").attr("disabled",false);
-				$("#load_tickets").hide();
-				$("#btnSend").show();
-			});
-		}//end if
-
-
-
-		//console.log(promos);
-		
-		//Tickets Count
-		let n_t = elements.length;
-		$(".n_t").text(n_t);	
-
-		//Tickets selected
-		let t_selectBtn = "";
-		for (var i = n_t-1; i >= 0; i--) {
-			t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
-		}//end foreach
-		$(".t_opt").html(t_selectBtn);
-
-		//Show Div Selected
-		$("#div_selected").show();
-		$(this).removeClass('btn-outline-success');
-		$(this).addClass('btn-success');
-	});
 JS;
 $this->registerJs($script);

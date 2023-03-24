@@ -273,8 +273,8 @@ class SiteController extends Controller
             $tickets[$i] = self::addcero($digitos,$i);
         }//end foreach
 
-        //$tickets_div = array_chunk($tickets,10000);
-        $tickets_div = array_chunk($tickets,5);
+        $tickets_div = array_chunk($tickets,6500);
+        //$tickets_div = array_chunk($tickets,5);
         
         Yii::$app->session->set('tickets', $tickets);
         return $tickets_div;
@@ -302,16 +302,40 @@ class SiteController extends Controller
         //$promos_ = !empty($model->promos) ? 1 : 0;
         $init    = $model->ticket_init;
         $end     = $model->ticket_end;
-        $tickets_list = self::createTickets($init,$end);
+        //$tickets_list = self::createTickets($init,$end);
 
         //Tickets apartados y vendidos
-        $tickets_ac = self::dumpTicketAC($model->tickets);
+        //$tickets_ac = self::dumpTicketAC($model->tickets);
 
         return $this->render('rifaDetail', [
+            'model'        => $model,
+            //'tickets_list' => $tickets_list,
+            //'tickets_ac'   => $tickets_ac
+        ]);
+    }//end function
+
+    public function actionLoadtickets(){
+        $model = Rifas::find()->where(["id" => Yii::$app->request->post()["id"]])->one();
+        $init  = $model->ticket_init;
+        $end   = $model->ticket_end;
+        //Tickets List
+        $tickets_list = self::createTickets($init,$end);
+        //Tickets apartados y vendidos
+        $tickets_ac   = self::dumpTicketAC($model->tickets);
+
+        return $this->renderAjax('_loadTickets',[
             'model'        => $model,
             'tickets_list' => $tickets_list,
             'tickets_ac'   => $tickets_ac
         ]);
+
+        /*echo "<pre>";
+        var_dump($tickets_list);
+        echo "</pre>";
+        echo "<pre>";
+        var_dump($tickets_ac);
+        echo "</pre>";
+        die();*/
     }//end function
 
     public function actionPromos(){
