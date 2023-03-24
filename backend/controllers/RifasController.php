@@ -103,8 +103,11 @@ class RifasController extends Controller
 
             #-- Save Promotion
             $modelPromos->load(Yii::$app->request->post());
-            $modelPromos->rifa_id = $model->id;
-            $modelPromos->save();
+            if(!empty($modelPromos->buy_ticket) && !empty($modelPromos->get_ticket)){
+                $modelPromos->rifa_id = $model->id;
+                $modelPromos->save();
+            }//end if
+            
 
             Yii::$app->session->setFlash('success', "Se registro correctamente la Rifa :  <strong>".$model->name."</strong>");
             return $this->redirect(['index']);

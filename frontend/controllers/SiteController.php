@@ -489,7 +489,16 @@ class SiteController extends Controller
     }//end function
 
     public function actionApartar(){
-        $rifaId = Yii::$app->request->get()["id"];
+        $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
+        $model                 = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
+        echo "<pre>";
+        var_dump($model);
+        echo "</pre>";
+        echo "<pre>";
+        var_dump($dump_tickets_play_all);
+        echo "</pre>";
+        die();
+
         return $this->renderAjax('_apartarPopup');
     }//end function
 }
