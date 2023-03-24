@@ -273,9 +273,10 @@ class SiteController extends Controller
             $tickets[$i] = self::addcero($digitos,$i);
         }//end foreach
 
-        $tickets_div = array_chunk($tickets,10000);
+        //$tickets_div = array_chunk($tickets,10000);
+        $tickets_div = array_chunk($tickets,5);
         
-        Yii::$app->session->set('tickets', $tickets_div);
+        Yii::$app->session->set('tickets', $tickets);
         return $tickets_div;
     }//end function
 
@@ -343,17 +344,6 @@ class SiteController extends Controller
                     $allTickets = array_merge($allTickets,$elements_rnd);
                 }//end if
 
-
-                $lotes = count($tickets);
-                echo "<pre>";
-                var_dump($lotes);
-                echo "</pre>";
-                echo "<pre>";
-                var_dump($tn);
-                echo "</pre>";
-                die();
-
-
                 //Elimina los Tickets seleccionados del conjunto de Tickets
                 foreach ($allTickets as $element) {
                     if (($key = array_search($element, $tickets)) !== false) {
@@ -362,19 +352,40 @@ class SiteController extends Controller
                 }//end foreach
 
                 //Obtiene un número aleatorio del conjunto de Tickets
-                $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
+                $total_tickets_ls = count($tickets);
+                //Existe tickets para generar un aleatoreo
+                if($total_tickets_ls != 0){
+                    if($total_tickets_ls < $model->promos[0]->get_ticket){
+                        $keys_random = array_rand($tickets,$total_tickets_ls);
+                    }else{
+                        $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
+                    }//end if
+                }elseif($total_tickets_ls == 0){
+                    //Ya no existen tickets para generar aleatoreo
+                    $keys_random = null;
+                }//end if
+
+
                 if(is_array($keys_random)){
                     foreach ($keys_random as $key_random) {
                         $tickets_play[$tn][] = $tickets[$key_random];
                     }//end foreahc
                 }else{
-                    $tickets_play[$tn][] = $tickets[$keys_random];
+                    if(!is_null($keys_random)){
+                        $tickets_play[$tn][] = $tickets[$keys_random];
+                    }//end if
                 }//end if
 
 
 
                 $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
-                $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+                if(is_null($keys_random)){
+                    $dump_tickets_play_all[$tn] = [$tn];
+                }else{
+                    $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+                }//end if
+
+                Yii::$app->session->set('ticket',$tickets);
                 Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
                 Yii::$app->session->set('countClick',0);
                 //$json_tickets_play = Yii::$app->session->get('tickets_play_all');
@@ -423,8 +434,8 @@ class SiteController extends Controller
                 }//end if
             }//end foreach
 
-            $tickets_play[$tn]                = $tn;
-            $dump_tickets_play_all            = Yii::$app->session->get('tickets_play_all');
+            $tickets_play[$tn]          = $tn;
+            $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
             $dump_tickets_play_all[$tn] = $tickets_play[$tn];
             
             Yii::$app->session->set('ticket',$tickets);
