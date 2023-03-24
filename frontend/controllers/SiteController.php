@@ -328,14 +328,6 @@ class SiteController extends Controller
             'tickets_list' => $tickets_list,
             'tickets_ac'   => $tickets_ac
         ]);
-
-        /*echo "<pre>";
-        var_dump($tickets_list);
-        echo "</pre>";
-        echo "<pre>";
-        var_dump($tickets_ac);
-        echo "</pre>";
-        die();*/
     }//end function
 
     public function actionPromos(){
@@ -481,14 +473,19 @@ class SiteController extends Controller
     }//end function
 
     public function actionSearchticket(){
-        $ticket_s = Yii::$app->request->post()["ticket_serarch"];
-        $model    = Tickets::find()->where(['ticket' => $ticket_s])->one();
+        $tn_s = Yii::$app->request->post()["tn_s"];
+        $max  = Yii::$app->request->post()["max"];
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if($tn_s > $max){
+            return ["status"=>false];
+        }//end if
 
-        
-        echo "<pre>";
-        var_dump($model);
-        echo "</pre>";
-        die();
+        $model  = Tickets::find()->where(['ticket' => $tn_s])->one();
+        if(is_null($model)){
+            return ["status"=>true];
+        }//end if
+
+        return ["status"=>false];
     }//end function
 
 

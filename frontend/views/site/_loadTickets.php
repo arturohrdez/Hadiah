@@ -68,14 +68,6 @@ $script = <<< JS
 		var tn_sel   = $("#tn_sel").val();
 		var tn_rand  = $("#tn_rand").val();
 		let elements = [];
-		//alert(tn_rand);
-		//console.log(promos_related_);
-		
-		/*if(promos_related_ == 0){
-			$("#div_tickets").show();
-			$("#div_tickets").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
-			//alert("entra");
-		}//end if*/
 
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
@@ -83,14 +75,11 @@ $script = <<< JS
 			let search_ti = tn_sel.indexOf(tn);
 			let search_tr = tn_rand.indexOf(tn);
 			if(search_ti == -1 && search_tr == -1){
-				//$(".btn_ticket").attr("disabled",true);
 				elements.push(tn);
 				$("#tn_sel").val(elements.join(','));
 				promos(elements,tn,tn_rand).done(function(response){
 					promos_         = JSON.parse(response);
 					if(promos_.status == true){
-						//$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
-						//$("#div_oportunities").show();
 						oportunities(promos_.tickets_play);
 					}else{
 						if(promos_.status == "NA"){
@@ -108,12 +97,9 @@ $script = <<< JS
 		}else{
 			elements.push(tn);
 			$("#tn_sel").val(elements.join(','));
-			//$(".btn_ticket").attr("disabled",true);
 			promos(elements,tn,tn_rand).done(function(response){
 				promos_         = JSON.parse(response);
 				if(promos_.status == true){
-					//$("#div_oportunities").html('<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>');
-					//$("#div_oportunities").show();
 					oportunities(promos_.tickets_play);
 				}else{
 					if(promos_.status == "NA"){
@@ -123,16 +109,10 @@ $script = <<< JS
 				}//end if
 
 				//Muestra oportunidades
-				//oportunities(response);
-				//$(".btn_ticket").attr("disabled",false);
 				$("#load_tickets").hide();
 				$("#btnSend").show();
 			});
 		}//end if
-
-
-
-		//console.log(promos);
 		
 		//Tickets Count
 		let n_t = elements.length;

@@ -61,7 +61,19 @@ echo newerton\fancybox3\FancyBox::widget([
 					</div>
 
 					<div class="row pt-3 pb-3 bg-primary">
-						<div class="d-flex justify-content-center bd-highlight">
+						<div class="row d-flex justify-content-center bd-highlight">
+							<div id="ticket_s_m" class="col-6 text-center" style="display: none;">
+								<div class="alert alert-success p-2">
+									<strong><i class="bi bi-ticket-perforated-fill"></i> BOLETO DISPONIBLE</strong>
+								</div>
+							</div>
+							<div class="clearix"></div>
+							<div id="ticket_e_m" class="col-6 text-center" style="display: none;">
+								<div class="alert alert-danger p-2">
+									<strong><i class="bi bi-ticket-perforated-fill"></i> BOLETO NO DISPONIBLE</strong>
+								</div>
+							</div>
+							<div class="clearix"></div>
 							<div class="col-6 text-center">
 								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'NUM. BOLETO','autocomplete'=>'off']) ?>
 								<?php echo  Html::button("BUSCAR BOLETO", ['id'=>'btn_ticket_search','class' => 'btn btn-danger mt-2','style'=>'font-weight: bold;']); ?>
@@ -113,6 +125,7 @@ echo newerton\fancybox3\FancyBox::widget([
 $digitos     = strlen($model->ticket_end);
 $URL_remove  = Url::to(['site/ticketremove']);
 $URL_tickets = Url::to(['site/loadtickets']);
+$URL_searcht = Url::to(['site/searchticket']);
 ?>
 <script type="text/javascript">
 	function ticketRemove(t){
@@ -211,13 +224,41 @@ $script = <<< JS
 	});
 
 	//Format Number
-	$("#ticket_s").on("keyup",function(e){
+	$("#ticket_s").on("keyup change",function(e){
 		let n = $(this).val();
 		let i = n.replace(/^(0+)/g, '');
 		let f = "";
 		if(n != ""){
 			f = i.padStart({$digitos},"0");
 			$(this).val(f);
+		}//end if
+	});
+
+	$("#btn_ticket_search").on("click",function(e){
+		let tn_s = $("#ticket_s").val();
+		if(tn_s != ""){
+			$.ajax({
+				url : "{$URL_searcht}",
+				type: 'POST',
+				data: {"tn_s":tn_s,"max":{$model->ticket_end}},
+				beforeSend: function(data){
+					$("#ticket_s_m").hide();
+					$("#ticket_e_m").hide();
+					$("#btn_ticket_search").attr("disabled",true);
+					$("#btn_ticket_search").html("Buscando Boleto..");
+				},
+				success: function(response) {
+					$("#btn_ticket_search").html("BUSCAR BOLETO");
+					$("#btn_ticket_search").attr("disabled",false);
+
+					if(response.status == true){
+						$("#ticket_s_m").show();
+						$("#btn_ticket_search").remove();
+					}else{
+						$("#ticket_e_m").show();
+					}//end if
+				}
+			});
 		}//end if
 	});
 
