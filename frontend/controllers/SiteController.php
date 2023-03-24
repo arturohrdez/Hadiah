@@ -488,8 +488,6 @@ class SiteController extends Controller
         return ["status"=>false];
     }//end function
 
-
-
     public function actionApartar(){
         $rifaId = Yii::$app->request->get()["id"];
         return $this->renderAjax('_apartarPopup');

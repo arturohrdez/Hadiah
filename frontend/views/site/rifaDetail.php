@@ -75,8 +75,8 @@ echo newerton\fancybox3\FancyBox::widget([
 							</div>
 							<div class="clearix"></div>
 							<div class="col-6 text-center">
-								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','maxlength'=>10,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'NUM. BOLETO','autocomplete'=>'off']) ?>
-								<?php echo  Html::button("BUSCAR BOLETO", ['id'=>'btn_ticket_search','class' => 'btn btn-danger mt-2','style'=>'font-weight: bold;']); ?>
+								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'NUM. BOLETO','autocomplete'=>'off']) ?>
+								<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 							</div>
 						</div>
 					</div>
@@ -228,13 +228,18 @@ $script = <<< JS
 		let n = $(this).val();
 		let i = n.replace(/^(0+)/g, '');
 		let f = "";
-		if(n != ""){
+		let a = parseFloat(n);
+
+		if(n != "" && a > 0){
 			f = i.padStart({$digitos},"0");
 			$(this).val(f);
+			$("#btn_addticket").show();
+		}else{
+			$("#btn_addticket").hide();
 		}//end if
 	});
 
-	$("#btn_ticket_search").on("click",function(e){
+	$("#btn_addticket").on("click",function(e){
 		let tn_s = $("#ticket_s").val();
 		if(tn_s != ""){
 			$.ajax({
@@ -242,25 +247,25 @@ $script = <<< JS
 				type: 'POST',
 				data: {"tn_s":tn_s,"max":{$model->ticket_end}},
 				beforeSend: function(data){
-					$("#ticket_s_m").hide();
+					//$("#ticket_s_m").hide();
 					$("#ticket_e_m").hide();
-					$("#btn_ticket_search").attr("disabled",true);
-					$("#btn_ticket_search").html("Buscando Boleto..");
+					$("#btn_addticket").attr("disabled",true);
+					$("#btn_addticket").html("Buscando Boleto..");
 				},
 				success: function(response) {
-					$("#btn_ticket_search").html("BUSCAR BOLETO");
-					$("#btn_ticket_search").attr("disabled",false);
+					$("#btn_addticket").html("¡LO QUIERO!");
+					$("#btn_addticket").attr("disabled",false);
 
 					if(response.status == true){
-						$("#ticket_s_m").show();
-						$("#btn_ticket_search").remove();
+						$("#tn_"+tn_s).trigger('click');
 					}else{
 						$("#ticket_e_m").show();
 					}//end if
+					$("#btn_addticket").hide();
+					$("#ticket_s").val('');
 				}
 			});
 		}//end if
 	});
-
 JS;
 $this->registerJs($script);
