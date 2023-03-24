@@ -61,7 +61,7 @@ echo newerton\fancybox3\FancyBox::widget([
 					</div>
 
 					<div class="row pt-3 pb-3 bg-primary">
-						<div class="row d-flex justify-content-center bd-highlight">
+						<div class="d-flex justify-content-center bd-highlight">
 							<div id="ticket_s_m" class="col-6 text-center" style="display: none;">
 								<div class="alert alert-success p-2">
 									<strong><i class="bi bi-ticket-perforated-fill"></i> BOLETO DISPONIBLE</strong>
