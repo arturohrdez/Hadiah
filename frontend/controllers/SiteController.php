@@ -299,6 +299,14 @@ class SiteController extends Controller
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
+        //Rifa no activas
+        if(!$model->status){
+            return $this->render('rifaEnd', [
+                'model'        => $model,
+            ]);
+        }//end if
+
+
         //$promos_ = !empty($model->promos) ? 1 : 0;
         $init    = $model->ticket_init;
         $end     = $model->ticket_end;
