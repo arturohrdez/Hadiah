@@ -4,7 +4,11 @@ use yii\helpers\Url;
 use yii\bootstrap4\ActiveForm;
 
 echo newerton\fancybox3\FancyBox::widget([
-    'target' => '.data-fancybox-modal'
+    'target' => '.data-fancybox-modal',
+    'config' => [
+		'clickSlide'   => false,
+		'clickOutside' => false,
+    ]
 ]);
 ?>
 <section id="breadcrumbs" class="breadcrumbs">
@@ -75,7 +79,7 @@ echo newerton\fancybox3\FancyBox::widget([
 							</div>
 							<div class="clearix"></div>
 							<div class="col-6 text-center">
-								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'NUM. BOLETO','autocomplete'=>'off']) ?>
+								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 								<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 							</div>
 						</div>
@@ -101,8 +105,8 @@ echo newerton\fancybox3\FancyBox::widget([
 							<div id="div_oportunities" class="col-12" style="display: none;"></div>
 							<div class="row mt-3" style="text-align: center;">
 								<div>
-									<button id="btnSend" class="btn btn-success bg-gradient data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
-										<i class="bi bi-plus-square"></i> APARTAR <i class="bi bi-plus-square"></i> 								
+									<button id="btnSend" class="btn btn-success bg-gradient pl-5 pr-5 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
+										APARTAR
 									</button>
 								</div>
 							</div>

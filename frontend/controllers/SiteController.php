@@ -19,6 +19,8 @@ use frontend\models\ContactForm;
 //Backend
 use backend\models\Rifas;
 use backend\models\Tickets;
+use frontend\models\TicketForm;
+
 
 /**
  * Site controller
@@ -497,16 +499,12 @@ class SiteController extends Controller
     }//end function
 
     public function actionApartar(){
-        $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
-        $model                 = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
-        echo "<pre>";
-        var_dump($model);
-        echo "</pre>";
-        echo "<pre>";
-        var_dump($dump_tickets_play_all);
-        echo "</pre>";
-        die();
-
-        return $this->renderAjax('_apartarPopup');
+        //$dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
+        $modelTicket = new TicketForm();
+        $modelRifa   = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
+        return $this->renderAjax('_apartarPopup',[
+            'modelRifa'=>$modelRifa,
+            'modelTicket'=>$modelTicket
+        ]);
     }//end function
 }
