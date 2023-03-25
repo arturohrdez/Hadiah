@@ -7,6 +7,7 @@ use yii\base\Model;
 
 class TicketForm extends Model
 {
+	public $rifa_id;
     public $phone;
     public $name;
     public $lastname;
@@ -16,7 +17,7 @@ class TicketForm extends Model
     {
         return [
             // name, email, subject and body are required
-			[['phone', 'name', 'lastname', 'state'], 'required'],
+			[['rifa_id','phone', 'name', 'lastname', 'state'], 'required'],
 			[['phone'], 'number', 'max'    => 9999999999],
 			[['name'], 'string', 'max'     => 180],
 			[['lastname'], 'string', 'max' => 250],

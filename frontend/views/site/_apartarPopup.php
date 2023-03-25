@@ -51,6 +51,7 @@ $states = [
 		</div>
 		<div class="col-12 mt-3">
 			<?php $form = ActiveForm::begin(['id' => 'ticketForm']); ?>
+			<?php echo $form->field($modelTicket, 'rifa_id')->hiddenInput(['value'=>$modelRifa->id])->label(false); ?>
 			<?php echo $form->field($modelTicket,'phone')->textInput(['placeholder'=>'TELÉFONO - WHATSAPP (10 digítos)'])->label(false); ?>
 			<?php echo $form->field($modelTicket,'name')->textInput(['placeholder'=>'NOMBRE(S)'])->label(false); ?>
 			<?php echo $form->field($modelTicket,'lastname')->textInput(['placeholder'=>'APELLIDOS'])->label(false); ?>

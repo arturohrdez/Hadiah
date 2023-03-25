@@ -501,6 +501,16 @@ class SiteController extends Controller
     public function actionApartar(){
         //$dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $modelTicket = new TicketForm();
+        if ($modelTicket->load(Yii::$app->request->post())) {
+            echo "<pre>";
+            var_dump(Yii::$app->session->get('tickets_play_all'));
+            echo "</pre>";
+            echo "<pre>";
+            var_dump(Yii::$app->request->post());
+            echo "</pre>";
+            die();
+        }//end if
+
         $modelRifa   = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
         return $this->renderAjax('_apartarPopup',[
             'modelRifa'=>$modelRifa,
