@@ -125,6 +125,49 @@ if(!empty($rifas)){
         </div>
     </div>
 </section>
+<?php 
+if(!empty($rifas)){
+?>
+<section id="team" class="team ">
+    <div class="container">
+        <div class="row">
+            <div class="section-title">
+                <p class="text-center text-danger fs-1">Rifas Activas</p>
+            </div>
+        </div>
+        <div class="row">
+            <?php 
+            foreach ($rifas as $rifa) {
+                $rifa_id    = $rifa->id;
+                $rifa_title = $rifa->name;
+                $rifa_terms = $rifa->terms;
+                $rifa_image = $rifa->main_image;
+            ?>
+            <div class="col-lg-6 mt-4">
+                <div class="member d-flex align-items-start">
+                    <div class="pic">
+                        <img src="<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>" class="img-fluid" alt="">
+                    </div>
+                    <div class="member-info">
+                        <h4><?php echo $rifa_title;?></h4>
+                        <span><?php echo nl2br($rifa_terms); ?></span>
+                        <div class="">
+                            <a class="btn btn-outline-danger" href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>">
+                                Comprar Boleto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            }//end foreach 
+            ?>
+        </div>
+    </div>
+</section>
+<?php 
+}//end if
+?>
 
 <!-- ======= About Section ======= -->
 <section id="about" class="about">
