@@ -1,6 +1,7 @@
 <?php
 use yii\bootstrap4\Html;
 use yii\bootstrap4\ActiveForm;
+use yii\helpers\Url;
 
 $ticket_n = count(Yii::$app->session->get('tickets_play_all')); 
 $states = [	
@@ -50,7 +51,14 @@ $states = [
 			</div>
 		</div>
 		<div class="col-12 mt-3">
-			<?php $form = ActiveForm::begin(['id' => 'ticketForm']); ?>
+			<?php 
+				$form = ActiveForm::begin([
+					'id'                     => 'ticketForm',
+					'enableClientValidation' => true,
+					'enableAjaxValidation'   => false,
+					'action' => ['/site/apartar'],
+				]); 
+			?>
 			<?php echo $form->field($modelTicket, 'rifa_id')->hiddenInput(['value'=>$modelRifa->id])->label(false); ?>
 			<?php echo $form->field($modelTicket,'phone')->textInput(['placeholder'=>'TELÉFONO - WHATSAPP (10 digítos)'])->label(false); ?>
 			<?php echo $form->field($modelTicket,'name')->textInput(['placeholder'=>'NOMBRE(S)'])->label(false); ?>
@@ -63,16 +71,48 @@ $states = [
 				Tu boleto sólo dura 24 horas apartado
 			</div>
 			<div class="form-group text-center mt-3">
-				<?php echo  Html::submitButton('<i class="bi bi-check-circle-fill"></i>  APARTAR ', ['class' => 'btn pl-5 pr-5 btn-success']) ?>
+				<?php echo  Html::submitButton('<i class="bi bi-check-circle-fill"></i>  APARTAR ', ['id'=>'btnAparta','class' => 'btn pl-5 pr-5 btn-success']) ?>
 			</div>
+
+			<div id="divMsg" class="col-12 text-center text-danger fw-bold mt-3" style="display: none;"></div>
 
 			<?php ActiveForm::end(); ?>
 		</div>
 	</div>
 </div>
 
-<script type="text/javascript">
-	/*$(function(e){
-		$("#arr_tickets").val($("#tn_sel").val());
-	});*/
-</script>
+<?php
+$script = <<< JS
+	$('#ticketForm').on('beforeSubmit', function(e) {
+		var form     = $(this);
+		var formData = form.serialize();
+
+    	$.ajax({
+	        url : form.attr("action"),
+	        type: form.attr("method"),
+	        data: formData,
+	        beforeSend: function(data){
+	        	console.log("Before Send");
+	        },
+	        success: function (data) {
+	        	//console.log(data)
+	        	if(data.status == false){
+	        		$("#btnAparta").hide();
+	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
+	        		$("#divMsg").show();
+	        	}else if(data.status == true){
+	        		
+	        		$("#btnAparta").hide();
+	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito.</div>');
+	        		$("#divMsg").show();
+	        	}//end if
+	        },
+	        error: function () {
+	            alert("Something went wrong");
+	        }
+	    });
+	}).on('submit', function(e){
+	    e.preventDefault();
+	});
+JS;
+$this->registerJs($script);
