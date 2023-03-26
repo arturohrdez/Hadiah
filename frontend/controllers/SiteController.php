@@ -572,7 +572,12 @@ class SiteController extends Controller
             }//end foreach
 
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ["status"=>true];
+            return [
+                "status"   => true,
+                "name"     => $modelTicket->name,
+                "lastname" => $modelTicket->lastname,
+                "phone"    => $modelTicket->phone
+            ];
         }//end if
 
         $modelRifa   = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
@@ -580,5 +585,60 @@ class SiteController extends Controller
             'modelRifa'=>$modelRifa,
             'modelTicket'=>$modelTicket
         ]);
+    }//end function
+
+    public function actionSendwp(){
+        $model            = Rifas::find()->where(["id" => Yii::$app->request->post()["id"]])->one();
+        $tickets_play_all = Yii::$app->session->get('tickets_play_all');
+
+        //Usuario
+        $name     = Yii::$app->request->post()["name"];
+        $lastname = Yii::$app->request->post()["lastname"];
+        $phone    = Yii::$app->request->post()["phone"];
+
+        $diassemana = Yii::$app->params["diassemana"];
+        $meses      = Yii::$app->params["meses"];
+        //Rifa
+        $titulo_rifa  = $model->name;
+        $fecha_rifa   = $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init));
+        $terms_rifa   = nl2br($model->terms);
+
+        //Tickets
+        $num_tickets          = count($tickets_play_all);
+        $tickets_play_all_str = "";
+        $h                    = 0;
+        foreach ($tickets_play_all as $key__ => $tickets__) {
+            $tickets_play_all_str .= $key__." ";
+            if(is_array($tickets__)){
+                $tickets_play_all_str .= "(".implode(",", $tickets__).")";
+            }//end if
+            $tickets_play_all_str .= "<br>";
+        }//end foreach
+
+
+        $custom_msg = "
+            Hola, Aparte boletos de la rifa: <br>
+            {$titulo_rifa} <br>
+            {$fecha_rifa} 
+            ------------
+            <br><br>
+            {$num_tickets} - BOLETO(S):  <br>
+            {$tickets_play_all_str} <br><br>
+            Nombre : {$name} {$lastname} <br>
+            Celular: {$phone} <br>
+            <br>
+            {$terms_rifa}
+            ------------
+            <br><br>
+            El siguiente paso es enviar foto del comprobante de pago por aquí.
+            <br>
+            DA CLICK EN ENVIAR -->
+            <br>
+            ¡MUCHA SUERTE!
+        ";
+
+        $link = Yii::$app->params["social-networks"]["whatsapp"]."/?text=".urlencode($custom_msg);
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ["status"=>true,"link"=>$link];
     }//end function
 }

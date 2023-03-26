@@ -82,6 +82,7 @@ $states = [
 </div>
 
 <?php
+$URL_sendwp = Url::to(['site/sendwp']);
 $script = <<< JS
 	$('#ticketForm').on('beforeSubmit', function(e) {
 		var form     = $(this);
@@ -104,6 +105,22 @@ $script = <<< JS
 	        	}else if(data.status == true){
 	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito.</div>');
 	        		$("#divMsg").show();
+
+	        		//
+	        		setTimeout(function(e){
+		        		$.ajax({
+		        			url: "{$URL_sendwp}",
+		        			type: "POST",
+		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone},
+		        			beforeSend: function(data){
+		        				$("#divMsg").html('<div class="alert alert-success">Redirigiendo a Whatsapp...</div>');
+		        			},
+		        			success: function (data) {
+								window.location.href = data.link;
+		        			},
+		        		});
+					}, 3000);
+	        		
 	        	}//end if
 	        },
 	        error: function () {
