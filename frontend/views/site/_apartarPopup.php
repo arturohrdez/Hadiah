@@ -40,7 +40,7 @@ $states = [
 	'Zacatecas'           => 'Zacatecas'
 ];
 ?>
-<div id="modal" class="col-lg-7 col-md-9 col-sm-9">
+<div id="modal" class="col-lg-4 col-md-9 col-sm-9">
 	<div class="container">
 		<div class="col-12 text-center fw-bold">
 			<div class="fs-3">LLENA TUS DATOS Y DA CLICK EN APARTAR</div>
@@ -70,7 +70,7 @@ $states = [
 			<div class="col-12 text-center text-danger fw-bold mt-3">
 				Tu boleto sólo dura 24 horas apartado
 			</div>
-			<div class="form-group text-center mt-3">
+			<div id="divBtnA" class="form-group text-center mt-3">
 				<?php echo  Html::submitButton('<i class="bi bi-check-circle-fill"></i>  APARTAR ', ['id'=>'btnAparta','class' => 'btn pl-5 pr-5 btn-success']) ?>
 			</div>
 
@@ -92,17 +92,16 @@ $script = <<< JS
 	        type: form.attr("method"),
 	        data: formData,
 	        beforeSend: function(data){
-	        	console.log("Before Send");
+	        	$("#btnAparta").hide();
+	        	$("#divBtnA").html('<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>');
 	        },
 	        success: function (data) {
 	        	//console.log(data)
+	        	$("#divBtnA").html('').hide();
 	        	if(data.status == false){
-	        		$("#btnAparta").hide();
 	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
 	        		$("#divMsg").show();
 	        	}else if(data.status == true){
-	        		
-	        		$("#btnAparta").hide();
 	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito.</div>');
 	        		$("#divMsg").show();
 	        	}//end if
