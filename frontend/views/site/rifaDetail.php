@@ -38,8 +38,8 @@ echo newerton\fancybox3\FancyBox::widget([
 						<p>
 							<div class="entry-title text-danger text-center fs-2">
 								<?php 
-									$diassemana = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado"];
-									$meses      = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+									$diassemana = Yii::$app->params["diassemana"];
+									$meses      = Yii::$app->params["meses"];
 									echo $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init)) ; 
 								?>
 							</div>

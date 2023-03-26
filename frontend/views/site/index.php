@@ -16,46 +16,35 @@ if(!empty($rifas)){
         <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
         <div class="carousel-inner" role="listbox">
             <?php 
+            $i = 0;
             foreach ($rifas as $rifa) {
                 $rifa_id          = $rifa->id;
                 $rifa_title       = $rifa->name;
                 $rifa_description = $rifa->description;
                 $rifa_image       = $rifa->main_image;
+                $rifa_date        = $rifa->date_init;
             ?>
-            <!-- Slide 1 -->
-            <div class="carousel-item active" style="background-image: url('<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>')">
+            <div class="carousel-item <?php echo ($i == 0) ? "active" : ""; ?>" style="background-image: url('<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>')">
                 <div class="carousel-container">
                     <div class="container">
                         <h2 class="animate__animated animate__fadeInDown">
                             <?php echo $rifa_title; ?>
                         </h2>
+                        <p class="animate__animated animate__fadeInUp fs-3">
+                            <?php
+                                $diassemana = Yii::$app->params["diassemana"];
+                                $meses      = Yii::$app->params["meses"];
+                                echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " del ".date('Y',strtotime($rifa_date)) ; 
+                            ?>
+                        </p>
                         <a href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>" class="btn-get-started animate__animated animate__fadeInUp">Comprar Boletos</a>
                     </div>
                 </div>
             </div>
             <?php 
+                $i++;
             }//end foreach
             ?>
-            <!-- Slide 2 -->
-            <!-- <div class="carousel-item" style="background-image: url(assets/img/slide/slide-2.jpg)">
-                <div class="carousel-container">
-                    <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown">Lorem Ipsum Dolor</h2>
-                        <p class="animate__animated animate__fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-                        <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">Read More</a>
-                    </div>
-                </div>
-            </div> -->
-            <!-- Slide 3 -->
-            <!-- <div class="carousel-item" style="background-image: url(assets/img/slide/slide-3.jpg)">
-                <div class="carousel-container">
-                    <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown">Sequi ea ut et est quaerat</h2>
-                        <p class="animate__animated animate__fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-                        <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">Read More</a>
-                    </div>
-                </div>
-            </div> -->
         </div>
         <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
             <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
@@ -142,6 +131,7 @@ if(!empty($rifas)){
                 $rifa_title = $rifa->name;
                 $rifa_terms = $rifa->terms;
                 $rifa_image = $rifa->main_image;
+                $rifa_date  = $rifa->date_init;
             ?>
             <div class="col-lg-6 mt-4">
                 <div class="member d-flex align-items-start">
@@ -150,8 +140,18 @@ if(!empty($rifas)){
                     </div>
                     <div class="member-info">
                         <h4><?php echo $rifa_title;?></h4>
-                        <span><?php echo nl2br($rifa_terms); ?></span>
-                        <div class="">
+                        <span>
+                            <?php
+                                $diassemana = Yii::$app->params["diassemana"];
+                                $meses      = Yii::$app->params["meses"];
+                                echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " del ".date('Y',strtotime($rifa_date)) ; 
+                            ?>
+                        </span>
+                        <p>
+                            <?php echo nl2br($rifa_terms); ?>
+                            
+                        </p>
+                        <div class="mt-2">
                             <a class="btn btn-outline-danger" href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>">
                                 Comprar Boleto
                             </a>
@@ -203,7 +203,7 @@ if(!empty($rifas)){
         </div>
         <div class="row col-lg-12 pt-4 pt-lg-0">
             <p class="text-center fs-4">
-                <?= Html::a("WHATSAPP: (221) 222 4619", $url = 'https://wa.me/+5212212224916', ['target' => '_blank']); ?>
+                <?= Html::a("WHATSAPP: (221) 222 4619", $url = Yii::$app->params["social-networks"]["whatsapp"], ['target' => '_blank']); ?>
             </p>
         </div>
         <div class="row col-lg-12 pt-3">
@@ -211,9 +211,9 @@ if(!empty($rifas)){
                 Envíanos tus preguntas a
             </p>
             <p class="fs-1 text-center">
-                <?= Html::a("<i class='bi bi-whatsapp'></i>", $url = 'https://wa.me/+5212212224916', ['target' => '_blank']); ?>
+                <?= Html::a("<i class='bi bi-whatsapp'></i>", $url = Yii::$app->params["social-networks"]["whatsapp"], ['target' => '_blank']); ?>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <?= Html::a("<i class='bi bi-facebook'></i>", $url = 'https://es-es.facebook.com/', ['target' => '_blank']); ?>
+                <?= Html::a("<i class='bi bi-facebook'></i>", $url = Yii::$app->params["social-networks"]["facebook"], ['target' => '_blank']); ?>
             </p>
         </div>
     </div>
