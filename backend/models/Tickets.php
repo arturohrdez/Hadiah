@@ -11,12 +11,14 @@ use Yii;
  * @property int $rifa_id
  * @property string $ticket
  * @property string $date
+ * @property string|null $date_end
  * @property string $phone
  * @property string $name
  * @property string $lastname
  * @property string $state
  * @property string $type
  * @property string $status
+ * @property int|null $parent_id
  *
  * @property Rifas $rifa
  */
@@ -37,8 +39,8 @@ class Tickets extends \yii\db\ActiveRecord
     {
         return [
             [['rifa_id', 'ticket', 'date', 'phone', 'name', 'lastname', 'state', 'type', 'status'], 'required'],
-            [['rifa_id'], 'integer'],
-            [['date'], 'safe'],
+            [['rifa_id', 'parent_id'], 'integer'],
+            [['date', 'date_end'], 'safe'],
             [['ticket'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 15],
             [['name'], 'string', 'max' => 180],
@@ -59,12 +61,14 @@ class Tickets extends \yii\db\ActiveRecord
             'rifa_id' => 'Rifa ID',
             'ticket' => 'Ticket',
             'date' => 'Date',
+            'date_end' => 'Date End',
             'phone' => 'Phone',
             'name' => 'Name',
             'lastname' => 'Lastname',
             'state' => 'State',
             'type' => 'Type',
             'status' => 'Status',
+            'parent_id' => 'Parent ID',
         ];
     }
 

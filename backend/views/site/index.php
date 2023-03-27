@@ -9,11 +9,22 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Rifas',
-                'text'  => 'Administra la creación, modificación y eliminación de Rifas',
+                'text'  => 'Administra la creación de Rifas',
                 'icon'  => 'fa fa-bolt',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/rifas/index'])
+            ]) ?>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Boletos',
+                'text'  => 'Listado de boletos apartados y vendidos',
+                'icon'  => 'fab fa-ticket-alt',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/tickets/index'])
             ]) ?>
         </div>
     </div>
