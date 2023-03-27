@@ -19,6 +19,7 @@ use Yii;
  * @property string $type
  * @property string $status
  * @property int|null $parent_id
+ * @property string|null $date_payment
  *
  * @property Rifas $rifa
  */
@@ -40,7 +41,7 @@ class Tickets extends \yii\db\ActiveRecord
         return [
             [['rifa_id', 'ticket', 'date', 'phone', 'name', 'lastname', 'state', 'type', 'status'], 'required'],
             [['rifa_id', 'parent_id'], 'integer'],
-            [['date', 'date_end'], 'safe'],
+            [['date', 'date_end', 'date_payment'], 'safe'],
             [['ticket'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 15],
             [['name'], 'string', 'max' => 180],
@@ -57,18 +58,19 @@ class Tickets extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'rifa_id' => 'Rifa ID',
-            'ticket' => 'Ticket',
-            'date' => 'Date',
-            'date_end' => 'Date End',
-            'phone' => 'Phone',
-            'name' => 'Name',
-            'lastname' => 'Lastname',
-            'state' => 'State',
-            'type' => 'Type',
-            'status' => 'Status',
-            'parent_id' => 'Parent ID',
+            'id'           => 'ID',
+            'rifa_id'      => 'Rifa',
+            'ticket'       => 'Boleto',
+            'date'         => 'Date',
+            'date_end'     => 'Date End',
+            'phone'        => 'Teléfono',
+            'name'         => 'Nombre(s)',
+            'lastname'     => 'Apellidos',
+            'state'        => 'Estados',
+            'type'         => 'Type',
+            'status'       => 'Status',
+            'parent_id'    => 'Parent ID',
+            'date_payment' => 'Date Payment',
         ];
     }
 

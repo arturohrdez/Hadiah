@@ -40,13 +40,19 @@ class TicketsSearch extends Tickets
      */
     public function search($params)
     {
-        $query = Tickets::find();
+        //$query = Tickets::find();
+
+        $query = Tickets::find()->joinWith(['rifa'])->where(['<>','rifas.status',0]);
+
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
+            'pagination' => [
+                'defaultPageSize' => 20,
+            ]
         ]);
 
         $this->load($params);
@@ -66,13 +72,13 @@ class TicketsSearch extends Tickets
             'parent_id' => $this->parent_id,
         ]);
 
-        $query->andFilterWhere(['like', 'ticket', $this->ticket])
-            ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'lastname', $this->lastname])
-            ->andFilterWhere(['like', 'state', $this->state])
-            ->andFilterWhere(['like', 'type', $this->type])
-            ->andFilterWhere(['like', 'status', $this->status]);
+        $query->andFilterWhere(['like', 'tickets.ticket', $this->ticket])
+            ->andFilterWhere(['like', 'tickets.phone', $this->phone])
+            ->andFilterWhere(['like', 'tickets.name', $this->name])
+            ->andFilterWhere(['like', 'tickets.lastname', $this->lastname])
+            ->andFilterWhere(['like', 'tickets.state', $this->state])
+            ->andFilterWhere(['like', 'tickets.type', $this->type])
+            ->andFilterWhere(['=', 'tickets.status', $this->status]);
 
         return $dataProvider;
     }

@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             //'id',
                             //'rifa_id',
-                            [
+                           [
                                 'label'     => 'Rifa',
                                 'attribute' => 'rifa_id',
                                 'format'    =>'html',
