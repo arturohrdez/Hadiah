@@ -103,7 +103,7 @@ $script = <<< JS
 	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
 	        		$("#divMsg").show();
 	        	}else if(data.status == true){
-	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito.</div>');
+	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito. <br> Por favor no cierre esta ventana.</div>');
 	        		$("#divMsg").show();
 
 	        		//

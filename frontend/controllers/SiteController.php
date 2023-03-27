@@ -542,7 +542,8 @@ class SiteController extends Controller
                 $model            = new Tickets();
                 $model->rifa_id   = $modelTicket->rifa_id;
                 $model->ticket    = (string) $key__;
-                $model->date      = date("Y-m-d H:i:s");
+                $model->date      = date("Y-m-d H:i");
+                $model->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
                 $model->phone     = $modelTicket->phone;
                 $model->name      = $modelTicket->name;
                 $model->lastname  = $modelTicket->lastname;
@@ -558,7 +559,8 @@ class SiteController extends Controller
                         $modelTR            = new Tickets();
                         $modelTR->rifa_id   = $modelTicket->rifa_id;
                         $modelTR->ticket    = (string) $ticket_;
-                        $modelTR->date      = date("Y-m-d H:i:s");
+                        $modelTR->date      = date("Y-m-d H:i");
+                        $modelTR->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
                         $modelTR->phone     = $modelTicket->phone;
                         $modelTR->name      = $modelTicket->name;
                         $modelTR->lastname  = $modelTicket->lastname;
@@ -601,7 +603,7 @@ class SiteController extends Controller
         //Rifa
         $titulo_rifa  = $model->name;
         $fecha_rifa   = $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init));
-        $terms_rifa   = nl2br($model->terms);
+        $terms_rifa   = $model->terms;
 
         //Tickets
         $num_tickets          = count($tickets_play_all);
@@ -612,30 +614,28 @@ class SiteController extends Controller
             if(is_array($tickets__)){
                 $tickets_play_all_str .= "(".implode(",", $tickets__).")";
             }//end if
-            $tickets_play_all_str .= "<br>";
+            $tickets_play_all_str .= "
+";
         }//end foreach
 
 
-        $custom_msg = "
-            Hola, Aparte boletos de la rifa: <br>
-            {$titulo_rifa} <br>
-            {$fecha_rifa} 
-            ------------
-            <br><br>
-            {$num_tickets} - BOLETO(S):  <br>
-            {$tickets_play_all_str} <br><br>
-            Nombre : {$name} {$lastname} <br>
-            Celular: {$phone} <br>
-            <br>
-            {$terms_rifa}
-            ------------
-            <br><br>
-            El siguiente paso es enviar foto del comprobante de pago por aquí.
-            <br>
-            DA CLICK EN ENVIAR -->
-            <br>
-            ¡MUCHA SUERTE!
-        ";
+        $custom_msg = "Hola, Aparte boletos de la rifa:
+🎉 *{$titulo_rifa}*
+🗓️ *FECHA SORTEO:* {$fecha_rifa} 
+------------
+🍀 *{$num_tickets} - BOLETO(S):*
+{$tickets_play_all_str}
+------------
+*NOMBRE :* {$name} {$lastname}
+*CELULAR:* {$phone}
+------------
+↘️⬇️↙️
+{$terms_rifa}
+------------
+El siguiente paso es enviar foto del comprobante de pago por aquí.
+DA CLICK EN ENVIAR➡️
+*¡MUCHA SUERTE!*
+";
 
         $link = Yii::$app->params["social-networks"]["whatsapp"]."/?text=".urlencode($custom_msg);
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
