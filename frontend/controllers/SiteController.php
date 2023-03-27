@@ -620,10 +620,10 @@ class SiteController extends Controller
 
 
         $custom_msg = "Hola, Aparte boletos de la rifa:
-🎉 *{$titulo_rifa}*
-🗓️ *FECHA SORTEO:* {$fecha_rifa} 
+🎉*{$titulo_rifa}*
+🗓️*FECHA SORTEO:* {$fecha_rifa} 
 ------------
-🍀 *{$num_tickets} - BOLETO(S):*
+🍀*{$num_tickets} - BOLETO(S):*
 {$tickets_play_all_str}
 ------------
 *NOMBRE :* {$name} {$lastname}
