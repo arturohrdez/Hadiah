@@ -3,12 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
+use backend\models\Rifas;
 use backend\models\Tickets;
 use backend\models\TicketsSearch;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * TicketsController implements the CRUD actions for Tickets model.
@@ -153,6 +154,15 @@ class TicketsController extends Controller
 
         return $this->redirect(['index']);
     }
+
+
+    public function actionSales(){
+
+        $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->all();
+        return $this->render('sales',[
+            'modelRifas' => $modelRifas,
+        ]);
+    }//end function
 
     /**
      * Finds the Tickets model based on its primary key value.

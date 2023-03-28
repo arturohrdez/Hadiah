@@ -36,7 +36,7 @@ use yii\helpers\Html;
                 ]) */?>
             </div> -->
             <div class="col-12">
-                <?= Html::submitButton('Acceder', ['class' => 'btn btn-block bg-gradient-danger']) ?>
+                <?= Html::submitButton('ENTRAR', ['class' => 'btn btn-block bg-gradient-danger']) ?>
             </div>
         </div>
 

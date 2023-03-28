@@ -66,9 +66,12 @@ class RifasController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
+    {   
+        $sales = Yii::$app->request->get("sales",null);
+
         return $this->renderAjax('view', [
             'model' => $this->findModel($id),
+            'sales' => $sales
         ]);
     }
 
