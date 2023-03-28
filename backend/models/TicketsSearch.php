@@ -41,7 +41,7 @@ class TicketsSearch extends Tickets
     public function search($params)
     {
         //$query = Tickets::find();
-        $query = Tickets::find()->joinWith(['rifa'])->where(['<>','rifas.status',0]);
+        $query = Tickets::find()->joinWith(['rifa'])->where(['<>','rifas.status',0])->andWhere(['IS','parent_id',NULL]);
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
