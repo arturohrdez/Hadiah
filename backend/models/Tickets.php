@@ -66,9 +66,9 @@ class Tickets extends \yii\db\ActiveRecord
             'phone'        => 'Teléfono',
             'name'         => 'Nombre(s)',
             'lastname'     => 'Apellidos',
-            'state'        => 'Estados',
+            'state'        => 'Estado',
             'type'         => 'Type',
-            'status'       => 'Status',
+            'status'       => 'Estatus',
             'parent_id'    => 'Parent ID',
             'date_payment' => 'Date Payment',
         ];
