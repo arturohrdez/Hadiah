@@ -39,12 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
     								<div class="row bg-primary">
     									<div class="col-12 fs-1 text-center text-white p-2">
     										<h2><i class="fas fa-arrow-alt-circle-down"></i> SELECCIONA ABAJO LOS NÚMEROS DE LA SUERTE <i class="fas fa-arrow-alt-circle-down"></i></h2>
-    										<p class="text-yellow font-weight-bold">
+    										<div class="alert alert-warning font-weight-bold">
     											<h5>
-    												
-    												Lorem ipsum, dolor sit, amet consectetur adipisicing elit. Odio repudiandae laborum est nemo amet incidunt molestias aliquam excepturi deserunt maxime sequi voluptatem temporibus, libero eius, cupiditate sit a ea quibusdam.
+    												INGRESE UNO O VARIOS BOLETOS "SEPARADOS POR COMAS" ENTRE 0001 Y 89888
     											</h5>
-    										</p>
+    											<p>
+    												Ej. 234,334,223,556,33334
+    											</p>
+    										</div>
     									</div>
     								</div>
     								<div class="row bg-primary pt-3 pb-3">

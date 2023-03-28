@@ -67,6 +67,7 @@ class RifasController extends Controller
      */
     public function actionView($id)
     {   
+        //Para la vista de ventas
         $sales = Yii::$app->request->get("sales",null);
 
         return $this->renderAjax('view', [
