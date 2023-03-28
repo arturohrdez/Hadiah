@@ -1,13 +1,13 @@
 <?php
 
 
-use yii\grid\GridView;
-use yii\helpers\Html;
-use yii\widgets\Pjax;
-use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
-
 use backend\models\Rifas;
+use backend\models\Tickets;
+use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\TicketsSearch */
@@ -91,11 +91,38 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'      => 'ticket',
                                 'contentOptions' => ['style'=>'text-align: center'],
                             ],
+                            [
+                                'label'          => 'Oportunidades',
+                                'contentOptions' => ['style'=>'text-align: center'],
+                                'format'         =>'html',
+                                'value'          => function($model){
+                                    $oportunidades = Tickets::find()->where(['parent_id'=>$model->id])->all();
+                                    if(!empty($oportunidades)){
+                                        $op_s = "";
+                                        foreach ($oportunidades as $oportunidad) {
+                                            $op_s .= "{$oportunidad->ticket},";
+                                        }//end foreach
+                                        $op_str = "(".trim($op_s, ',').")";
+                                        return $op_str;
+                                    }else{
+                                        return "N/A";
+                                    }//end if
+                                }//end function
+                            ],
                             //'date',
                             //'date_end',
-                            //'phone',
-                            //'name',
-                            //'lastname',
+                            [
+                                'attribute'      => 'name',
+                                'contentOptions' => ['style'=>'text-align: center']
+                            ],
+                            [
+                                'attribute'      => 'lastname',
+                                'contentOptions' => ['style'=>'text-align: center']
+                            ],
+                            [
+                                'attribute'      => 'phone',
+                                'contentOptions' => ['style'=>'text-align: center']
+                            ],
                             //'state',
                             //'type',
                             //'status',

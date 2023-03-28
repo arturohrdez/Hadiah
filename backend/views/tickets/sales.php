@@ -35,10 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
     							<div id="rifaDetail" class="text-center" style="display: none;">
     								<div></div>
     							</div>
-    							<div id="ticketsPlay" style="display: block;">
+    							<div id="ticketsPlay" style="display: none;">
     								<div class="row bg-primary">
     									<div class="col-12 fs-1 text-center text-white p-2">
     										<h2><i class="fas fa-arrow-alt-circle-down"></i> SELECCIONA ABAJO LOS NÚMEROS DE LA SUERTE <i class="fas fa-arrow-alt-circle-down"></i></h2>
+    										<p class="text-yellow font-weight-bold">
+    											<h5>
+    												
+    												Lorem ipsum, dolor sit, amet consectetur adipisicing elit. Odio repudiandae laborum est nemo amet incidunt molestias aliquam excepturi deserunt maxime sequi voluptatem temporibus, libero eius, cupiditate sit a ea quibusdam.
+    											</h5>
+    										</p>
     									</div>
     								</div>
     								<div class="row bg-primary pt-3 pb-3">
@@ -70,19 +76,29 @@ $script = <<< JS
 	});*/
 	$("#rifa_id").on("change",function(e){
 		let rifa_id = $(this).val();
-		$.ajax({
-			url     : "{$URL_rifas}",
-			type    : 'GET',
-			dataType: 'HTML',
-			data    : {"id":rifa_id,"sales":true},
-			beforeSend: function(data){
-				$("#rifaDetail").show();
-				$("#rifaDetail").html('<div class="spinner-border text-danger mt-3" role="status"><span class="visually-hidden"></span></div>');
-			},
-			success: function(response) {
-				$("#rifaDetail").html(response);
-			}
-		});
+		if(rifa_id == ""){
+			$("#rifaDetail").html('');
+			$("#rifaDetail").hide('');
+			$("#ticketsPlay").hide();
+			$("#ticket_s").val('');
+		}else{
+			$.ajax({
+				url     : "{$URL_rifas}",
+				type    : 'GET',
+				dataType: 'HTML',
+				data    : {"id":rifa_id,"sales":true},
+				beforeSend: function(data){
+					$("#ticketsPlay").hide();
+					$("#ticket_s").val('');
+					$("#rifaDetail").show();
+					$("#rifaDetail").html('<div class="spinner-border text-danger mt-3" role="status"><span class="visually-hidden"></span></div>');
+				},
+				success: function(response) {
+					$("#rifaDetail").html(response);
+					$("#ticketsPlay").show();
+				}
+			});
+		}
 		//alert("entra -->"+rifa_id);
 	});
 JS;
