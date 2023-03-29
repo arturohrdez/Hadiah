@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="container-fluid">
     <div class="loading text-center"></div>
-    <div id="divEditForm" class="col-12">
+    <div id="divEditForm" class="col-8 offset-lg-2">
     	<div class="tickets-sales">
     		<div class="row-fluid">
     			<div class="col-sm-12">
@@ -41,20 +41,17 @@ $this->params['breadcrumbs'][] = $this->title;
     										<h2><i class="fas fa-arrow-alt-circle-down"></i> SELECCIONA ABAJO LOS NÚMEROS DE LA SUERTE <i class="fas fa-arrow-alt-circle-down"></i></h2>
     										<div class="alert alert-warning font-weight-bold">
     											<h5>
-    												INGRESE UNO O VARIOS BOLETOS "SEPARADOS POR COMAS" ENTRE 0001 Y 89888
+    												INGRESE UN BOLETO ENTRE <br> <span id="init" class="right badge badge-info"></span> <span class="right badge badge-info">Y</span> <span id="end" class="right badge badge-info"></span>
     											</h5>
-    											<p>
-    												Ej. 234,334,223,556,33334
-    											</p>
     										</div>
     									</div>
     								</div>
     								<div class="row bg-primary pt-3 pb-3">
-	    								<div class="col-lg-9 col-12 text-center">
-											<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
+	    								<div class="col-12 text-center">
+											<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 										</div>
-										<div class="col-lg-3 col-12 text-center">
-											<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning col-12','style'=>'font-weight: bold; display: block;']); ?>
+										<div class="col-12 text-center">
+											<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 										</div>
 									</div>
     							</div>
@@ -71,11 +68,30 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php 
-$URL_rifas = Url::to(['rifas/view']);
+$URL_rifas   = Url::to(['rifas/view']);
+$URL_searcht = Url::to(['tickets/searchticket']);
 $script = <<< JS
 	/*$(function(e){
 		alert("esta entrando");
 	});*/
+
+	//Format Number
+	$("#ticket_s").on("keyup change",function(e){
+		let d = $("#t_digit").val();
+		let n = $(this).val();
+		let i = n.replace(/^(0+)/g, '');
+		let f = "";
+		let a = parseFloat(n);
+
+		if(n != "" && a > 0){
+			f = i.padStart(d,"0");
+			$(this).val(f);
+			$("#btn_addticket").show();
+		}else{
+			$("#btn_addticket").hide();
+		}//end if
+	});
+
 	$("#rifa_id").on("change",function(e){
 		let rifa_id = $(this).val();
 		if(rifa_id == ""){
@@ -97,11 +113,52 @@ $script = <<< JS
 				},
 				success: function(response) {
 					$("#rifaDetail").html(response);
+
+					let i = $("#t_init").val();
+					let n = $("#t_digit").val();
+					let f = i.padStart(n,"0");
+					
+					$("#init").html(f);
+					$("#end").text($("#t_end").val());
 					$("#ticketsPlay").show();
 				}
 			});
 		}
 		//alert("entra -->"+rifa_id);
+	});
+
+	$("#btn_addticket").on("click",function(e){
+		let tn_s    = $("#ticket_s").val();
+		let max     = $("#t_end").val();
+		let rifa_id = $("#rifa_id").val();
+		if(tn_s != ""){
+			$.ajax({
+				url : "{$URL_searcht}",
+				type: 'POST',
+				data: {"id":rifa_id,"tn_s":tn_s,"max":max},
+				beforeSend: function(data){
+					//$("#ticket_s_m").hide();
+					//$("#ticket_e_m").hide();
+					$("#btn_addticket").attr("disabled",true);
+					$("#btn_addticket").html("Buscando Boleto..");
+				},
+				success: function(response) {
+					$("#btn_addticket").html("¡LO QUIERO!");
+					$("#btn_addticket").attr("disabled",false);
+					$("#ticket_s").val('');
+					console.log(response);
+
+					/*if(response.status == true){
+						$("#tn_"+tn_s).trigger('click');
+					}else{
+						$("#ticket_e_m").show();
+					}//end if
+					$("#btn_addticket").hide();
+					$("#ticket_s").val('');*/
+				}
+			});
+		}//end if
+
 	});
 JS;
 $this->registerJs($script);

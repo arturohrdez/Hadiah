@@ -124,6 +124,12 @@ if(is_null($sales)){
                 </div>
             </div>
             <?php 
+            }else{
+            ?>
+            <input type="hidden" id="t_init" value="<?php echo $model->ticket_init ?>">
+            <input type="hidden" id="t_digit" value="<?php echo strlen($model->ticket_end);?>">
+            <input type="hidden" id="t_end" value="<?php echo $model->ticket_end ?>">
+            <?php
             }//end if 
             ?>
 

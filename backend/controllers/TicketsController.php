@@ -157,11 +157,53 @@ class TicketsController extends Controller
 
 
     public function actionSales(){
+        Yii::$app->session->set('tickets', []);
+        Yii::$app->session->set('tickets_play_all',[]);
 
         $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->all();
         return $this->render('sales',[
             'modelRifas' => $modelRifas,
         ]);
+    }//end function
+
+
+    public static function dumpTicketAC($tickets_ac = []){
+        $ticketsAC = []; 
+        if(empty($tickets_ac)){
+            return $ticketsAC;
+        }//end if
+        
+        foreach ($tickets_ac as $ticket_) {
+            $ticketsAC[] = $ticket_->ticket;
+        }//end foreach
+        return $ticketsAC;
+    }//end function
+
+    public function actionSearchticket(){
+        $tn_s = Yii::$app->request->post()["tn_s"];
+        $max  = Yii::$app->request->post()["max"];
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if($tn_s > $max){
+            return ["status"=>false];
+        }//end if
+
+        $modelT  = Tickets::find()->where(['ticket' => $tn_s])->one();
+        //Boleto disponible
+        if(is_null($modelT)){
+            $model   = Rifas::find()->where(["id" => Yii::$app->request->post("id")])->one();
+
+            //Tickets apartados y vendidos
+            $tickets_ac = self::dumpTicketAC($model->tickets);
+            echo "<pre>";
+            var_dump($tickets_ac);
+            echo "</pre>";
+            die();
+            //$allTickets = array_merge($elements,$tickets_ac);
+
+            return ["status"=>true];
+        }//end if
+
+        //return ["status"=>false];
     }//end function
 
     /**
