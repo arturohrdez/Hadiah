@@ -47,11 +47,34 @@ $this->params['breadcrumbs'][] = $this->title;
     									</div>
     								</div>
     								<div class="row bg-primary pt-3 pb-3">
+    									<div id="ticket_e_m" class="col-12 text-center" style="display: none;">
+											<div class="alert alert-danger ">
+												<strong>BOLETO NO DISPONIBLE</strong>
+											</div>
+										</div>
 	    								<div class="col-12 text-center">
 											<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 										</div>
 										<div class="col-12 text-center">
 											<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
+										</div>
+									</div>
+									<div id="div_selected" class="row pt-3 pb-2 bg-black" style="display: none;">
+										<div id="div_options" class="col-12 text-white text-center">
+											<p class="fs-3 text-warning">
+												<span class="n_t">0</span> - Boletos Seleccionados
+											</p>
+											<p class="t_opt"><button class='btn_ticketDel'></button></p>
+											<p class="fs-5 text-warning">
+												Para eliminar haz clic en el boleto.
+											</p>
+
+											<div id="load_tickets" class="col-12" style="display: none;">
+												<div class="spinner-border text-danger" role="status"><span class="visually-hidden"></span></div>
+											</div>
+
+											<div id="div_oportunities" class="col-12" style="display: none;"></div>
+											
 										</div>
 									</div>
     							</div>
@@ -71,6 +94,48 @@ $this->params['breadcrumbs'][] = $this->title;
 $URL_rifas   = Url::to(['rifas/view']);
 $URL_tickets = Url::to(['tickets/createtickets']);
 $URL_searcht = Url::to(['tickets/searchticket']);
+$URL_remove = Url::to(['tickets/ticketremove']);
+?>
+
+<script type="text/javascript">
+	function ticketRemove(t){
+		var url_r = "<?php echo $URL_remove ?>";
+		$.ajax({
+			url: url_r,
+			type: 'POST',
+			data: {"tn":t},
+			beforeSend: function(data){
+				//$(".btn_ticket").attr("disabled",true);
+				//$(".btn_ticketDel").attr("disabled",true);
+				$("#btnSend").hide();
+				$("#load_tickets").show();
+			},
+			success: function(response) {
+				if(response.status == true){
+					let elements = Object.keys(response.tickets_play);
+					let n_t = elements.length;
+					$(".n_t").text(n_t);
+
+					if(n_t == 0){
+						$("#div_selected").hide();
+					}//end if
+					$("#t_"+t).remove();
+					$("#t_n_"+t).remove();
+				}//end if
+
+				//$(".btn_ticket").attr("disabled",false);
+				$(".btn_ticketDel").attr("disabled",false);
+				$("#load_tickets").hide();
+				$("#btnSend").show();
+	        },
+	        error: function() {
+	            console.log('Error occured');
+	        }
+		});
+	}//end function
+</script>
+
+<?php
 $script = <<< JS
 	/*$(function(e){
 		alert("esta entrando");
@@ -115,7 +180,6 @@ $script = <<< JS
 					.always(function() {
 						console.log("complete");
 					});
-					
 					$("#ticketsPlay").hide();
 					$("#ticket_s").val('');
 					$("#rifaDetail").show();
@@ -131,6 +195,8 @@ $script = <<< JS
 					$("#init").html(f);
 					$("#end").text($("#t_end").val());
 					$("#ticketsPlay").show();
+					$("#div_selected").hide();
+
 				}
 			});
 		}
@@ -148,7 +214,7 @@ $script = <<< JS
 				data: {"id":rifa_id,"tn_s":tn_s,"max":max},
 				beforeSend: function(data){
 					//$("#ticket_s_m").hide();
-					//$("#ticket_e_m").hide();
+					$("#ticket_e_m").hide();
 					$("#btn_addticket").attr("disabled",true);
 					$("#btn_addticket").html("Buscando Boleto..");
 				},
@@ -156,15 +222,49 @@ $script = <<< JS
 					$("#btn_addticket").html("¡LO QUIERO!");
 					$("#btn_addticket").attr("disabled",false);
 					$("#ticket_s").val('');
-					console.log(response);
 
-					/*if(response.status == true){
-						$("#tn_"+tn_s).trigger('click');
+					if(response.status == true){
+						//Tickets Count
+						let elements = Object.keys(response.tickets_play);
+						let n_t = elements.length;
+						$(".n_t").text(n_t);
+
+						//Tickets selected
+						let t_selectBtn = "";
+						for (var i = n_t-1; i >= 0; i--) {
+							t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
+						}//end foreach
+						$(".t_opt").html(t_selectBtn);
+
+						if(response.promos == true){
+							let oportunities = Object.entries(response.tickets_play);
+							let ticket_ran       = [];
+							let div_oportunities = '<div id="lbl_oportunities">Oportunidades:</div>';
+							oportunities.forEach(([key, value]) => {
+								div_oportunities += "<div id='t_n_"+key+"'>"+key+" [";
+								for (var i = value.length - 1; i >= 0; i--) {
+
+									if(i < value.length-1){
+										div_oportunities += ",";
+									}
+									div_oportunities += value[i];
+
+									ticket_ran.push(value[i]);
+								}//end foreach
+								div_oportunities += "] </div>";
+							});
+
+							//tickets_randoms
+							$("#div_oportunities").html(div_oportunities);
+							$("#div_oportunities").show();
+						}//end if
+
+						//Show Div Selected
+						$("#div_selected").show();
 					}else{
+						$("#btn_addticket").hide();
 						$("#ticket_e_m").show();
 					}//end if
-					$("#btn_addticket").hide();
-					$("#ticket_s").val('');*/
 				}
 			});
 		}//end if

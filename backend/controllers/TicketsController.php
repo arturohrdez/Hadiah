@@ -238,7 +238,7 @@ class TicketsController extends Controller
                 Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
 
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+                return ["status"=>true,"promos"=>false,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
             }//end if
 
 
@@ -297,10 +297,33 @@ class TicketsController extends Controller
             Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
 
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+            return ["status"=>true,"promos"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
         }//end if
 
         return ["status"=>false];
+    }//end function
+
+    public function actionTicketremove(){
+        $tn               = Yii::$app->request->post()["tn"];
+        $tickets_play_all = Yii::$app->session->get('tickets_play_all');
+        $tickets          = Yii::$app->session->get('tickets');
+
+        array_push($tickets, $tn);
+        if(is_array($tickets_play_all[$tn])){
+            foreach ($tickets_play_all[$tn] as $value) {
+                array_push($tickets, $value);
+            }//end forechs
+        }//end if
+
+        $ticketRemove_    = $tickets_play_all[$tn];
+        unset($tickets_play_all[$tn]);
+
+
+        Yii::$app->session->set('tickets',$tickets);
+        Yii::$app->session->set('tickets_play_all',$tickets_play_all);
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        /*$ticketRemove = json_encode($ticketRemove_);*/
+        return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
     }//end function
 
     /**
