@@ -157,13 +157,32 @@ class TicketsController extends Controller
 
 
     public function actionSales(){
-        Yii::$app->session->set('tickets', []);
-        Yii::$app->session->set('tickets_play_all',[]);
-
         $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->all();
         return $this->render('sales',[
             'modelRifas' => $modelRifas,
         ]);
+    }//end function
+
+    public static function addcero($digitos,$number){
+        return str_pad($number, $digitos, "0", STR_PAD_LEFT);
+    }//end function
+
+    public static function actionCreatetickets(){
+        Yii::$app->session->set('tickets', []);
+        Yii::$app->session->set('tickets_play_all',[]);
+
+        //Rifa
+        $model   = Rifas::find()->where(["id" => Yii::$app->request->get("id")])->one();
+        $digitos = strlen($model->ticket_end);
+        $tickets = [];
+        for ($i=$model->ticket_init; $i <= $model->ticket_end ; $i++) { 
+            $tickets[$i] = self::addcero($digitos,$i);
+        }//end foreach
+
+        //$tickets_div = array_chunk($tickets,6500);
+        
+        Yii::$app->session->set('tickets', $tickets);
+        //return $tickets_div;
     }//end function
 
 
@@ -180,30 +199,108 @@ class TicketsController extends Controller
     }//end function
 
     public function actionSearchticket(){
-        $tn_s = Yii::$app->request->post()["tn_s"];
-        $max  = Yii::$app->request->post()["max"];
+        $tn  = Yii::$app->request->post()["tn_s"];
+        $max = Yii::$app->request->post()["max"];
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if($tn_s > $max){
+        if($tn > $max){
             return ["status"=>false];
         }//end if
 
-        $modelT  = Tickets::find()->where(['ticket' => $tn_s])->one();
+        $modelT  = Tickets::find()->where(['ticket' => $tn])->one();
         //Boleto disponible
         if(is_null($modelT)){
+            //Rifa
             $model   = Rifas::find()->where(["id" => Yii::$app->request->post("id")])->one();
+            $tickets = Yii::$app->session->get('tickets');
+            //El número fue previamente seleccionado
+            if(!in_array($tn,$tickets)){
+                return ["status"=>null];
+            }//end if
+
+            //No existen promos
+            if(empty($model->promos)){
+                //Tickets apartados y vendidos
+                $tickets_ac = self::dumpTicketAC($model->tickets);
+                array_push($tickets_ac, $tn);
+
+                //Elimina los Tickets seleccionados del conjunto de Tickets
+                foreach ($tickets_ac as $element) {
+                    if (($key = array_search($element, $tickets)) !== false) {
+                        unset($tickets[$key]);
+                    }//end if
+                }//end foreach
+
+                $tickets_play[$tn]          = $tn;
+                $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+                $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+                
+                Yii::$app->session->set('tickets',$tickets);
+                Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+            }//end if
+
+
+            //El número existe en los números random previamente generados
+            $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
+            foreach ($dump_tickets_play_all as $tickets_play) {
+                if(in_array($tn,$tickets_play)){
+                    return ["status"=>null];
+                }//end if
+            }//end if
+
 
             //Tickets apartados y vendidos
             $tickets_ac = self::dumpTicketAC($model->tickets);
-            echo "<pre>";
-            var_dump($tickets_ac);
-            echo "</pre>";
-            die();
-            //$allTickets = array_merge($elements,$tickets_ac);
+            array_push($tickets_ac, $tn);
 
-            return ["status"=>true];
+            //Elimina los Tickets seleccionados del conjunto de Tickets
+            foreach ($tickets_ac as $element) {
+                if (($key = array_search($element, $tickets)) !== false) {
+                    unset($tickets[$key]);
+                }//end if
+            }//end foreach
+
+            //Obtiene un número aleatorio del conjunto de Tickets
+            $total_tickets_ls = count($tickets);
+            //Existe tickets para generar un aleatoreo
+            if($total_tickets_ls != 0){
+                if($total_tickets_ls < $model->promos[0]->get_ticket){
+                    $keys_random = array_rand($tickets,$total_tickets_ls);
+                }else{
+                    $keys_random = array_rand($tickets,$model->promos[0]->get_ticket);
+                }//end if
+            }elseif($total_tickets_ls == 0){
+                //Ya no existen tickets para generar aleatoreo
+                $keys_random = null;
+            }//end if
+
+            if(is_array($keys_random)){
+                foreach ($keys_random as $key_random) {
+                    $tickets_play[$tn][] = $tickets[$key_random];
+                }//end foreahc
+            }else{
+                if(!is_null($keys_random)){
+                    $tickets_play[$tn][] = $tickets[$keys_random];
+                }//end if
+            }//end if
+
+            $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+            if(is_null($keys_random)){
+                $dump_tickets_play_all[$tn] = [$tn];
+            }else{
+                $dump_tickets_play_all[$tn] = $tickets_play[$tn];
+            }//end if
+
+            Yii::$app->session->set('tickets',$tickets);
+            Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
         }//end if
 
-        //return ["status"=>false];
+        return ["status"=>false];
     }//end function
 
     /**

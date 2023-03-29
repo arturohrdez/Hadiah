@@ -411,7 +411,7 @@ class SiteController extends Controller
                     $dump_tickets_play_all[$tn] = $tickets_play[$tn];
                 }//end if
 
-                Yii::$app->session->set('ticket',$tickets);
+                Yii::$app->session->set('tickets',$tickets);
                 Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
                 Yii::$app->session->set('countClick',0);
                 //$json_tickets_play = Yii::$app->session->get('tickets_play_all');
@@ -464,7 +464,7 @@ class SiteController extends Controller
             $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
             $dump_tickets_play_all[$tn] = $tickets_play[$tn];
             
-            Yii::$app->session->set('ticket',$tickets);
+            Yii::$app->session->set('tickets',$tickets);
             Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
             //$json_tickets_play = json_encode(Yii::$app->session->get('tickets_play_all'));
             $return            = ["status"=>false,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];

@@ -69,6 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php 
 $URL_rifas   = Url::to(['rifas/view']);
+$URL_tickets = Url::to(['tickets/createtickets']);
 $URL_searcht = Url::to(['tickets/searchticket']);
 $script = <<< JS
 	/*$(function(e){
@@ -106,6 +107,15 @@ $script = <<< JS
 				dataType: 'HTML',
 				data    : {"id":rifa_id,"sales":true},
 				beforeSend: function(data){
+					$.ajax({
+						url: '{$URL_tickets}',
+						type: 'GET',
+						data: {"id": rifa_id},
+					})
+					.always(function() {
+						console.log("complete");
+					});
+					
 					$("#ticketsPlay").hide();
 					$("#ticket_s").val('');
 					$("#rifaDetail").show();
