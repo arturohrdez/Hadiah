@@ -5,6 +5,14 @@ use yii\helpers\ArrayHelper;
 
 $this->title = 'Ventas';
 $this->params['breadcrumbs'][] = $this->title;
+
+echo newerton\fancybox3\FancyBox::widget([
+    'target' => '.data-fancybox-modal',
+    'config' => [
+		'clickSlide'   => false,
+		'clickOutside' => false,
+    ]
+]);
 ?>
 
 <div class="container-fluid">
@@ -74,6 +82,13 @@ $this->params['breadcrumbs'][] = $this->title;
 											</div>
 
 											<div id="div_oportunities" class="col-12" style="display: none;"></div>
+											<div class="row mt-3" style="text-align: center;">
+												<div class="col-12">
+													<button id="btnSend" class="btn btn-success bg-gradient pl-5 pr-5 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['tickets/pagar']) ?>" data-touch="false" style="display: none;">
+														PAGAR BOLETO(S)
+													</button>
+												</div>
+											</div>
 											
 										</div>
 									</div>
@@ -215,6 +230,7 @@ $script = <<< JS
 				beforeSend: function(data){
 					//$("#ticket_s_m").hide();
 					$("#ticket_e_m").hide();
+					$("#btnSend").hide();
 					$("#btn_addticket").attr("disabled",true);
 					$("#btn_addticket").html("Buscando Boleto..");
 				},
@@ -261,7 +277,9 @@ $script = <<< JS
 
 						//Show Div Selected
 						$("#div_selected").show();
+						$("#btnSend").show();
 					}else{
+						$("#btnSend").show();
 						$("#btn_addticket").hide();
 						$("#ticket_e_m").show();
 					}//end if

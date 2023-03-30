@@ -69,6 +69,9 @@ class RifasController extends Controller
     {   
         //Para la vista de ventas
         $sales = Yii::$app->request->get("sales",null);
+        if($sales == true){
+            Yii::$app->session->set("rifaId", $id);
+        }//end if
 
         return $this->renderAjax('view', [
             'model' => $this->findModel($id),
