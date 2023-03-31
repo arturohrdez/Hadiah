@@ -302,7 +302,7 @@ class SiteController extends Controller
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
         //Rifa no activas
-        if(!$model->status){
+        if(is_null($model) || !$model->status){
             return $this->render('rifaEnd', [
                 'model'        => $model,
             ]);
@@ -641,4 +641,18 @@ DA CLICK EN ENVIAR➡️
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ["status"=>true,"link"=>$link];
     }//end function
+
+    public function actionTickets(){
+        $rifaId = Yii::$app->request->get()["id"];
+        $model  = Rifas::find()->where(["id" => $rifaId])->one();
+
+        //Rifa no activas
+        if(is_null($model) || !$model->status){
+            return $this->render('rifaEnd', [
+                'model'        => $model,
+            ]);
+        }//end if
+        die("entra".$rifaId);
+    }//end function
+
 }
