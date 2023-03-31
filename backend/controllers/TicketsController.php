@@ -169,8 +169,8 @@ class TicketsController extends Controller
     }//end function
 
     public static function actionCreatetickets(){
-        Yii::$app->session->set('tickets', []);
-        Yii::$app->session->set('tickets_play_all',[]);
+        Yii::$app->session->set('tickets_B', []);
+        Yii::$app->session->set('tickets_play_all_B',[]);
 
         //Rifa
         $model   = Rifas::find()->where(["id" => Yii::$app->request->get("id")])->one();
@@ -182,7 +182,7 @@ class TicketsController extends Controller
 
         //$tickets_div = array_chunk($tickets,6500);
         
-        Yii::$app->session->set('tickets', $tickets);
+        Yii::$app->session->set('tickets_B', $tickets);
         //return $tickets_div;
     }//end function
 
@@ -212,7 +212,7 @@ class TicketsController extends Controller
         if(is_null($modelT)){
             //Rifa
             $model   = Rifas::find()->where(["id" => Yii::$app->request->post("id")])->one();
-            $tickets = Yii::$app->session->get('tickets');
+            $tickets = Yii::$app->session->get('tickets_B');
             //El número fue previamente seleccionado
             if(!in_array($tn,$tickets)){
                 return ["status"=>null];
@@ -232,19 +232,19 @@ class TicketsController extends Controller
                 }//end foreach
 
                 $tickets_play[$tn]          = $tn;
-                $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+                $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all_B');
                 $dump_tickets_play_all[$tn] = $tickets_play[$tn];
                 
-                Yii::$app->session->set('tickets',$tickets);
-                Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+                Yii::$app->session->set('tickets_B',$tickets);
+                Yii::$app->session->set('tickets_play_all_B',$dump_tickets_play_all);
 
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ["status"=>true,"promos"=>false,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+                return ["status"=>true,"promos"=>false,"tickets_play"=>Yii::$app->session->get('tickets_play_all_B')];
             }//end if
 
 
             //El número existe en los números random previamente generados
-            $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
+            $dump_tickets_play_all = Yii::$app->session->get('tickets_play_all_B');
             foreach ($dump_tickets_play_all as $tickets_play) {
                 if(in_array($tn,$tickets_play)){
                     return ["status"=>null];
@@ -287,18 +287,18 @@ class TicketsController extends Controller
                 }//end if
             }//end if
 
-            $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
+            $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all_B');
             if(is_null($keys_random)){
                 $dump_tickets_play_all[$tn] = [$tn];
             }else{
                 $dump_tickets_play_all[$tn] = $tickets_play[$tn];
             }//end if
 
-            Yii::$app->session->set('tickets',$tickets);
-            Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
+            Yii::$app->session->set('tickets_B',$tickets);
+            Yii::$app->session->set('tickets_play_all_B',$dump_tickets_play_all);
 
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ["status"=>true,"promos"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+            return ["status"=>true,"promos"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all_B')];
         }//end if
 
         return ["status"=>false];
@@ -306,8 +306,8 @@ class TicketsController extends Controller
 
     public function actionTicketremove(){
         $tn               = Yii::$app->request->post()["tn"];
-        $tickets_play_all = Yii::$app->session->get('tickets_play_all');
-        $tickets          = Yii::$app->session->get('tickets');
+        $tickets_play_all = Yii::$app->session->get('tickets_play_all_B');
+        $tickets          = Yii::$app->session->get('tickets_B');
 
         array_push($tickets, $tn);
         if(is_array($tickets_play_all[$tn])){
@@ -320,11 +320,11 @@ class TicketsController extends Controller
         unset($tickets_play_all[$tn]);
 
 
-        Yii::$app->session->set('tickets',$tickets);
-        Yii::$app->session->set('tickets_play_all',$tickets_play_all);
+        Yii::$app->session->set('tickets_B',$tickets);
+        Yii::$app->session->set('tickets_play_all_B',$tickets_play_all);
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         /*$ticketRemove = json_encode($ticketRemove_);*/
-        return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all')];
+        return ["status"=>true,"tickets_play"=>Yii::$app->session->get('tickets_play_all_B')];
     }//end function
 
     public static function getTicketSelected($ticket = null){
@@ -343,7 +343,7 @@ class TicketsController extends Controller
             //Valida si existen tickets ya apartados o pagados
             $ticket_duplicados = [];
             $data              = [];
-            $tickets_play_all  = Yii::$app->session->get('tickets_play_all');
+            $tickets_play_all  = Yii::$app->session->get('tickets_play_all_B');
             foreach ($tickets_play_all as $key__ => $tickets__) {
                 if(!self::getTicketSelected($key__)){
                     $ticket_duplicados[] = $key__;

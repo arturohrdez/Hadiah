@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-$this->title = 'Ventas';
+$this->title = 'Punto de Venta';
 $this->params['breadcrumbs'][] = $this->title;
 
 echo newerton\fancybox3\FancyBox::widget([

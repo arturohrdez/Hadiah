@@ -30,7 +30,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
-                'title' => 'Ventas',
+                'title' => 'Punto de Venta',
                 'text'  => 'Terminal de venta de Boletos',
                 'icon'  => 'fas fa-cart-arrow-down',
                 'theme' => 'gradient-dark',

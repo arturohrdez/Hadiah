@@ -3,7 +3,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Url;
 
-$ticket_n = count(Yii::$app->session->get('tickets_play_all')); 
+$ticket_n = count(Yii::$app->session->get('tickets_play_all_B')); 
 $states = [	
 	''                    => 'SELECCIONAR UNA OPCIÓN',
 	'Aguascalientes'      => 'Aguascalientes',
