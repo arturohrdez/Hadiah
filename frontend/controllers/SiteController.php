@@ -642,17 +642,43 @@ DA CLICK EN ENVIAR➡️
         return ["status"=>true,"link"=>$link];
     }//end function
 
-    public function actionTickets(){
+    public function actionBoleto(){
         $rifaId = Yii::$app->request->get()["id"];
-        $model  = Rifas::find()->where(["id" => $rifaId])->one();
+        if(isset(Yii::$app->request->get()["number"])){
+            $ticket = Yii::$app->request->get()["number"];
+        }else{
+            die("Número de Boleto es requerido");
+        }//end if
 
+
+        $model  = Rifas::find()->where(["id" => $rifaId])->one();
         //Rifa no activas
         if(is_null($model) || !$model->status){
             return $this->render('rifaEnd', [
                 'model'        => $model,
             ]);
         }//end if
-        die("entra".$rifaId);
+
+        //Busca boleto (Oportunidades)
+        $modelTicket = Tickets::find()->where(['rifa_id'=>$model->id,'ticket' => $ticket])->one();
+        if(is_null($modelTicket)){
+            return $this->render('rifaTickets', [
+                'model'  => $model,
+                'ticket' => $ticket,
+                'status' => false,
+            ]);
+        }//end if
+
+        //Busca si tiene oportunidades
+        $modelOportunidades = Tickets::find()->where(['rifa_id'=>$model->id,'parent_id' => $modelTicket->id])->all();
+
+
+        return $this->render('rifaTickets', [
+            'model'         => $model,
+            'modelTicket'   => $modelTicket,
+            'oportunidades' => $modelOportunidades, 
+            'status'        => true
+        ]);
     }//end function
 
 }
