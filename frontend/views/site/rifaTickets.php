@@ -86,6 +86,18 @@
 							</div>
 						</div>
 						<div class="row mt-4">
+							<div class="col-md-4 col-12 fw-bold">COMPRA :</div>
+							<div class="col-md-8 col-12 fw-bold text-danger">
+								<?php 
+									if($modelTicket->status == "P"){
+										echo $modelTicket->date_payment;
+									}else{
+										echo "-----";
+									}//end if
+								?>		
+							</div>
+						</div>
+						<div class="row mt-4">
 							<div class="col-12">
 								<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
 							</div>
