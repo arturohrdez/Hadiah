@@ -368,35 +368,37 @@ class TicketsController extends Controller
             //No existes tickets registrados con anterioridad
             //Guarda información
             foreach ($tickets_play_all as $key__ => $tickets__) {
-                $model            = new Tickets();
-                $model->rifa_id   = $modelTicket->rifa_id;
-                $model->ticket    = (string) $key__;
-                $model->date      = date("Y-m-d H:i");
-                $model->date_end  = date("Y-m-d H:i");
-                $model->phone     = $modelTicket->phone;
-                $model->name      = $modelTicket->name;
-                $model->lastname  = $modelTicket->lastname;
-                $model->state     = $modelTicket->state;
-                $model->type      = "S";
-                $model->status    = "P";
-                $model->parent_id = null;
+                $model               = new Tickets();
+                $model->rifa_id      = $modelTicket->rifa_id;
+                $model->ticket       = (string) $key__;
+                $model->date         = date("Y-m-d H:i");
+                $model->date_end     = date("Y-m-d H:i");
+                $model->date_payment = date("Y-m-d H:i:s");
+                $model->phone        = $modelTicket->phone;
+                $model->name         = $modelTicket->name;
+                $model->lastname     = $modelTicket->lastname;
+                $model->state        = $modelTicket->state;
+                $model->type         = "S";
+                $model->status       = "P";
+                $model->parent_id    = null;
                 $model->save();
 
 
                 if(is_array($tickets__)){
                     foreach ($tickets__ as $ticket_) {
-                        $modelTR            = new Tickets();
-                        $modelTR->rifa_id   = $modelTicket->rifa_id;
-                        $modelTR->ticket    = (string) $ticket_;
-                        $modelTR->date      = date("Y-m-d H:i");
-                        $modelTR->date_end  = date("Y-m-d H:i");
-                        $modelTR->phone     = $modelTicket->phone;
-                        $modelTR->name      = $modelTicket->name;
-                        $modelTR->lastname  = $modelTicket->lastname;
-                        $modelTR->state     = $modelTicket->state;
-                        $modelTR->type      = "R";
-                        $modelTR->status    = "P";
-                        $modelTR->parent_id = $model->id;
+                        $modelTR               = new Tickets();
+                        $modelTR->rifa_id      = $modelTicket->rifa_id;
+                        $modelTR->ticket       = (string) $ticket_;
+                        $modelTR->date         = date("Y-m-d H:i");
+                        $modelTR->date_end     = date("Y-m-d H:i");
+                        $modelTR->date_payment = date("Y-m-d H:i:s");
+                        $modelTR->phone        = $modelTicket->phone;
+                        $modelTR->name         = $modelTicket->name;
+                        $modelTR->lastname     = $modelTicket->lastname;
+                        $modelTR->state        = $modelTicket->state;
+                        $modelTR->type         = "R";
+                        $modelTR->status       = "P";
+                        $modelTR->parent_id    = $model->id;
                         $modelTR->save();
                     }//end foreach
                 }//end if
@@ -405,6 +407,7 @@ class TicketsController extends Controller
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [
                 "status"   => true,
+                "rifaId"   => $modelTicket->rifa_id,
                 "name"     => $modelTicket->name,
                 "lastname" => $modelTicket->lastname,
                 "phone"    => $modelTicket->phone
@@ -417,6 +420,52 @@ class TicketsController extends Controller
             'modelTicket'=>$modelTicket
         ]);
     }//end if
+
+
+    public function actionSendwp(){
+        $model            = Rifas::find()->where(["id" => Yii::$app->request->post()["id"]])->one();
+        $tickets_play_all = Yii::$app->session->get('tickets_play_all_B');
+
+        //Usuario
+        $name     = Yii::$app->request->post()["name"];
+        $lastname = Yii::$app->request->post()["lastname"];
+        $phone    = Yii::$app->request->post()["phone"];
+
+        $diassemana = Yii::$app->params["diassemana"];
+        $meses      = Yii::$app->params["meses"];
+        //Rifa
+        $titulo_rifa  = $model->name;
+        $fecha_rifa   = $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init));
+        $terms_rifa   = $model->terms;
+
+        //Tickets
+        $num_tickets          = count($tickets_play_all);
+        $tickets_play_all_str = "";
+        $h                    = 0;
+
+        $domainFront = Yii::$app->params["baseUrlFront"]."/index.php/site/boleto/";
+        $uri_ticket_payment = "";
+        foreach ($tickets_play_all as $key__ => $tickets__) {
+            $uri_ticket_payment .= "<a href='".$domainFront.$model->id."?number=".$key__."' target='_blank'>".$domainFront.$model->id."?number=".$key__."</a>
+
+";
+        }//end foreach
+
+$custom_msg = "¡LISTO! Pago registrado con éxito, muchas gracias.
+
+*{$name}* 
+Encuentra todos tus bolestos PAGADOS aquí:
+
+{$uri_ticket_payment}
+*¡MUCHA SUERTE!*
+🍀🍀
+";
+        
+
+        $link = "https://wa.me/+52{$phone}/?text=".urlencode($custom_msg);
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ["status"=>true,"link"=>$link];
+    }//end function
 
     /**
      * Finds the Tickets model based on its primary key value.

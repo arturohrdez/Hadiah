@@ -17,7 +17,7 @@ echo newerton\fancybox3\FancyBox::widget([
 
 <div class="container-fluid">
     <div class="loading text-center"></div>
-    <div id="divEditForm" class="col-8 offset-lg-2">
+    <div id="divEditForm" class="col-lg-8 col-12 offset-lg-2">
     	<div class="tickets-sales">
     		<div class="row-fluid">
     			<div class="col-sm-12">

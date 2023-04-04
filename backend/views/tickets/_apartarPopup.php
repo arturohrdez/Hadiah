@@ -76,7 +76,7 @@ $states = [
 </div>
 
 <?php
-$URL_sendwp = Url::to(['site/sendwp']);
+$URL_sendwp = Url::to(['tickets/sendwp']);
 $script = <<< JS
 	$('#ticketForm').on('beforeSubmit', function(e) {
 		var form     = $(this);
@@ -97,23 +97,24 @@ $script = <<< JS
 	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
 	        		$("#divMsg").show();
 	        	}else if(data.status == true){
-	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Los Boletos han sido registrados con éxito.');
+	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Los Boletos han sido registrados con éxito. <br> Por favor no cierre esta ventana.');
 	        		$("#divMsg").show();
 
 	        		//
-	        		/*setTimeout(function(e){
+	        		setTimeout(function(e){
 		        		$.ajax({
 		        			url: "{$URL_sendwp}",
 		        			type: "POST",
-		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone},
+		        			data: {"id":data.rifaId,"name":data.name,"lastname":data.lastname,"phone":data.phone},
 		        			beforeSend: function(data){
 		        				$("#divMsg").html('<div class="alert alert-success">Redirigiendo a Whatsapp...</div>');
 		        			},
 		        			success: function (data) {
+		        				//console.log(data);
 								window.location.href = data.link;
 		        			},
 		        		});
-					}, 3000);*/
+					}, 3000);
 	        		
 	        	}//end if
 	        },
