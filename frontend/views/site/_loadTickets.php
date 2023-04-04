@@ -4,10 +4,14 @@ use yii\helpers\Url;
 
 foreach ($tickets_list as $ticket_l) {
 	foreach ($ticket_l as $tickets) {
-		if(!in_array($tickets, $tickets_ac)){
-			echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets]).'</div>';
-		}else{
+		if(in_array($tickets, $tickets_ac)){
 			echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
+		}else{
+			if(in_array($tickets,$tickets_st)){
+				echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
+			}else{
+				echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets]).'</div>';
+			}//end if
 		}//end if
 	}//end foreach
 }//end foreach
@@ -15,26 +19,6 @@ foreach ($tickets_list as $ticket_l) {
 $URL_promos  = Url::to(['site/promos']);
 $URL_storage = Url::to(['site/validstorageticket']);
 $script = <<< JS
-
-	/*function validStorage(rifa_id,tn){
-		var url_storage        = "$URL_storage";
-		return $.ajax({
-			url: url_storage,
-			type: 'POST',
-			data: {"id":rifa_id,"tn":tn},
-			beforeSend: function(data){
-				console.log("search storage");
-			},
-			success: function(response) {
-				console.log("ok"+response);
-	        },
-	        error: function() {
-	            console.log('Error occured');
-	        }
-		});
-
-	}//end function*/
-
 	function promos(elements,tn,tn_rand){
 		var url_p        = "$URL_promos";
 		var elements_ran = tn_rand;

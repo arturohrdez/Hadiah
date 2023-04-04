@@ -322,11 +322,8 @@ class SiteController extends Controller
             foreach ($modelTS as $ticket) {
                 $TicketsStorage[] = $ticket->ticket;
             }//end foreach
-
-            return $TicketsStorage;
-        }else{
-            return false;
-        }
+        }//end if
+        return $TicketsStorage;
     }//end if
 
     /**
@@ -372,11 +369,15 @@ class SiteController extends Controller
         $tickets_list = self::createTickets($init,$end);
         //Tickets apartados y vendidos
         $tickets_ac   = self::dumpTicketAC($model->tickets);
+        //Tickets Storage
+        $tickets_st   = self::getTicketStorage(Yii::$app->request->post()["id"]);
 
         return $this->renderAjax('_loadTickets',[
             'model'        => $model,
             'tickets_list' => $tickets_list,
-            'tickets_ac'   => $tickets_ac
+            'tickets_ac'   => $tickets_ac,
+            'tickets_st'   => $tickets_st,
+
         ]);
     }//end function
 
@@ -415,7 +416,7 @@ class SiteController extends Controller
 
                 //Busca los tickets en storage
                 $allTicketsStorage = self::getTicketStorage($rifaId);
-                if($allTicketsStorage != false){
+                if(!empty($allTicketsStorage)){
                     $allTickets = array_merge($allTickets,$allTicketsStorage);
                     $allTickets = array_unique($allTickets);
                 }//end if
@@ -596,6 +597,8 @@ class SiteController extends Controller
                     }//end foreach
                 }//end if
             }//end foreach
+            
+
 
             //Existen tickets ya registrados por alguien más
             if(!empty($ticket_duplicados)){
