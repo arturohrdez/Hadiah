@@ -25,11 +25,11 @@ use kartik\date\DatePicker;
     
     <?= $form->field($model, 'date_init',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3','style'=>'float: left;']])->widget(DatePicker::classname(),[
             'name' => 'date_init', 
-            'value' => date('d-M-Y'),
+            'value' => date('Y-m-d'),
             'options' => ['placeholder' => 'Seleccione la fecha de inicio'],
             'pluginOptions' => [
                 'autoclose'=>true,
-                'format' => 'dd-M-yyyy',
+                'format' => 'yyyy-mm-dd',
                 'todayHighlight' => true
             ]
         ])

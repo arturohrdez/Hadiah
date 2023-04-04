@@ -315,6 +315,19 @@ class SiteController extends Controller
         $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->one()->delete();
     }//end if
 
+    public static function getTicketStorage($rifaId = null){
+        $TicketsStorage = [];
+        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId])->all();
+        if(!empty($modelTS)){
+            foreach ($modelTS as $ticket) {
+                $TicketsStorage[] = $ticket->ticket;
+            }//end foreach
+
+            return $TicketsStorage;
+        }else{
+            return false;
+        }
+    }//end if
 
     /**
      * 
@@ -386,13 +399,6 @@ class SiteController extends Controller
             }//end if
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
-                /*//Valida si el ticket seleccionado no esta en el storaga
-                $resTS =self::getTicketStoraga($rifaId,$tn);
-                if(!$resTS){
-                    $return            = ["status"=>false,"storage"=>$resTS];
-                    return json_encode($return);
-                }//end if*/
-
                 //Guarda ticket seleccionado en el storage
                 self::saveTicketStorage($rifaId,$tn);
 
@@ -405,6 +411,13 @@ class SiteController extends Controller
                 if(!empty($elements_rnd)){
                     $elements_rnd = explode(",", $elements_rnd);
                     $allTickets = array_merge($allTickets,$elements_rnd);
+                }//end if
+
+                //Busca los tickets en storage
+                $allTicketsStorage = self::getTicketStorage($rifaId);
+                if($allTicketsStorage != false){
+                    $allTickets = array_merge($allTickets,$allTicketsStorage);
+                    $allTickets = array_unique($allTickets);
                 }//end if
 
                 //Elimina los Tickets seleccionados del conjunto de Tickets
@@ -741,12 +754,13 @@ DA CLICK EN ENVIAR➡️
         $tn     = Yii::$app->request->post()["tn"];
 
         $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->count();
-        //Existe registros en el storaga
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //Existe registros en el storage
         if($modelTS > 0){
-            return "NO";
+            return ["status"=>false];
         }
         // No existe registro en el storaga
-        return "SI";
+        return ["status"=>true];
     }//end function
 
 }

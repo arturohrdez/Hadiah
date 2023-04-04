@@ -446,7 +446,7 @@ class TicketsController extends Controller
         $domainFront = Yii::$app->params["baseUrlFront"]."/index.php/site/boleto/";
         $uri_ticket_payment = "";
         foreach ($tickets_play_all as $key__ => $tickets__) {
-            $uri_ticket_payment .= "<a href='".$domainFront.$model->id."?number=".$key__."' target='_blank'>".$domainFront.$model->id."?number=".$key__."</a>
+            $uri_ticket_payment .= $domainFront.$model->id."?number=".$key__."
 
 ";
         }//end foreach

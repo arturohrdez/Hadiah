@@ -16,7 +16,7 @@ $URL_promos  = Url::to(['site/promos']);
 $URL_storage = Url::to(['site/validstorageticket']);
 $script = <<< JS
 
-	function validStorage(rifa_id,tn){
+	/*function validStorage(rifa_id,tn){
 		var url_storage        = "$URL_storage";
 		return $.ajax({
 			url: url_storage,
@@ -33,7 +33,7 @@ $script = <<< JS
 	        }
 		});
 
-	}//end function
+	}//end function*/
 
 	function promos(elements,tn,tn_rand){
 		var url_p        = "$URL_promos";
@@ -84,12 +84,11 @@ $script = <<< JS
 	}//end function
 
 	$(".btn_ticket").on("click",function(e){
-		var tn       = $(this).data("tn");
-		var tn_sel   = $("#tn_sel").val();
-		var tn_rand  = $("#tn_rand").val();
-		let elements = [];
-
-		validStorage($model->id,tn);
+		var tn          = $(this).data("tn");
+		var tn_sel      = $("#tn_sel").val();
+		var tn_rand     = $("#tn_rand").val();
+		let elements    = [];
+		var url_storage = "$URL_storage";
 
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
@@ -97,68 +96,116 @@ $script = <<< JS
 			let search_ti = tn_sel.indexOf(tn);
 			let search_tr = tn_rand.indexOf(tn);
 			if(search_ti == -1 && search_tr == -1){
-				elements.push(tn);
-				$("#tn_sel").val(elements.join(','));
-				promos(elements,tn,tn_rand).done(function(response){
-					promos_         = JSON.parse(response);
-					if(promos_.status == true){
-						oportunities(promos_.tickets_play);
-					}else{
-
-						if(promos_.status == "NA"){
-							alert("Error 403 (Forbidden)");
-							return false;
-						}
-					}//end if
-
-					//Muestra oportunidades
-					//$(".btn_ticket").attr("disabled",false);
-					$("#load_tickets").hide()
-					$("#btnSend").show();
+				var validStorage = $.ajax({
+					url: url_storage,
+					type: 'POST',
+					data: {"id":{$model->id},"tn":tn},
+					dataType: 'json',
+					beforeSend: function(data){console.log("search storage");},
+					success: function(response) {console.log("success storage")},
+					error: function() {console.log('Error occured - valid storage');}
 				});
-			}//end if
-		}else{
-			elements.push(tn);
-			$("#tn_sel").val(elements.join(','));
-			promos(elements,tn,tn_rand).done(function(response){
-				promos_         = JSON.parse(response);
-				if(promos_.status == true){
-					oportunities(promos_.tickets_play);
-				}else{
-					if(promos_.status == "NA"){
-						alert("Error 403 (Forbidden)");
+
+				validStorage.done(function(res){
+					if(res.status == false){
+						alert("Lo sentimos, el boleto "+tn+" fue seleccionado por alguien más, por favor intente con otro.");
 						return false;
-					}
+					}else if(res.status == true){
+						elements.push(tn);
+						$("#tn_sel").val(elements.join(','));
+						promos(elements,tn,tn_rand).done(function(response){
+							promos_         = JSON.parse(response);
+							if(promos_.status == true){
+								oportunities(promos_.tickets_play);
+							}else{
 
-					/*if(promos_.status == false){
-						if(promos_.storage == false){
-							alert("Lo sentimos ese Ticket ya fue seleccionado por alguíen mas");
-							return false;
+								if(promos_.status == "NA"){
+									alert("Error 403 (Forbidden)");
+									return false;
+								}
+							}//end if
+
+							//Muestra oportunidades
+							//$(".btn_ticket").attr("disabled",false);
+							$("#load_tickets").hide()
+							$("#btnSend").show();
+						});
+
+						//Tickets Count
+						let n_t = elements.length;
+						$(".n_t").text(n_t);	
+
+						//Tickets selected
+						let t_selectBtn = "";
+						for (var i = n_t-1; i >= 0; i--) {
+							t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
+						}//end foreach
+						$(".t_opt").html(t_selectBtn);
+
+						//Show Div Selected
+						$("#div_selected").show();
+
+						$("#tn_"+tn).removeClass('btn-outline-success');
+						$("#tn_"+tn).addClass('btn-success');
+					}//end if
+				});
+
+			}//end if
+
+		}else{
+			var validStorage = $.ajax({
+				url: url_storage,
+				type: 'POST',
+				data: {"id":{$model->id},"tn":tn},
+				dataType: 'json',
+				beforeSend: function(data){console.log("search storage");},
+				success: function(response) {console.log("success storage")},
+				error: function() {console.log('Error occured - valid storage');}
+			});
+
+			validStorage.done(function(res){
+				if(res.status == false){
+					alert("Lo sentimos, el boleto "+tn+" fue seleccionado por alguien más, por favor intente con otro.");
+					return false;
+				}else if(res.status == true){
+					elements.push(tn);
+					$("#tn_sel").val(elements.join(','));
+					promos(elements,tn,tn_rand).done(function(response){
+						promos_         = JSON.parse(response);
+						if(promos_.status == true){
+							oportunities(promos_.tickets_play);
+						}else{
+							if(promos_.status == "NA"){
+								alert("Error 403 (Forbidden)");
+								return false;
+							}//end if
 						}//end if
-					}//end if*/
-				}//end if
 
-				//Muestra oportunidades
-				$("#load_tickets").hide();
-				$("#btnSend").show();
+						//Muestra oportunidades
+						$("#load_tickets").hide();
+						$("#btnSend").show();
+					});
+
+
+					//Tickets Count
+					let n_t = elements.length;
+					$(".n_t").text(n_t);	
+
+					//Tickets selected
+					let t_selectBtn = "";
+					for (var i = n_t-1; i >= 0; i--) {
+						t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
+					}//end foreach
+					$(".t_opt").html(t_selectBtn);
+
+					//Show Div Selected
+					$("#div_selected").show();
+
+					$("#tn_"+tn).removeClass('btn-outline-success');
+					$("#tn_"+tn).addClass('btn-success');
+				}//end if
 			});
 		}//end if
-		
-		//Tickets Count
-		let n_t = elements.length;
-		$(".n_t").text(n_t);	
-
-		//Tickets selected
-		let t_selectBtn = "";
-		for (var i = n_t-1; i >= 0; i--) {
-			t_selectBtn = t_selectBtn + '<button id="t_'+elements[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements[i]+'`)">'+elements[i]+'</button>';
-		}//end foreach
-		$(".t_opt").html(t_selectBtn);
-
-		//Show Div Selected
-		$("#div_selected").show();
-		$(this).removeClass('btn-outline-success');
-		$(this).addClass('btn-success');
 	});
 JS;
 $this->registerJs($script);
