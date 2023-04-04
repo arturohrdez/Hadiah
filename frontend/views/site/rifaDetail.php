@@ -3,6 +3,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap4\ActiveForm;
 
+
+$this->title = $model->name;
+
 echo newerton\fancybox3\FancyBox::widget([
     'target' => '.data-fancybox-modal',
     'config' => [
@@ -134,10 +137,11 @@ $URL_searcht = Url::to(['site/searchticket']);
 <script type="text/javascript">
 	function ticketRemove(t){
 		var url_r = "<?php echo $URL_remove ?>";
+		var rifa_id = "<?php echo $model->id ?>";
 		$.ajax({
 			url: url_r,
 			type: 'POST',
-			data: {"tn":t},
+			data: {"id":rifa_id,"tn":t},
 			beforeSend: function(data){
 				//$(".btn_ticket").attr("disabled",true);
 				$(".btn_ticketDel").attr("disabled",true);

@@ -2,24 +2,23 @@
 
 namespace frontend\controllers;
 
-use frontend\models\ResendVerificationEmailForm;
-use frontend\models\VerifyEmailForm;
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
-
-//Backend
 use backend\models\Rifas;
 use backend\models\Tickets;
+use backend\models\Ticketstorage;
+use common\models\LoginForm;
+use frontend\models\ContactForm;
+use frontend\models\PasswordResetRequestForm;
+use frontend\models\ResendVerificationEmailForm;
+use frontend\models\ResetPasswordForm;
+use frontend\models\SignupForm;
 use frontend\models\TicketForm;
+use frontend\models\VerifyEmailForm;
+use yii\base\InvalidArgumentException;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
+use yii\web\Controller;
 
 
 /**
@@ -264,6 +263,11 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * 
+     * HELPERS
+     * 
+     * */
     public static function addcero($digitos,$number){
         return str_pad($number, $digitos, "0", STR_PAD_LEFT);
     }//end function
@@ -294,6 +298,25 @@ class SiteController extends Controller
         return $ticketsAC;
     }//end function
 
+    public static function saveTicketStorage($rifaId = null,$tn = null){
+        $modelTS          = new Ticketstorage();
+        $modelTS->rifa_id = $rifaId;
+        $modelTS->ticket  = $tn;
+        $modelTS->date_ini = date("Y-m-d H:i:s");
+        $modelTS->date_end = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstoraga'],strtotime(date("Y-m-d H:i:s"))));
+        $modelTS->save();
+    }//end function
+
+    public static function removeTicketStorage($rifaId = null, $tn = null){
+        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->one()->delete();
+    }//end if
+
+
+    /**
+     * 
+     * MAINS
+     * 
+     * */
     public function actionRifa(){
         Yii::$app->session->set('countClick',0);
         Yii::$app->session->set('tickets_play_all',[]);
@@ -359,6 +382,10 @@ class SiteController extends Controller
             }//end if
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
+                //Guarda ticket seleccionado en el storage
+                self::saveTicketStorage($rifaId,$tn);
+                
+
                 //Tickets apartados y vendidos
                 $tickets_ac = self::dumpTicketAC($model->tickets);
                 $allTickets = array_merge($elements,$tickets_ac);
@@ -395,10 +422,14 @@ class SiteController extends Controller
                 if(is_array($keys_random)){
                     foreach ($keys_random as $key_random) {
                         $tickets_play[$tn][] = $tickets[$key_random];
+                        //Guarda ticket seleccionado en el storage
+                        self::saveTicketStorage($rifaId,$tickets[$key_random]);
                     }//end foreahc
                 }else{
                     if(!is_null($keys_random)){
                         $tickets_play[$tn][] = $tickets[$keys_random];
+                        //Guarda ticket seleccionado en el storage
+                        self::saveTicketStorage($rifaId,$tickets[$keys_random]);
                     }//end if
                 }//end if
 
@@ -449,6 +480,9 @@ class SiteController extends Controller
             }//end if
         }else{
             //No existe promo
+            //Guarda ticket seleccionado en el storage
+            self::saveTicketStorage($rifaId,$tn);
+
             //Tickets apartados y vendidos
             $tickets_ac        = self::dumpTicketAC($model->tickets);
             $allTickets        = array_merge($elements,$tickets_ac);
@@ -473,9 +507,19 @@ class SiteController extends Controller
     }//end function
 
     public function actionTicketremove(){
+        $rifaId           = Yii::$app->request->post()["id"];
         $tn               = Yii::$app->request->post()["tn"];
+        self::removeTicketStorage($rifaId,$tn);
+
+
         $tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $ticketRemove_    = $tickets_play_all[$tn];
+        if(is_array($ticketRemove_)){
+            foreach ($ticketRemove_ as $tnr) {
+                self::removeTicketStorage($rifaId,$tnr);
+            }//end foreach
+        }//end if
+
         unset($tickets_play_all[$tn]);
         Yii::$app->session->set('tickets_play_all',$tickets_play_all);
         $ticketRemove = json_encode($ticketRemove_);
