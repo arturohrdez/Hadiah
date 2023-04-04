@@ -13,7 +13,27 @@ foreach ($tickets_list as $ticket_l) {
 }//end foreach
 
 $URL_promos  = Url::to(['site/promos']);
+$URL_storage = Url::to(['site/validstorageticket']);
 $script = <<< JS
+
+	function validStorage(rifa_id,tn){
+		var url_storage        = "$URL_storage";
+		return $.ajax({
+			url: url_storage,
+			type: 'POST',
+			data: {"id":rifa_id,"tn":tn},
+			beforeSend: function(data){
+				console.log("search storage");
+			},
+			success: function(response) {
+				console.log("ok"+response);
+	        },
+	        error: function() {
+	            console.log('Error occured');
+	        }
+		});
+
+	}//end function
 
 	function promos(elements,tn,tn_rand){
 		var url_p        = "$URL_promos";
@@ -69,6 +89,8 @@ $script = <<< JS
 		var tn_rand  = $("#tn_rand").val();
 		let elements = [];
 
+		validStorage($model->id,tn);
+
 		if(tn_sel.length > 0){
 			var exp  = tn_sel.split(',');
 			elements = exp;
@@ -82,6 +104,7 @@ $script = <<< JS
 					if(promos_.status == true){
 						oportunities(promos_.tickets_play);
 					}else{
+
 						if(promos_.status == "NA"){
 							alert("Error 403 (Forbidden)");
 							return false;
@@ -106,6 +129,13 @@ $script = <<< JS
 						alert("Error 403 (Forbidden)");
 						return false;
 					}
+
+					/*if(promos_.status == false){
+						if(promos_.storage == false){
+							alert("Lo sentimos ese Ticket ya fue seleccionado por alguíen mas");
+							return false;
+						}//end if
+					}//end if*/
 				}//end if
 
 				//Muestra oportunidades

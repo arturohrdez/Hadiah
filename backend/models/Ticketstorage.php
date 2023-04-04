@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\behaviors\OptimisticLockBehavior;
 
 /**
  * This is the model class for table "ticketstorage".

@@ -9,5 +9,5 @@ return [
         "facebook"  => "https://www.facebook.com/",
         "whatsapp"  => "https://wa.me/+5212212224916"
     ],
-    'ticketstoraga' => "+30 minute",
+    'ticketstorage' => "+30 minute",
 ];

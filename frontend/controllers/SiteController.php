@@ -299,12 +299,16 @@ class SiteController extends Controller
     }//end function
 
     public static function saveTicketStorage($rifaId = null,$tn = null){
+        $lock = Yii::$app->db->createCommand('LOCK TABLES `ticketstorage` WRITE')->execute();
+        
         $modelTS          = new Ticketstorage();
         $modelTS->rifa_id = $rifaId;
         $modelTS->ticket  = $tn;
         $modelTS->date_ini = date("Y-m-d H:i:s");
-        $modelTS->date_end = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstoraga'],strtotime(date("Y-m-d H:i:s"))));
+        $modelTS->date_end = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
         $modelTS->save();
+
+        $unlock = Yii::$app->db->createCommand('UNLOCK TABLES')->execute();
     }//end function
 
     public static function removeTicketStorage($rifaId = null, $tn = null){
@@ -382,9 +386,15 @@ class SiteController extends Controller
             }//end if
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
+                /*//Valida si el ticket seleccionado no esta en el storaga
+                $resTS =self::getTicketStoraga($rifaId,$tn);
+                if(!$resTS){
+                    $return            = ["status"=>false,"storage"=>$resTS];
+                    return json_encode($return);
+                }//end if*/
+
                 //Guarda ticket seleccionado en el storage
                 self::saveTicketStorage($rifaId,$tn);
-                
 
                 //Tickets apartados y vendidos
                 $tickets_ac = self::dumpTicketAC($model->tickets);
@@ -403,6 +413,7 @@ class SiteController extends Controller
                         unset($tickets[$key]);
                     }//end if
                 }//end foreach
+
 
                 //Obtiene un número aleatorio del conjunto de Tickets
                 $total_tickets_ls = count($tickets);
@@ -723,6 +734,19 @@ DA CLICK EN ENVIAR➡️
             'oportunidades' => $modelOportunidades, 
             'status'        => true
         ]);
+    }//end function
+
+    public function actionValidstorageticket(){
+        $rifaId = Yii::$app->request->post()["id"];
+        $tn     = Yii::$app->request->post()["tn"];
+
+        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->count();
+        //Existe registros en el storaga
+        if($modelTS > 0){
+            return "NO";
+        }
+        // No existe registro en el storaga
+        return "SI";
     }//end function
 
 }
