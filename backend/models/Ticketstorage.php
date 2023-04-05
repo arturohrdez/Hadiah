@@ -3,7 +3,8 @@
 namespace backend\models;
 
 use Yii;
-use yii\behaviors\OptimisticLockBehavior;
+use \yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "ticketstorage".
@@ -16,6 +17,19 @@ use yii\behaviors\OptimisticLockBehavior;
  */
 class Ticketstorage extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

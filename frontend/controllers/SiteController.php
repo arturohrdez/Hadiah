@@ -299,16 +299,17 @@ class SiteController extends Controller
     }//end function
 
     public static function saveTicketStorage($rifaId = null,$tn = null){
-        $lock = Yii::$app->db->createCommand('LOCK TABLES `ticketstorage` WRITE')->execute();
+        //$lock = Yii::$app->db->createCommand('LOCK TABLES `ticketstorage` WRITE');
         
-        $modelTS          = new Ticketstorage();
-        $modelTS->rifa_id = $rifaId;
-        $modelTS->ticket  = $tn;
+        $modelTS           = new Ticketstorage();
+        $modelTS->rifa_id  = $rifaId;
+        $modelTS->ticket   = $tn;
         $modelTS->date_ini = date("Y-m-d H:i:s");
         $modelTS->date_end = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
+        $modelTS->uuid     = NULL;
         $modelTS->save();
 
-        $unlock = Yii::$app->db->createCommand('UNLOCK TABLES')->execute();
+        //$unlock = Yii::$app->db->createCommand('UNLOCK TABLES');
     }//end function
 
     public static function removeTicketStorage($rifaId = null, $tn = null){
@@ -400,6 +401,10 @@ class SiteController extends Controller
             }//end if
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
+                //UUID
+                
+
+
                 //Guarda ticket seleccionado en el storage
                 self::saveTicketStorage($rifaId,$tn);
 
@@ -597,7 +602,7 @@ class SiteController extends Controller
                     }//end foreach
                 }//end if
             }//end foreach
-            
+
 
 
             //Existen tickets ya registrados por alguien más
