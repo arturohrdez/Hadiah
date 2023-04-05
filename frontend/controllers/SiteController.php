@@ -20,6 +20,8 @@ use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
+use \aracoool\uuid\Uuid;
+
 
 /**
  * Site controller
@@ -298,22 +300,22 @@ class SiteController extends Controller
         return $ticketsAC;
     }//end function
 
-    public static function saveTicketStorage($rifaId = null,$tn = null){
+    public static function saveTicketStorage($rifaId = null,$tn = null,$uuid = null){
         //$lock = Yii::$app->db->createCommand('LOCK TABLES `ticketstorage` WRITE');
-        
         $modelTS           = new Ticketstorage();
         $modelTS->rifa_id  = $rifaId;
         $modelTS->ticket   = $tn;
         $modelTS->date_ini = date("Y-m-d H:i:s");
         $modelTS->date_end = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
-        $modelTS->uuid     = NULL;
+        $modelTS->uuid     = $uuid;
         $modelTS->save();
 
         //$unlock = Yii::$app->db->createCommand('UNLOCK TABLES');
     }//end function
 
     public static function removeTicketStorage($rifaId = null, $tn = null){
-        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->one()->delete();
+        $uuid = Yii::$app->session->get("uuid");
+        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn,"uuid"=>$uuid])->one()->delete();
     }//end if
 
     public static function getTicketStorage($rifaId = null,$type = null,$tn = null){
@@ -345,6 +347,7 @@ class SiteController extends Controller
         Yii::$app->session->set('countClick',0);
         Yii::$app->session->set('tickets_play_all',[]);
         Yii::$app->session->set('tickets', []);
+        Yii::$app->session->set('uuid', Uuid::v4());
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
@@ -403,7 +406,8 @@ class SiteController extends Controller
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
         self::createTickets($model->ticket_init,$model->ticket_end);
         $tickets = Yii::$app->session->get('tickets');
-
+        $uuid = Yii::$app->session->get('uuid');
+        
         if(!empty($model->promos)){
             if($model->promos[0]->buy_ticket > 1){
                 $return = ["status"=>"NA"];
@@ -412,7 +416,7 @@ class SiteController extends Controller
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
                 //Guarda ticket seleccionado en el storage
-                self::saveTicketStorage($rifaId,$tn);
+                self::saveTicketStorage($rifaId,$tn,$uuid);
 
                 //Tickets apartados y vendidos
                 $tickets_ac = self::dumpTicketAC($model->tickets);
@@ -458,7 +462,7 @@ class SiteController extends Controller
                     foreach ($keys_random as $key_random) {
                         $tickets_play[$tn][] = $tickets[$key_random];
                         //Guarda ticket seleccionado en el storage
-                        self::saveTicketStorage($rifaId,$tickets[$key_random]);
+                        self::saveTicketStorage($rifaId,$tickets[$key_random],$uuid);
                         //Elimina los tickets random del conjutno de tickets
                         unset($tickets[$key_random]);
                     }//end foreahc
@@ -466,7 +470,7 @@ class SiteController extends Controller
                     if(!is_null($keys_random)){
                         $tickets_play[$tn][] = $tickets[$keys_random];
                         //Guarda ticket seleccionado en el storage
-                        self::saveTicketStorage($rifaId,$tickets[$keys_random]);
+                        self::saveTicketStorage($rifaId,$tickets[$keys_random],$uuid);
                         //Elimina los tickets random del conjutno de tickets
                         unset($tickets[$keys_random]);
                     }//end if
@@ -518,7 +522,7 @@ class SiteController extends Controller
         }else{
             //No existe promo
             //Guarda ticket seleccionado en el storage
-            self::saveTicketStorage($rifaId,$tn);
+            self::saveTicketStorage($rifaId,$tn,$uuid);
 
             //Tickets apartados y vendidos
             $tickets_ac        = self::dumpTicketAC($model->tickets);
