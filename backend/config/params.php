@@ -11,5 +11,5 @@ return [
         "facebook"  => "https://www.facebook.com/",
         "whatsapp"  => "https://wa.me/+5212212224916"
     ],
-    'ticketstorage' => "+30 minute",
+    'ticketstorage' => "+10 minute",
 ];

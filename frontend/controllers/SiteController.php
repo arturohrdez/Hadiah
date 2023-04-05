@@ -315,7 +315,10 @@ class SiteController extends Controller
 
     public static function removeTicketStorage($rifaId = null, $tn = null){
         $uuid = Yii::$app->session->get("uuid");
-        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn,"uuid"=>$uuid])->one()->delete();
+        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn,"uuid"=>$uuid])->one();
+        if(!is_null($modelTS)){
+            $modelTS->delete();
+        }//end if
     }//end if
 
     public static function getTicketStorage($rifaId = null,$type = null,$tn = null){
@@ -347,7 +350,10 @@ class SiteController extends Controller
         Yii::$app->session->set('countClick',0);
         Yii::$app->session->set('tickets_play_all',[]);
         Yii::$app->session->set('tickets', []);
-        Yii::$app->session->set('uuid', Uuid::v4());
+        $uuid = Yii::$app->session->get('uuid');
+        if(empty($uuid)){
+            Yii::$app->session->set('uuid', Uuid::v4());
+        }//end if
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
