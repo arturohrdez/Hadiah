@@ -80,7 +80,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {   
-        $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->limit(3)->all();
+        $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
         return $this->render('index',['rifas'=>$modelRifas]);
     }
 
@@ -316,15 +316,24 @@ class SiteController extends Controller
         $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->one()->delete();
     }//end if
 
-    public static function getTicketStorage($rifaId = null){
-        $TicketsStorage = [];
-        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId])->all();
-        if(!empty($modelTS)){
-            foreach ($modelTS as $ticket) {
-                $TicketsStorage[] = $ticket->ticket;
-            }//end foreach
+    public static function getTicketStorage($rifaId = null,$type = null,$tn = null){
+        if(is_null($type)){
+            $TicketsStorage = [];
+            $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId])->all();
+            if(!empty($modelTS)){
+                foreach ($modelTS as $ticket) {
+                    $TicketsStorage[] = $ticket->ticket;
+                }//end foreach
+            }//end if
+            return $TicketsStorage;
+        }elseif($type == 2){
+            $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->count();
+            if(!empty($modelTS)){
+                return ["status"=>false,"rows"=>$modelTS];
+            }else{
+                return ["status"=>true];
+            }//end if
         }//end if
-        return $TicketsStorage;
     }//end if
 
     /**
@@ -371,7 +380,7 @@ class SiteController extends Controller
         //Tickets apartados y vendidos
         $tickets_ac   = self::dumpTicketAC($model->tickets);
         //Tickets Storage
-        $tickets_st   = self::getTicketStorage(Yii::$app->request->post()["id"]);
+        $tickets_st   = self::getTicketStorage(Yii::$app->request->post()["id"],null,null);
 
         return $this->renderAjax('_loadTickets',[
             'model'        => $model,
@@ -391,8 +400,9 @@ class SiteController extends Controller
         $elements_rnd = $post["tickets_rnd"];
         $tn           = $post["tn"];
 
-        $tickets = Yii::$app->session->get('tickets');
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
+        self::createTickets($model->ticket_init,$model->ticket_end);
+        $tickets = Yii::$app->session->get('tickets');
 
         if(!empty($model->promos)){
             if($model->promos[0]->buy_ticket > 1){
@@ -401,10 +411,6 @@ class SiteController extends Controller
             }//end if
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
-                //UUID
-                
-
-
                 //Guarda ticket seleccionado en el storage
                 self::saveTicketStorage($rifaId,$tn);
 
@@ -420,10 +426,10 @@ class SiteController extends Controller
                 }//end if
 
                 //Busca los tickets en storage
-                $allTicketsStorage = self::getTicketStorage($rifaId);
+                $allTicketsStorage = self::getTicketStorage($rifaId,null,null);
                 if(!empty($allTicketsStorage)){
-                    $allTickets = array_merge($allTickets,$allTicketsStorage);
-                    $allTickets = array_unique($allTickets);
+                    $allTickets_ = array_merge($allTickets,$allTicketsStorage);
+                    $allTickets = array_unique($allTickets_);
                 }//end if
 
                 //Elimina los Tickets seleccionados del conjunto de Tickets
@@ -432,7 +438,6 @@ class SiteController extends Controller
                         unset($tickets[$key]);
                     }//end if
                 }//end foreach
-
 
                 //Obtiene un número aleatorio del conjunto de Tickets
                 $total_tickets_ls = count($tickets);
@@ -454,16 +459,18 @@ class SiteController extends Controller
                         $tickets_play[$tn][] = $tickets[$key_random];
                         //Guarda ticket seleccionado en el storage
                         self::saveTicketStorage($rifaId,$tickets[$key_random]);
+                        //Elimina los tickets random del conjutno de tickets
+                        unset($tickets[$key_random]);
                     }//end foreahc
                 }else{
                     if(!is_null($keys_random)){
                         $tickets_play[$tn][] = $tickets[$keys_random];
                         //Guarda ticket seleccionado en el storage
                         self::saveTicketStorage($rifaId,$tickets[$keys_random]);
+                        //Elimina los tickets random del conjutno de tickets
+                        unset($tickets[$keys_random]);
                     }//end if
                 }//end if
-
-
 
                 $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
                 if(is_null($keys_random)){
@@ -537,8 +544,8 @@ class SiteController extends Controller
     }//end function
 
     public function actionTicketremove(){
-        $rifaId           = Yii::$app->request->post()["id"];
-        $tn               = Yii::$app->request->post()["tn"];
+        $rifaId  = Yii::$app->request->post()["id"];
+        $tn      = Yii::$app->request->post()["tn"];
         self::removeTicketStorage($rifaId,$tn);
 
 
@@ -549,6 +556,7 @@ class SiteController extends Controller
                 self::removeTicketStorage($rifaId,$tnr);
             }//end foreach
         }//end if
+
 
         unset($tickets_play_all[$tn]);
         Yii::$app->session->set('tickets_play_all',$tickets_play_all);
@@ -572,8 +580,8 @@ class SiteController extends Controller
         return ["status"=>false];
     }//end function
 
-    public static function getTicketSelected($ticket = null){
-        $model  = Tickets::find()->where(['ticket' => $ticket])->one();
+    public static function getTicketSelected($rifaId = null,$ticket = null){
+        $model  = Tickets::find()->where(['rifa_id'=>$rifaId,'ticket' => $ticket])->one();
         if(is_null($model)){
             return true;
         }//end if
@@ -585,25 +593,39 @@ class SiteController extends Controller
         //$dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $modelTicket = new TicketForm();
         if ($modelTicket->load(Yii::$app->request->post())) {
-            //Valida si existen tickets ya apartados o pagados
+            $rifaId            = $modelTicket->rifa_id;
             $ticket_duplicados = [];
-            $data              = [];
             $tickets_play_all  = Yii::$app->session->get('tickets_play_all');
+            
+            //Valida cada ticket vs Apartados o vendidos
             foreach ($tickets_play_all as $key__ => $tickets__) {
-                if(!self::getTicketSelected($key__)){
+                //Valida cada ticket vs ticketstorage
+                //Parea evitar la concurrencia, no se pueden guardar duplicados
+                $ticketstorageS = self::getTicketStorage($rifaId,2,$key__);
+                //Existe más de un registro en storage
+                if(!$ticketstorageS["status"] && $ticketstorageS["rows"] > 1){
+                    //Concurrencia
+                    $ticket_duplicados[] = $key__;
+                }//end if
+
+                if(!self::getTicketSelected($rifaId,$key__)){
                     $ticket_duplicados[] = $key__;
                 }//end if
 
                 if(is_array($tickets__)){
                     foreach ($tickets__ as $ticket_) {
-                        if(!self::getTicketSelected($ticket_)){
+                        $ticketstorageR = self::getTicketStorage($rifaId,2,$ticket_);
+                        if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 1){
+                            //Concurrencia
+                            $ticket_duplicados[] = $ticket_;
+                        }//end if
+
+                        if(!self::getTicketSelected($rifaId,$ticket_)){
                             $ticket_duplicados[] = $ticket_;
                         }//end if
                     }//end foreach
                 }//end if
             }//end foreach
-
-
 
             //Existen tickets ya registrados por alguien más
             if(!empty($ticket_duplicados)){
@@ -611,6 +633,7 @@ class SiteController extends Controller
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return ["status"=>false,"tickets_duplicados"=>$ticket_duplicados];
             }//end if
+
 
             //No existes tickets registrados con anterioridad
             //Guarda información
@@ -628,7 +651,8 @@ class SiteController extends Controller
                 $model->status    = "A";
                 $model->parent_id = null;
                 $model->save();
-
+                //Vacía storage
+                self::removeTicketStorage($rifaId,$key__);
 
                 if(is_array($tickets__)){
                     foreach ($tickets__ as $ticket_) {
@@ -645,6 +669,9 @@ class SiteController extends Controller
                         $modelTR->status    = "A";
                         $modelTR->parent_id = $model->id;
                         $modelTR->save();
+
+                        //Vacía storage
+                        self::removeTicketStorage($rifaId,$ticket_);
                     }//end foreach
                 }//end if
             }//end foreach

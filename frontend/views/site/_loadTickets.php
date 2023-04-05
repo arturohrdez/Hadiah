@@ -80,7 +80,7 @@ $script = <<< JS
 			let search_ti = tn_sel.indexOf(tn);
 			let search_tr = tn_rand.indexOf(tn);
 			if(search_ti == -1 && search_tr == -1){
-				var validStorage = $.ajax({
+				/*var validStorage = $.ajax({
 					url: url_storage,
 					type: 'POST',
 					data: {"id":{$model->id},"tn":tn},
@@ -88,13 +88,13 @@ $script = <<< JS
 					beforeSend: function(data){console.log("search storage");},
 					success: function(response) {console.log("success storage")},
 					error: function() {console.log('Error occured - valid storage');}
-				});
+				});*/
 
-				validStorage.done(function(res){
+				/*validStorage.done(function(res){
 					if(res.status == false){
 						alert("Lo sentimos, el boleto "+tn+" fue seleccionado por alguien más, por favor intente con otro.");
 						return false;
-					}else if(res.status == true){
+					}else if(res.status == true){*/
 						elements.push(tn);
 						$("#tn_sel").val(elements.join(','));
 						promos(elements,tn,tn_rand).done(function(response){
@@ -131,13 +131,11 @@ $script = <<< JS
 
 						$("#tn_"+tn).removeClass('btn-outline-success');
 						$("#tn_"+tn).addClass('btn-success');
-					}//end if
-				});
-
+					//}//end if
+				//});
 			}//end if
-
 		}else{
-			var validStorage = $.ajax({
+			/*var validStorage = $.ajax({
 				url: url_storage,
 				type: 'POST',
 				data: {"id":{$model->id},"tn":tn},
@@ -145,13 +143,13 @@ $script = <<< JS
 				beforeSend: function(data){console.log("search storage");},
 				success: function(response) {console.log("success storage")},
 				error: function() {console.log('Error occured - valid storage');}
-			});
+			});*/
 
-			validStorage.done(function(res){
+			/*validStorage.done(function(res){
 				if(res.status == false){
 					alert("Lo sentimos, el boleto "+tn+" fue seleccionado por alguien más, por favor intente con otro.");
 					return false;
-				}else if(res.status == true){
+				}else if(res.status == true){*/
 					elements.push(tn);
 					$("#tn_sel").val(elements.join(','));
 					promos(elements,tn,tn_rand).done(function(response){
@@ -187,8 +185,8 @@ $script = <<< JS
 
 					$("#tn_"+tn).removeClass('btn-outline-success');
 					$("#tn_"+tn).addClass('btn-success');
-				}//end if
-			});
+				//}//end if
+			//});
 		}//end if
 	});
 JS;
