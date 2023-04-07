@@ -9,9 +9,12 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=database;dbname=hadiah',
+        ],
         'mutex' => [
-            'class'     => 'yii\mutex\FileMutex',
-            'mutexPath' => '@common/runtime/mutex', //Debe exister para almacenar los archivos filemutex
+            'class' => 'yii\mutex\MysqlMutex'
         ],
     ],
 ];

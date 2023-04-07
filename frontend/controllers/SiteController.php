@@ -75,6 +75,7 @@ class SiteController extends Controller
         ];
     }
 
+
     /**
      * Displays homepage.
      *
@@ -426,7 +427,7 @@ class SiteController extends Controller
         $tickets = Yii::$app->session->get('tickets');
         $uuid    = Yii::$app->session->get('uuid');
 
-        $arrStorage = [];
+        //$arrStorage = [];
         if(!empty($model->promos)){
             if($model->promos[0]->buy_ticket > 1){
                 $return = ["status"=>"NA"];
@@ -436,7 +437,7 @@ class SiteController extends Controller
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
                 //Guarda ticket seleccionado en el storage
                 //self::saveTicketStorage($rifaId,$tn,$uuid);
-                $arrStorage[] = $tn; 
+                //$arrStorage[] = $tn; 
 
                 //Tickets apartados y vendidos
                 $tickets_ac = self::dumpTicketAC($model->tickets);
@@ -483,7 +484,7 @@ class SiteController extends Controller
                         $tickets_play[$tn][] = $tickets[$key_random];
                         //Guarda ticket seleccionado en el storage
                         //self::saveTicketStorage($rifaId,$tickets[$key_random],$uuid);
-                         $arrStorage[] = $tickets[$key_random];
+                        //$arrStorage[] = $tickets[$key_random];
                         //Elimina los tickets random del conjutno de tickets
                         unset($tickets[$key_random]);
                     }//end foreahc
@@ -492,7 +493,7 @@ class SiteController extends Controller
                         $tickets_play[$tn][] = $tickets[$keys_random];
                         //Guarda ticket seleccionado en el storage
                         //self::saveTicketStorage($rifaId,$tickets[$keys_random],$uuid);
-                         $arrStorage[] = $tickets[$keys_random];
+                        //$arrStorage[] = $tickets[$keys_random];
                         //Elimina los tickets random del conjutno de tickets
                         unset($tickets[$keys_random]);
                     }//end if
@@ -507,7 +508,7 @@ class SiteController extends Controller
                 }//end if
 
                 //Guarda los tickets seleccionados en storage
-                $resStorage = self::saveTicketStorage($rifaId,$arrStorage,$uuid);
+                //$resStorage = self::saveTicketStorage($rifaId,$arrStorage,$uuid);
                 /*if(!$resStorage){
                     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return ["status"=>true,"duplicate"=>true];
@@ -553,7 +554,7 @@ class SiteController extends Controller
         }else{
             //No existe promo
             //Guarda ticket seleccionado en el storage
-            self::saveTicketStorage($rifaId,$tn,$uuid);
+            //self::saveTicketStorage($rifaId,$tn,$uuid);
 
             //Tickets apartados y vendidos
             $tickets_ac        = self::dumpTicketAC($model->tickets);
@@ -581,16 +582,16 @@ class SiteController extends Controller
     public function actionTicketremove(){
         $rifaId  = Yii::$app->request->post()["id"];
         $tn      = Yii::$app->request->post()["tn"];
-        self::removeTicketStorage($rifaId,$tn);
+        //self::removeTicketStorage($rifaId,$tn);
 
 
         $tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $ticketRemove_    = $tickets_play_all[$tn];
-        if(is_array($ticketRemove_)){
+        /*if(is_array($ticketRemove_)){
             foreach ($ticketRemove_ as $tnr) {
                 self::removeTicketStorage($rifaId,$tnr);
             }//end foreach
-        }//end if
+        }//end if*/
 
 
         unset($tickets_play_all[$tn]);
@@ -628,97 +629,118 @@ class SiteController extends Controller
         //$dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $modelTicket = new TicketForm();
         if ($modelTicket->load(Yii::$app->request->post())) {
-            sleep(rand(0,5));
-            $rifaId            = $modelTicket->rifa_id;
-            $ticket_duplicados = [];
-            $tickets_play_all  = Yii::$app->session->get('tickets_play_all');
-            
-            //Valida cada ticket vs Apartados o vendidos
-            foreach ($tickets_play_all as $key__ => $tickets__) {
-                //Valida cada ticket vs ticketstorage
-                //Parea evitar la concurrencia, no se pueden guardar duplicados
-                $ticketstorageS = self::getTicketStorage($rifaId,2,$key__);
-                //Existe más de un registro en storage
-                if(!$ticketstorageS["status"] && $ticketstorageS["rows"] > 0){
-                    //Concurrencia
-                    $ticket_duplicados[] = $key__;
-                }//end if
-
-                if(!self::getTicketSelected($rifaId,$key__)){
-                    $ticket_duplicados[] = $key__;
-                }//end if
-
-                if(is_array($tickets__)){
-                    foreach ($tickets__ as $ticket_) {
-                        $ticketstorageR = self::getTicketStorage($rifaId,2,$ticket_);
-                        if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 0){
-                            //Concurrencia
-                            $ticket_duplicados[] = $ticket_;
-                        }//end if
-
-                        if(!self::getTicketSelected($rifaId,$ticket_)){
-                            $ticket_duplicados[] = $ticket_;
-                        }//end if
-                    }//end foreach
-                }//end if
-            }//end foreach
-
-            //Existen tickets ya registrados por alguien más
-            if(!empty($ticket_duplicados)){
-                $ticket_duplicados = implode(",", $ticket_duplicados);
-                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ["status"=>false,"tickets_duplicados"=>$ticket_duplicados];
+            $mutex = \Yii::$app->mutex;
+            // Adquirir el bloqueo
+            if (!$mutex->acquire('lock_apartar')) {
+                // Esperar 2 segundos antes de volver a ejecutar la acción
+                sleep(2);
+                // Volver a ejecutar la acción
+                $this->actionApartar();
+                // Si no se puede adquirir el mutex, se está ejecutando otra instancia de la acción.
+                // Puede mostrar un mensaje de error o redirigir a otra página.
+                //throw new \yii\web\HttpException(503, 'La acción ya se está ejecutando en otra instancia.');
             }//end if
 
 
-            //No existes tickets registrados con anterioridad
-            //Guarda información
-            foreach ($tickets_play_all as $key__ => $tickets__) {
-                $model            = new Tickets();
-                $model->rifa_id   = $modelTicket->rifa_id;
-                $model->ticket    = (string) $key__;
-                $model->date      = date("Y-m-d H:i");
-                $model->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
-                $model->phone     = $modelTicket->phone;
-                $model->name      = $modelTicket->name;
-                $model->lastname  = $modelTicket->lastname;
-                $model->state     = $modelTicket->state;
-                $model->type      = "S";
-                $model->status    = "A";
-                $model->parent_id = null;
-                $model->save();
-                //Vacía storage
-                self::removeTicketStorage($rifaId,$key__);
+            try{
+                $rifaId            = $modelTicket->rifa_id;
+                $ticket_duplicados = [];
+                $tickets_play_all  = Yii::$app->session->get('tickets_play_all');
+                
+                //Valida cada ticket vs Apartados o vendidos
+                foreach ($tickets_play_all as $key__ => $tickets__) {
+                    //Valida cada ticket vs ticketstorage
+                    /*//Parea evitar la concurrencia, no se pueden guardar duplicados
+                    $ticketstorageS = self::getTicketStorage($rifaId,2,$key__);
+                    //Existe más de un registro en storage
+                    if(!$ticketstorageS["status"] && $ticketstorageS["rows"] > 0){
+                        //Concurrencia
+                        $ticket_duplicados[] = $key__;
+                    }//end if*/
 
-                if(is_array($tickets__)){
-                    foreach ($tickets__ as $ticket_) {
-                        $modelTR            = new Tickets();
-                        $modelTR->rifa_id   = $modelTicket->rifa_id;
-                        $modelTR->ticket    = (string) $ticket_;
-                        $modelTR->date      = date("Y-m-d H:i");
-                        $modelTR->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
-                        $modelTR->phone     = $modelTicket->phone;
-                        $modelTR->name      = $modelTicket->name;
-                        $modelTR->lastname  = $modelTicket->lastname;
-                        $modelTR->state     = $modelTicket->state;
-                        $modelTR->type      = "R";
-                        $modelTR->status    = "A";
-                        $modelTR->parent_id = $model->id;
-                        $modelTR->save();
+                    if(!self::getTicketSelected($rifaId,$key__)){
+                        $ticket_duplicados[] = $key__;
+                    }//end if
 
-                        //Vacía storage
-                        self::removeTicketStorage($rifaId,$ticket_);
-                    }//end foreach
+                    if(is_array($tickets__)){
+                        foreach ($tickets__ as $ticket_) {
+                            $ticketstorageR = self::getTicketStorage($rifaId,2,$ticket_);
+                            if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 0){
+                                //Concurrencia
+                                $ticket_duplicados[] = $ticket_;
+                            }//end if
+
+                            if(!self::getTicketSelected($rifaId,$ticket_)){
+                                $ticket_duplicados[] = $ticket_;
+                            }//end if
+                        }//end foreach
+                    }//end if
+                }//end foreach
+
+                //Existen tickets ya registrados por alguien más
+                if(!empty($ticket_duplicados)){
+                    $ticket_duplicados = implode(",", $ticket_duplicados);
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ["status"=>false,"tickets_duplicados"=>$ticket_duplicados];
                 }//end if
-            }//end foreach
 
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [
-                "status"   => true,
-                "name"     => $modelTicket->name,
-                "lastname" => $modelTicket->lastname,
-                "phone"    => $modelTicket->phone
-            ];
+
+                //No existes tickets registrados con anterioridad
+                //Guarda información
+                foreach ($tickets_play_all as $key__ => $tickets__) {
+                    $model            = new Tickets();
+                    $model->rifa_id   = $modelTicket->rifa_id;
+                    $model->ticket    = (string) $key__;
+                    $model->date      = date("Y-m-d H:i");
+                    $model->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
+                    $model->phone     = $modelTicket->phone;
+                    $model->name      = $modelTicket->name;
+                    $model->lastname  = $modelTicket->lastname;
+                    $model->state     = $modelTicket->state;
+                    $model->type      = "S";
+                    $model->status    = "A";
+                    $model->parent_id = null;
+                    $model->save();
+                    //Vacía storage
+                    self::removeTicketStorage($rifaId,$key__);
+
+                    if(is_array($tickets__)){
+                        foreach ($tickets__ as $ticket_) {
+                            $modelTR            = new Tickets();
+                            $modelTR->rifa_id   = $modelTicket->rifa_id;
+                            $modelTR->ticket    = (string) $ticket_;
+                            $modelTR->date      = date("Y-m-d H:i");
+                            $modelTR->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
+                            $modelTR->phone     = $modelTicket->phone;
+                            $modelTR->name      = $modelTicket->name;
+                            $modelTR->lastname  = $modelTicket->lastname;
+                            $modelTR->state     = $modelTicket->state;
+                            $modelTR->type      = "R";
+                            $modelTR->status    = "A";
+                            $modelTR->parent_id = $model->id;
+                            $modelTR->save();
+
+                            //Vacía storage
+                            self::removeTicketStorage($rifaId,$ticket_);
+                        }//end foreach
+                    }//end if
+                }//end foreach
+
+                // Liberar el bloqueo
+                //$this->mutex->release('lock_apartar');
+
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return [
+                    "status"   => true,
+                    "name"     => $modelTicket->name,
+                    "lastname" => $modelTicket->lastname,
+                    "phone"    => $modelTicket->phone
+                ];
+
+            } finally {
+                // Liberar el mutex para que otras instancias puedan ejecutar la acción.
+                $mutex->release('lock_apartar');
+            }
         }//end if
 
         $modelRifa   = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
