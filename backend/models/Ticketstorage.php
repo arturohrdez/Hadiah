@@ -17,7 +17,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class Ticketstorage extends \yii\db\ActiveRecord
 {
-    public function behaviors()
+    /*public function behaviors()
     {
         return [
             [
@@ -28,7 +28,7 @@ class Ticketstorage extends \yii\db\ActiveRecord
                 ],
             ],
         ];
-    }
+    }*/
 
     /**
      * {@inheritdoc}

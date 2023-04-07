@@ -300,17 +300,28 @@ class SiteController extends Controller
         return $ticketsAC;
     }//end function
 
-    public static function saveTicketStorage($rifaId = null,$tn = null,$uuid = null){
-        //$lock = Yii::$app->db->createCommand('LOCK TABLES `ticketstorage` WRITE');
-        $modelTS           = new Ticketstorage();
-        $modelTS->rifa_id  = $rifaId;
-        $modelTS->ticket   = $tn;
-        $modelTS->date_ini = date("Y-m-d H:i:s");
-        $modelTS->date_end = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
-        $modelTS->uuid     = $uuid;
-        $modelTS->save();
-
-        //$unlock = Yii::$app->db->createCommand('UNLOCK TABLES');
+    public static function saveTicketStorage($rifaId = null,$arr_tn = null,$uuid = null){
+        if(is_array($arr_tn)){
+            foreach ($arr_tn as $tn) {
+                $modelTS             = new Ticketstorage();
+                $modelTS->rifa_id    = $rifaId;
+                $modelTS->ticket     = $tn;
+                $modelTS->date_ini   = date("Y-m-d H:i:s");
+                $modelTS->date_end   = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
+                $modelTS->created_at = $_SERVER["REQUEST_TIME_FLOAT"];
+                $modelTS->uuid       = $uuid;
+                $modelTS->save();
+            }//end foreach
+        }else{
+            $modelTS             = new Ticketstorage();
+            $modelTS->rifa_id    = $rifaId;
+            $modelTS->ticket     = $arr_tn;
+            $modelTS->date_ini   = date("Y-m-d H:i:s");
+            $modelTS->date_end   = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
+            $modelTS->created_at = $_SERVER["REQUEST_TIME_FLOAT"];
+            $modelTS->uuid       = $uuid;
+            $modelTS->save();
+        }//end if
     }//end function
 
     public static function removeTicketStorage($rifaId = null, $tn = null){
@@ -332,7 +343,8 @@ class SiteController extends Controller
             }//end if
             return $TicketsStorage;
         }elseif($type == 2){
-            $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->count();
+            $uuid    = Yii::$app->session->get("uuid");
+            $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->andWhere(["!=","uuid",$uuid])->count();
             if(!empty($modelTS)){
                 return ["status"=>false,"rows"=>$modelTS];
             }else{
@@ -410,10 +422,11 @@ class SiteController extends Controller
         $tn           = $post["tn"];
 
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
-        self::createTickets($model->ticket_init,$model->ticket_end);
+        self     ::createTickets($model->ticket_init,$model->ticket_end);
         $tickets = Yii::$app->session->get('tickets');
-        $uuid = Yii::$app->session->get('uuid');
-        
+        $uuid    = Yii::$app->session->get('uuid');
+
+        $arrStorage = [];
         if(!empty($model->promos)){
             if($model->promos[0]->buy_ticket > 1){
                 $return = ["status"=>"NA"];
@@ -422,7 +435,8 @@ class SiteController extends Controller
 
             if(Yii::$app->session->get('countClick') == $model->promos[0]->buy_ticket){
                 //Guarda ticket seleccionado en el storage
-                self::saveTicketStorage($rifaId,$tn,$uuid);
+                //self::saveTicketStorage($rifaId,$tn,$uuid);
+                $arrStorage[] = $tn; 
 
                 //Tickets apartados y vendidos
                 $tickets_ac = self::dumpTicketAC($model->tickets);
@@ -468,7 +482,8 @@ class SiteController extends Controller
                     foreach ($keys_random as $key_random) {
                         $tickets_play[$tn][] = $tickets[$key_random];
                         //Guarda ticket seleccionado en el storage
-                        self::saveTicketStorage($rifaId,$tickets[$key_random],$uuid);
+                        //self::saveTicketStorage($rifaId,$tickets[$key_random],$uuid);
+                         $arrStorage[] = $tickets[$key_random];
                         //Elimina los tickets random del conjutno de tickets
                         unset($tickets[$key_random]);
                     }//end foreahc
@@ -476,11 +491,13 @@ class SiteController extends Controller
                     if(!is_null($keys_random)){
                         $tickets_play[$tn][] = $tickets[$keys_random];
                         //Guarda ticket seleccionado en el storage
-                        self::saveTicketStorage($rifaId,$tickets[$keys_random],$uuid);
+                        //self::saveTicketStorage($rifaId,$tickets[$keys_random],$uuid);
+                         $arrStorage[] = $tickets[$keys_random];
                         //Elimina los tickets random del conjutno de tickets
                         unset($tickets[$keys_random]);
                     }//end if
                 }//end if
+
 
                 $dump_tickets_play_all      = Yii::$app->session->get('tickets_play_all');
                 if(is_null($keys_random)){
@@ -488,6 +505,14 @@ class SiteController extends Controller
                 }else{
                     $dump_tickets_play_all[$tn] = $tickets_play[$tn];
                 }//end if
+
+                //Guarda los tickets seleccionados en storage
+                $resStorage = self::saveTicketStorage($rifaId,$arrStorage,$uuid);
+                /*if(!$resStorage){
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ["status"=>true,"duplicate"=>true];
+                }//end if*/
+
 
                 Yii::$app->session->set('tickets',$tickets);
                 Yii::$app->session->set('tickets_play_all',$dump_tickets_play_all);
@@ -603,6 +628,7 @@ class SiteController extends Controller
         //$dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $modelTicket = new TicketForm();
         if ($modelTicket->load(Yii::$app->request->post())) {
+            sleep(rand(0,5));
             $rifaId            = $modelTicket->rifa_id;
             $ticket_duplicados = [];
             $tickets_play_all  = Yii::$app->session->get('tickets_play_all');
@@ -613,7 +639,7 @@ class SiteController extends Controller
                 //Parea evitar la concurrencia, no se pueden guardar duplicados
                 $ticketstorageS = self::getTicketStorage($rifaId,2,$key__);
                 //Existe más de un registro en storage
-                if(!$ticketstorageS["status"] && $ticketstorageS["rows"] > 1){
+                if(!$ticketstorageS["status"] && $ticketstorageS["rows"] > 0){
                     //Concurrencia
                     $ticket_duplicados[] = $key__;
                 }//end if
@@ -625,7 +651,7 @@ class SiteController extends Controller
                 if(is_array($tickets__)){
                     foreach ($tickets__ as $ticket_) {
                         $ticketstorageR = self::getTicketStorage($rifaId,2,$ticket_);
-                        if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 1){
+                        if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 0){
                             //Concurrencia
                             $ticket_duplicados[] = $ticket_;
                         }//end if
