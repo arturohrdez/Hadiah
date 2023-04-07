@@ -9,5 +9,9 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'mutex' => [
+            'class'     => 'yii\mutex\FileMutex',
+            'mutexPath' => '@common/runtime/mutex', //Debe exister para almacenar los archivos filemutex
+        ],
     ],
 ];
