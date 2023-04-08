@@ -702,7 +702,7 @@ class SiteController extends Controller
                     $model->parent_id = null;
                     $model->save();
                     //Vacía storage
-                    self::removeTicketStorage($rifaId,$key__);
+                    //self::removeTicketStorage($rifaId,$key__);
 
                     if(is_array($tickets__)){
                         foreach ($tickets__ as $ticket_) {
@@ -721,7 +721,7 @@ class SiteController extends Controller
                             $modelTR->save();
 
                             //Vacía storage
-                            self::removeTicketStorage($rifaId,$ticket_);
+                            //self::removeTicketStorage($rifaId,$ticket_);
                         }//end foreach
                     }//end if
                 }//end foreach

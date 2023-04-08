@@ -340,78 +340,92 @@ class TicketsController extends Controller
         $modelTicket = new TicketForm();
 
         if ($modelTicket->load(Yii::$app->request->post())) {
-            //Valida si existen tickets ya apartados o pagados
-            $ticket_duplicados = [];
-            $data              = [];
-            $tickets_play_all  = Yii::$app->session->get('tickets_play_all_B');
-            foreach ($tickets_play_all as $key__ => $tickets__) {
-                if(!self::getTicketSelected($key__)){
-                    $ticket_duplicados[] = $key__;
-                }//end if
-
-                if(is_array($tickets__)){
-                    foreach ($tickets__ as $ticket_) {
-                        if(!self::getTicketSelected($ticket_)){
-                            $ticket_duplicados[] = $ticket_;
-                        }//end if
-                    }//end foreach
-                }//end if
-            }//end foreach
-
-            //Existen tickets ya registrados por alguien más
-            if(!empty($ticket_duplicados)){
-                $ticket_duplicados = implode(",", $ticket_duplicados);
-                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ["status"=>false,"tickets_duplicados"=>$ticket_duplicados];
+            $mutex = \Yii::$app->mutex;
+            // Adquirir el bloqueo
+            if (!$mutex->acquire('lock_apartar')) {
+                // Esperar 2 segundos antes de volver a ejecutar la acción
+                sleep(2);
+                // Volver a ejecutar la acción
+                $this->actionPagar();
             }//end if
 
-            //No existes tickets registrados con anterioridad
-            //Guarda información
-            foreach ($tickets_play_all as $key__ => $tickets__) {
-                $model               = new Tickets();
-                $model->rifa_id      = $modelTicket->rifa_id;
-                $model->ticket       = (string) $key__;
-                $model->date         = date("Y-m-d H:i");
-                $model->date_end     = date("Y-m-d H:i");
-                $model->date_payment = date("Y-m-d H:i:s");
-                $model->phone        = $modelTicket->phone;
-                $model->name         = $modelTicket->name;
-                $model->lastname     = $modelTicket->lastname;
-                $model->state        = $modelTicket->state;
-                $model->type         = "S";
-                $model->status       = "P";
-                $model->parent_id    = null;
-                $model->save();
+            try{
+                //Valida si existen tickets ya apartados o pagados
+                $ticket_duplicados = [];
+                $data              = [];
+                $tickets_play_all  = Yii::$app->session->get('tickets_play_all_B');
+                foreach ($tickets_play_all as $key__ => $tickets__) {
+                    if(!self::getTicketSelected($key__)){
+                        $ticket_duplicados[] = $key__;
+                    }//end if
 
+                    if(is_array($tickets__)){
+                        foreach ($tickets__ as $ticket_) {
+                            if(!self::getTicketSelected($ticket_)){
+                                $ticket_duplicados[] = $ticket_;
+                            }//end if
+                        }//end foreach
+                    }//end if
+                }//end foreach
 
-                if(is_array($tickets__)){
-                    foreach ($tickets__ as $ticket_) {
-                        $modelTR               = new Tickets();
-                        $modelTR->rifa_id      = $modelTicket->rifa_id;
-                        $modelTR->ticket       = (string) $ticket_;
-                        $modelTR->date         = date("Y-m-d H:i");
-                        $modelTR->date_end     = date("Y-m-d H:i");
-                        $modelTR->date_payment = date("Y-m-d H:i:s");
-                        $modelTR->phone        = $modelTicket->phone;
-                        $modelTR->name         = $modelTicket->name;
-                        $modelTR->lastname     = $modelTicket->lastname;
-                        $modelTR->state        = $modelTicket->state;
-                        $modelTR->type         = "R";
-                        $modelTR->status       = "P";
-                        $modelTR->parent_id    = $model->id;
-                        $modelTR->save();
-                    }//end foreach
+                //Existen tickets ya registrados por alguien más
+                if(!empty($ticket_duplicados)){
+                    $ticket_duplicados = implode(",", $ticket_duplicados);
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ["status"=>false,"tickets_duplicados"=>$ticket_duplicados];
                 }//end if
-            }//end foreach
 
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [
-                "status"   => true,
-                "rifaId"   => $modelTicket->rifa_id,
-                "name"     => $modelTicket->name,
-                "lastname" => $modelTicket->lastname,
-                "phone"    => $modelTicket->phone
-            ];
+                //No existes tickets registrados con anterioridad
+                //Guarda información
+                foreach ($tickets_play_all as $key__ => $tickets__) {
+                    $model               = new Tickets();
+                    $model->rifa_id      = $modelTicket->rifa_id;
+                    $model->ticket       = (string) $key__;
+                    $model->date         = date("Y-m-d H:i");
+                    $model->date_end     = date("Y-m-d H:i");
+                    $model->date_payment = date("Y-m-d H:i:s");
+                    $model->phone        = $modelTicket->phone;
+                    $model->name         = $modelTicket->name;
+                    $model->lastname     = $modelTicket->lastname;
+                    $model->state        = $modelTicket->state;
+                    $model->type         = "S";
+                    $model->status       = "P";
+                    $model->parent_id    = null;
+                    $model->save();
+
+
+                    if(is_array($tickets__)){
+                        foreach ($tickets__ as $ticket_) {
+                            $modelTR               = new Tickets();
+                            $modelTR->rifa_id      = $modelTicket->rifa_id;
+                            $modelTR->ticket       = (string) $ticket_;
+                            $modelTR->date         = date("Y-m-d H:i");
+                            $modelTR->date_end     = date("Y-m-d H:i");
+                            $modelTR->date_payment = date("Y-m-d H:i:s");
+                            $modelTR->phone        = $modelTicket->phone;
+                            $modelTR->name         = $modelTicket->name;
+                            $modelTR->lastname     = $modelTicket->lastname;
+                            $modelTR->state        = $modelTicket->state;
+                            $modelTR->type         = "R";
+                            $modelTR->status       = "P";
+                            $modelTR->parent_id    = $model->id;
+                            $modelTR->save();
+                        }//end foreach
+                    }//end if
+                }//end foreach
+
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return [
+                    "status"   => true,
+                    "rifaId"   => $modelTicket->rifa_id,
+                    "name"     => $modelTicket->name,
+                    "lastname" => $modelTicket->lastname,
+                    "phone"    => $modelTicket->phone
+                ];
+            }finally {
+                // Liberar el mutex para que otras instancias puedan ejecutar la acción.
+                $mutex->release('lock_apartar');
+            }
         }//end if
 
         $modelRifa   = Rifas::find()->where(["id" => Yii::$app->session->get("rifaId")])->one();

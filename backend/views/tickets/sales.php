@@ -1,6 +1,7 @@
 <?php 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 
 $this->title = 'Punto de Venta';
@@ -30,15 +31,15 @@ echo newerton\fancybox3\FancyBox::widget([
     						<div class="tickets-form card-body">
     							<?php echo Html::label("RIFAS ACTIVAS", $for = 'rifa_id', ['class' => 'form-label']); ?>
     							<?php
-    								echo Html::dropDownList(
-    									'rifa_id',
-    									$selection = null,
-    									ArrayHelper::map($modelRifas,'id','name'),
-    									[
-    										'id'=>'rifa_id',
-    										'class' => 'form-control',
-    										'prompt'=>'-- SELECCIONE UNA OPCIÓN --'
-    									]);
+    								echo Select2::widget([
+    									'id'=>'rifa_id',
+									    'name' => 'rifa_id',
+									    'data' => ArrayHelper::map($modelRifas, 'id', 'name'),
+									    'options' => ['placeholder' => 'Seleccione una opción'],
+									    'pluginOptions' => [
+									        'allowClear' => true,
+									    ],
+									]);
     							?>
     							<div id="rifaDetail" class="text-center" style="display: none;">
     								<div></div>
