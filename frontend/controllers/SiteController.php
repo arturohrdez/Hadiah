@@ -405,14 +405,11 @@ class SiteController extends Controller
         $tickets_list = self::createTickets($init,$end);
         //Tickets apartados y vendidos
         $tickets_ac   = self::dumpTicketAC($model->tickets);
-        //Tickets Storage
-        $tickets_st   = self::getTicketStorage(Yii::$app->request->post()["id"],null,null);
 
         return $this->renderAjax('_loadTickets',[
             'model'        => $model,
             'tickets_list' => $tickets_list,
-            'tickets_ac'   => $tickets_ac,
-            'tickets_st'   => $tickets_st,
+            'tickets_ac'   => $tickets_ac
 
         ]);
     }//end function

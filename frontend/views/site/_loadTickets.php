@@ -7,11 +7,7 @@ foreach ($tickets_list as $ticket_l) {
 		if(in_array($tickets, $tickets_ac)){
 			echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
 		}else{
-			if(in_array($tickets,$tickets_st)){
-				echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
-			}else{
-				echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-success mb-3','data-tn'=>$tickets]).'</div>';
-			}//end if
+			echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-light mb-3 fw-bold','data-tn'=>$tickets]).'</div>';
 		}//end if
 	}//end foreach
 }//end foreach
@@ -48,8 +44,8 @@ $script = <<< JS
 		for (let key in elements) {
 			div_oportunities += "<div id='t_n_"+key+"'>"+key+" [";
 			for (var i = elements[key].length - 1; i >= 0; i--) {
-				$("#tn_"+elements[key][i]).removeClass('btn-outline-success');
-				$("#tn_"+elements[key][i]).addClass('btn-success');
+				$("#tn_"+elements[key][i]).removeClass('btn-outline-light');
+				$("#tn_"+elements[key][i]).addClass('btn-light');
 
 				if(i < elements[key].length-1){
 					div_oportunities += ",";
@@ -129,8 +125,8 @@ $script = <<< JS
 						//Show Div Selected
 						$("#div_selected").show();
 
-						$("#tn_"+tn).removeClass('btn-outline-success');
-						$("#tn_"+tn).addClass('btn-success');
+						$("#tn_"+tn).removeClass('btn-outline-light');
+						$("#tn_"+tn).addClass('btn-light');
 					//}//end if
 				//});
 			}//end if
@@ -183,8 +179,8 @@ $script = <<< JS
 					//Show Div Selected
 					$("#div_selected").show();
 
-					$("#tn_"+tn).removeClass('btn-outline-success');
-					$("#tn_"+tn).addClass('btn-success');
+					$("#tn_"+tn).removeClass('btn-outline-light');
+					$("#tn_"+tn).addClass('btn-light');
 				//}//end if
 			//});
 		}//end if

@@ -14,9 +14,9 @@ echo newerton\fancybox3\FancyBox::widget([
     ]
 ]);
 ?>
-<section id="breadcrumbs" class="breadcrumbs">
+<section id="breadcrumbs" class="breadcrumbs ">
 	<div class="container">
-		<div class="d-flex justify-content-between align-items-center">
+		<div class="d-flex justify-content-between align-items-center text-danger">
 			<h2><?php echo $model->name; ?></h2>
 			<ol>
 				<li><a href="/">Home</a></li>
@@ -31,44 +31,35 @@ echo newerton\fancybox3\FancyBox::widget([
 		<div class="row">
 			<div class="col-lg-12 entries">
 				<article class="entry">
-					<div class="entry-img text-center">
-						<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
-					</div>
-					<h2 class="entry-title fs-1 text-danger text-center">
-						<?php echo $model->name; ?>
-					</h2>
-					<div class="entry-content">
-						<p>
-							<div class="entry-title text-danger text-center fs-2">
-								<?php 
-									$diassemana = Yii::$app->params["diassemana"];
-									$meses      = Yii::$app->params["meses"];
-									echo $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init)) ; 
-								?>
-							</div>
-						</p>
-						<p>
-							<div class="alert alert-warning text-center fs-5">
-								<?php echo nl2br($model->terms); ?>
-							</div>
-						</p>
-						<p>
-							<div class="alert alert-info text-center fs-5">
-								<?php echo nl2br($model->description); ?>
-							</div>
-						</p>
-					</div>
-					<div class="clearfix">
-						<hr>
-					</div>
-					<div class="row mt-5 bg-primary">
-						<div class="col-12 fs-2 text-center text-white p-2">
-							<i class="bi bi-arrow-down-circle-fill"></i> SELECCIONA ABAJO TU NÚMERO DE LA SUERTE <i class="bi bi-arrow-down-circle-fill"></i>
+					<div class="row text-danger text-center pt-3 pb-3" style="border: 3px; border-style: dashed double;">
+						<h1 class="fw-bold">
+							<?php echo $model->name; ?>
+						</h1>
+						<div class="fs-2 mt-3">
+							<?php 
+								$diassemana = Yii::$app->params["diassemana"];
+								$meses      = Yii::$app->params["meses"];
+								echo $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init)) ; 
+							?>
 						</div>
 					</div>
-
-					<div class="row pt-3 pb-3 bg-primary">
-						<div class="d-flex justify-content-center bd-highlight">
+					<div class="row entry-img text-center mt-3">
+						<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
+					</div>
+					<div class="row text-primary mt-5" style="border: 3px; border-style: dashed double;">
+						<div class="text-center fw-bold fs-4 pt-3">
+							<?php echo nl2br($model->terms); ?>
+						</div>
+						<div class="text-center fw-bold fs-5 pt-5">
+							<?php echo nl2br($model->description); ?>
+						</div>
+					</div>
+					
+					<div class="row bg-success pt-3 pb-3 mt-5">
+						<div class="col-12 fs-2 text-center text-white fw-bold">
+							<i class="bi bi-arrow-down-circle-fill"></i> SELECCIONA ABAJO TU NÚMERO DE LA SUERTE <i class="bi bi-arrow-down-circle-fill"></i>
+						</div>
+						<div class="pb-3 d-flex justify-content-center bd-highlight">
 							<div id="ticket_s_m" class="col-6 text-center" style="display: none;">
 								<div class="alert alert-success p-2">
 									<strong><i class="bi bi-ticket-perforated-fill"></i> BOLETO DISPONIBLE</strong>
@@ -81,14 +72,18 @@ echo newerton\fancybox3\FancyBox::widget([
 								</div>
 							</div>
 							<div class="clearix"></div>
-							<div class="col-6 text-center">
+							<div class="col-6 text-center mt-3">
 								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 								<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 							</div>
 						</div>
 					</div>
 
-					<div id="div_selected" class="row pt-3 pb-2 bg-black" style="display: none;">
+					<!-- <div class="row pt-3 pb-3 bg-gradient bg-primary">
+						
+					</div> -->
+
+					<div id="div_selected" class="row pt-3 pb-2 bg-black text-warning"  style="display: none;">
 						<?php echo Html::hiddenInput('tn_sel', $value = null, ['id'=>'tn_sel']); ?>
 						<?php echo Html::hiddenInput('tn_rand', $value = null, ['id'=>'tn_rand']); ?>
 
@@ -116,10 +111,10 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div id="list_tickets" class="row mt-5 overflow-scroll" style="max-height: 300px;">
+					<div id="list_tickets" class="row bg-success pt-5 overflow-scroll" style="max-height: 300px;">
 						<div id="loading_tickets_list" class="col-12 text-center mb-5" style="display: none;">
-							<strong class="fs-3">Generando Boletos ...</strong><br>
-							<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>
+							<strong class="fs-3 text-light">Generando Boletos ...</strong><br>
+							<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>
 						</div>
 					</div>
 				</article>
@@ -166,8 +161,8 @@ $URL_searcht = Url::to(['site/searchticket']);
 					}//end if
 
 					$("#t_"+t).remove();
-					$("#tn_"+t).removeClass('btn-success');
-					$("#tn_"+t).addClass('btn-outline-success');
+					$("#tn_"+t).removeClass('btn-light');
+					$("#tn_"+t).addClass('btn-outline-light');
 				}//end if
 				
 				//Tickets random
@@ -187,8 +182,8 @@ $URL_searcht = Url::to(['site/searchticket']);
 							$("#tn_rand").val(exp_rand.join(','));
 
 							
-							$("#tn_"+ticketRandomRemove[key]).removeClass('btn-success');
-							$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-success');
+							$("#tn_"+ticketRandomRemove[key]).removeClass('btn-light');
+							$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-light');
 						}//end if
 					}//end for
 				}//end if
@@ -258,7 +253,7 @@ $script = <<< JS
 					//$("#ticket_s_m").hide();
 					$("#ticket_e_m").hide();
 					$("#btn_addticket").attr("disabled",true);
-					$("#btn_addticket").html("Buscando Boleto..");
+					$("#btn_addticket").html("Verficando Boleto..");
 				},
 				success: function(response) {
 					$("#btn_addticket").html("¡LO QUIERO!");
