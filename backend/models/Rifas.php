@@ -36,9 +36,9 @@ class Rifas extends \yii\db\ActiveRecord
     {
         return [
             [['imagen'],'required','on'=>'create'],
-            [['name', 'date_init', 'status', 'ticket_init', 'ticket_end'], 'required'],
+            [['name', 'date_init', 'status', 'ticket_init', 'ticket_end','banner'], 'required'],
             [['description', 'terms'], 'string'],
-            [['ticket_init', 'ticket_end', 'status'], 'integer'],
+            [['ticket_init', 'ticket_end', 'status','banner'], 'integer'],
             [['date_init'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['main_image'], 'string', 'max' => 2500],
@@ -63,6 +63,7 @@ class Rifas extends \yii\db\ActiveRecord
             'date_init' => 'Fecha Rifa',
             'main_image' => 'Imagen',
             'status' => 'Estatus',
+            'banner'=>'¿Mostrar en el Banner?'
         ];
     }
 

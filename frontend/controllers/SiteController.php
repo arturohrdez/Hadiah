@@ -83,7 +83,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {   
-        $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
+        $modelRifas = Rifas::find()->where(['status' => 1,'banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
         return $this->render('index',['rifas'=>$modelRifas]);
     }
 

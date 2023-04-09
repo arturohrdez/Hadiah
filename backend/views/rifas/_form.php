@@ -35,8 +35,9 @@ use kartik\date\DatePicker;
         ])
     ?>
     
+    <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])?>   
     <?= $form->field($model, 'status',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Activo', '0' => 'Inactivo', ], ['prompt' => 'Seleccione una opción'])?>   
-
+    <div class="clearfix"></div>
     <div class="row">
         <?= $form->field($model, 'imagen',['options'=>['class'=>'col-12 mt-3 bg-light']])->fileInput()->label('<div>Imagen: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño de Imagen: 1000px X 1000px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
         <div id="preview" class="col-12 mt-3" align="center"></div>
