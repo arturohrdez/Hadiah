@@ -26,7 +26,7 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'date_init',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3','style'=>'float: left;']])->widget(DatePicker::classname(),[
             'name' => 'date_init', 
             'value' => date('Y-m-d'),
-            'options' => ['placeholder' => 'Seleccione la fecha de inicio'],
+            'options' => ['placeholder' => 'Seleccione la fecha'],
             'pluginOptions' => [
                 'autoclose'=>true,
                 'format' => 'yyyy-mm-dd',
@@ -50,12 +50,17 @@ use kartik\date\DatePicker;
 <hr>
 <div class="promos-form card-body row">
     <div class="col-12">
-        <h2>Promoción</h2>
+        <h2>Oportunidades</h2>
     </div>
     <?= $form->field($modelPromos, 'id')->hiddenInput(['option' => 'value'])->label(false); ?>
     <?= $form->field($modelPromos, 'rifa_id')->hiddenInput(['option' => 'value'])->label(false); ?>
-    <?= $form->field($modelPromos, 'buy_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value']); ?>
+    <?= $form->field($modelPromos, 'buy_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value','maxlength'=>1]); ?>
     <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value']); ?>
+    <div id="infoOportunidades" class="col-12 text-center mt-2" style="display: none;">
+        <div class="alert alert-warning"> 
+            <span class="compraBoleto"></span><span class="oportunidadesBoleto"></span>
+        </div>
+    </div>
 </div>
 
 <div class=" card-footer" align="right">
@@ -67,6 +72,7 @@ use kartik\date\DatePicker;
 
 <?php
 $script = <<< JS
+
     $(function(e){
         var preview_img = '/$model->main_image';
         image = document.createElement('img');
@@ -95,6 +101,29 @@ $script = <<< JS
             };
         }
     }
+
+    $("#promos-buy_ticket").on("keyup",function(e){
+        let nt = $(this).val();
+        if(nt != ""){
+            $(".compraBoleto").text(nt+" Boleto(s) te da ");
+            $("#infoOportunidades").show();
+        }else{
+            $("#infoOportunidades").hide();
+        }
+    });
+    $("#promos-get_ticket").on("keyup change",function(e){
+        let no = $(this).val();
+        if(no != ""){
+            console.log(no);
+            no = parseInt(no);
+            let nt = parseInt($("#promos-buy_ticket").val());
+            let op = nt + no;
+            $(".oportunidadesBoleto").text(op + " oportunidades.");
+            $("#infoOportunidades").show();
+        }else{
+            $("#infoOportunidades").hide();
+        }
+    });
 JS;
 $this->registerJs($script);
 
