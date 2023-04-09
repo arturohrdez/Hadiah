@@ -666,10 +666,10 @@ class SiteController extends Controller
                     if(is_array($tickets__)){
                         foreach ($tickets__ as $ticket_) {
                             //$ticketstorageR = self::getTicketStorage($rifaId,2,$ticket_);
-                            if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 0){
+                            /*if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 0){
                                 //Concurrencia
                                 $ticket_duplicados[] = $ticket_;
-                            }//end if
+                            }//end if*/
 
                             if(!self::getTicketSelected($rifaId,$ticket_)){
                                 $ticket_duplicados[] = $ticket_;

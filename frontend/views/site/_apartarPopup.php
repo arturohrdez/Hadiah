@@ -94,7 +94,7 @@ $script = <<< JS
 	        data: formData,
 	        beforeSend: function(data){
 	        	$("#btnAparta").hide();
-	        	$("#divBtnA").html('<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>');
+	        	$("#divBtnA").html('<div class="alert alert-warning"> Verficando boletos... <br> Por favor no cierre esta ventana <br></div> <div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div>');
 	        },
 	        success: function (data) {
 	        	//console.log(data)
@@ -103,6 +103,7 @@ $script = <<< JS
 	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
 	        		$("#divMsg").show();
 	        	}else if(data.status == true){
+
 	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito. <br> Por favor no cierre esta ventana.</div>');
 	        		$("#divMsg").show();
 
