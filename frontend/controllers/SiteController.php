@@ -83,8 +83,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {   
-        $modelRifas = Rifas::find()->where(['status' => 1,'banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
-        return $this->render('index',['rifas'=>$modelRifas]);
+        $modelRifasBanner  = Rifas::find()->where(['status' => 1,'banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
+        $modelRifasActivas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->all(); 
+        return $this->render('index',[
+            'rifasBanner'  =>$modelRifasBanner,
+            'rifasActivas' =>$modelRifasActivas,
+        ]);
     }
 
     /**

@@ -9,7 +9,7 @@ $this->title = 'Rifas';
 
 <!-- ======= Hero Section ======= -->
 <?php 
-if(!empty($rifas)){
+if(!empty($rifasBanner)){
 ?>
 <section id="hero">
     <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -17,7 +17,7 @@ if(!empty($rifas)){
         <div class="carousel-inner" role="listbox">
             <?php 
             $i = 0;
-            foreach ($rifas as $rifa) {
+            foreach ($rifasBanner as $rifa) {
                 $rifa_id          = $rifa->id;
                 $rifa_title       = $rifa->name;
                 $rifa_description = $rifa->description;
@@ -115,7 +115,7 @@ if(!empty($rifas)){
     </div>
 </section>
 <?php 
-if(!empty($rifas)){
+if(!empty($rifasActivas)){
 ?>
 <section id="team" class="team ">
     <div class="container">
@@ -126,7 +126,7 @@ if(!empty($rifas)){
         </div>
         <div class="row">
             <?php 
-            foreach ($rifas as $rifa) {
+            foreach ($rifasActivas as $rifa) {
                 $rifa_id    = $rifa->id;
                 $rifa_title = $rifa->name;
                 $rifa_terms = $rifa->terms;
