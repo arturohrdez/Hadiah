@@ -89,7 +89,20 @@ echo newerton\fancybox3\FancyBox::widget([
                             //'date_init',
                             //'main_image',
 
-                            //'status',
+                            [
+                                'label'          => 'Estatus',
+                                'attribute'      => 'status',
+                                'format'         => 'html',
+                                'contentOptions' => ['style'=>'text-align: center'],
+                                'value'          => function($model){
+                                    if($model->status == 1){
+                                        return '<div class="right badge badge-success">ACTIVO</div>';
+                                    }elseif($model->status == 0){
+                                        return '<div class="right badge badge-warning">INACTIVO</div>';
+                                    }//end if
+                                },
+                                'filter' =>  Html::activeDropDownList($searchModel,'status',[1=>'ACTIVO',0=>'INACTIVO'],['class' => 'form-control','prompt'=>'Todos'])
+                            ],
 
                             [
                                 'class' => 'hail812\adminlte3\yii\grid\ActionColumn',
