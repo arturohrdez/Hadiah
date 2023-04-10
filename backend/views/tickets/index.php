@@ -123,6 +123,34 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'      => 'phone',
                                 'contentOptions' => ['style'=>'text-align: center']
                             ],
+                            [
+                                'label' => 'Fecha Apartado',
+                                'attribute' => 'date',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    //return Yii::$app->formatter->asDateTime($model->date);
+                                    return date('d/m/Y H:i:s',strtotime($model->date));
+                                }
+                            ],
+                            [
+                                'label' => 'Fecha Pago',
+                                'attribute' => 'date_payment',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    if(!empty($model->date_payment)){
+                                        return date('d/m/Y H:i:s',strtotime($model->date_payment));
+                                    }else{
+                                        return "-/-/- -:-:-";
+                                    }
+                                    //return Yii::$app->formatter->asDateTime($model->date);
+                                }
+                            ],
                             //'state',
                             //'type',
                             //'status',

@@ -18,7 +18,7 @@ class TicketsSearch extends Tickets
     {
         return [
             [['id', 'rifa_id', 'parent_id'], 'integer'],
-            [['ticket', 'date', 'date_end', 'phone', 'name', 'lastname', 'state', 'type', 'status'], 'safe'],
+            [['ticket', 'date', 'date_end','date_payment', 'phone', 'name', 'lastname', 'state', 'type', 'status'], 'safe'],
         ];
     }
 
@@ -66,6 +66,7 @@ class TicketsSearch extends Tickets
             'rifa_id' => $this->rifa_id,
             'date' => $this->date,
             'date_end' => $this->date_end,
+            'date_payment' => $this->date_payment,
             'parent_id' => $this->parent_id,
         ]);
 
