@@ -109,7 +109,7 @@ if(is_null($sales)){
                                         if($model->status == 1){
                                             return "<div class='col-12 alert-success'>EN JUEGO</div>";
                                         }else{
-                                            return "<div class='col-12 alert-danger'>APAGADA</div>";
+                                            return "<div class='col-12 alert-danger'>TERMINADA</div>";
                                         }//end if
                                     }
                                 ];

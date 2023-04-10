@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList(
                                     $searchModel,
                                     'rifa_id',
-                                    ArrayHelper::map(Rifas::find()->all(),'id','name'),
+                                    ArrayHelper::map(Rifas::find()->where(['status'=>1])->all(),'id','name'),
                                     ['class' => 'form-control','prompt'=>'Todos']
                                 ),
                             ],
