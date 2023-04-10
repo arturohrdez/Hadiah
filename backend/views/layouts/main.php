@@ -16,6 +16,7 @@ $publishedRes = Yii::$app->assetManager->publish('@vendor/hail812/yii2-adminlte3
 $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\hail812\adminlte3\assets\AdminLteAsset']);
 
 AppAsset::register($this);
+Yii::$app->formatter->locale = 'es-MX';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

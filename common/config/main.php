@@ -16,5 +16,9 @@ return [
         'mutex' => [
             'class' => 'yii\mutex\MysqlMutex'
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'timeZone' => 'America/Mexico_City',
+        ],
     ],
 ];

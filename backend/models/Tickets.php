@@ -39,6 +39,7 @@ class Tickets extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['date_payment'],'required','on'=>'payment'],
             [['rifa_id', 'ticket', 'date', 'phone', 'name', 'lastname', 'state', 'type', 'status'], 'required'],
             [['rifa_id', 'parent_id'], 'integer'],
             [['date', 'date_end', 'date_payment'], 'safe'],
@@ -70,7 +71,7 @@ class Tickets extends \yii\db\ActiveRecord
             'type'         => 'Type',
             'status'       => 'Estatus',
             'parent_id'    => 'Parent ID',
-            'date_payment' => 'Date Payment',
+            'date_payment' => 'Fecha de Pago',
         ];
     }
 

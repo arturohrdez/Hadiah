@@ -98,7 +98,8 @@ class TicketsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $model->scenario = 'payment';
+        
         if ($model->load(Yii::$app->request->post())) {
             //Solo boletos pagados
             if($model->status == "P"){
@@ -111,7 +112,7 @@ class TicketsController extends Controller
                             $op_s .= "{$oportunidad->ticket},";
                             //Actualiza también las oportunidades relacionadas al boleto
                             $oportunidad->status       = "P";
-                            $oportunidad->date_payment = date("Y-m-d H:i:s");
+                            $oportunidad->date_payment = $model->date_payment;
                             $oportunidad->save();
                         }//end foreach
 
@@ -119,7 +120,7 @@ class TicketsController extends Controller
                     }//end if
                 }//end if
 
-                $model->date_payment = date("Y-m-d H:i:s");
+                //$model->date_payment = date("Y-m-d H:i:s");
                 $model->save();
 
                 if(isset($op_str) && !empty($op_str)){

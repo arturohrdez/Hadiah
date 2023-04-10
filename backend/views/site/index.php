@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Url;
-
 $this->title = 'Panel';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>

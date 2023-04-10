@@ -92,6 +92,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }//end if
                                 },
                             ],
+                            [
+                                'attribute' => 'date_payment',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    return Yii::$app->formatter->asDateTime($model->date_payment);
+                                    //return date('d-M-Y H:i:s',strtotime($model->date_payment));
+                                }
+                            ],
+
                             //'status',
                             //'parent_id',
                         ],
