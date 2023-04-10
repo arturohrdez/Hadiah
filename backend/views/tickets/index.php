@@ -58,11 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="card-body pad table-responsive">
 
 
-                    <?php Pjax::begin(); ?>
-                    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-                    <?= GridView::widget([
+                    <?php Pjax::begin(['id' => 'my-pjax-tickets']); ?>
+                    <?php echo  GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
+                        //'pjax' => true,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
 

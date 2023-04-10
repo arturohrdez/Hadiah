@@ -20,5 +20,9 @@ return [
             'class' => 'yii\i18n\Formatter',
             'timeZone' => 'America/Mexico_City',
         ],
+        'pjax' => [
+            'class' => 'yii\widgets\Pjax',
+            'enablePushState' => false,
+        ],
     ],
 ];
