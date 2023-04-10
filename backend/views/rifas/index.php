@@ -96,12 +96,12 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'contentOptions' => ['style'=>'text-align: center'],
                                 'value'          => function($model){
                                     if($model->status == 1){
-                                        return '<div class="right badge badge-success">ACTIVO</div>';
+                                        return '<div class="right badge badge-success">EN JUEGO</div>';
                                     }elseif($model->status == 0){
-                                        return '<div class="right badge badge-warning">INACTIVO</div>';
+                                        return '<div class="right badge badge-danger">APAGADA</div>';
                                     }//end if
                                 },
-                                'filter' =>  Html::activeDropDownList($searchModel,'status',[1=>'ACTIVO',0=>'INACTIVO'],['class' => 'form-control','prompt'=>'Todos'])
+                                'filter' =>  Html::activeDropDownList($searchModel,'status',[1=>'EN JUEGO',0=>'APAGADA'],['class' => 'form-control','prompt'=>'Todos'])
                             ],
 
                             [

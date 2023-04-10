@@ -86,11 +86,13 @@ if(is_null($sales)){
                             }
                         ];
                         $items[] = [
-                            'label' => 'Promoción',
+                            'label' => 'Oportunidades',
                             'format' => 'html',
                             'value'     =>function($model){
                                 if(!empty($model->promos)){
-                                    return "Obten : ".$model->promos[0]->get_ticket." Oportunidades, En la compra de :".$model->promos[0]->buy_ticket." Boleto";
+                                    $opo = $model->promos[0]->buy_ticket + $model->promos[0]->get_ticket;
+                                    //return "Obten : ".$model->promos[0]->get_ticket." Oportunidades, En la compra de :".$model->promos[0]->buy_ticket." Boleto";
+                                    return "En la compra de : ".$model->promos[0]->buy_ticket." Boleto, obten ".$opo." Oportunidad(es)";
                                 }else{
                                     return "N/A";
                                     }//end if
@@ -105,9 +107,9 @@ if(is_null($sales)){
                                     'contentOptions' => ['align'=> 'center'],
                                     'value' => function($model){
                                         if($model->status == 1){
-                                            return "<div class='col-4 alert-success'>Activo</div>";
+                                            return "<div class='col-12 alert-success'>EN JUEGO</div>";
                                         }else{
-                                            return "<div class='col-4 alert-danger'>Inactivo</div>";
+                                            return "<div class='col-12 alert-danger'>APAGADA</div>";
                                         }//end if
                                     }
                                 ];
