@@ -64,18 +64,17 @@ class TicketsSearch extends Tickets
         $query->andFilterWhere([
             'id' => $this->id,
             'rifa_id' => $this->rifa_id,
-            'date' => $this->date,
-            'date_end' => $this->date_end,
-            'date_payment' => $this->date_payment,
             'parent_id' => $this->parent_id,
         ]);
 
-        $query->andFilterWhere(['like', 'tickets.ticket', $this->ticket])
-            ->andFilterWhere(['like', 'tickets.phone', $this->phone])
+        $query->andFilterWhere(['=', 'tickets.ticket', $this->ticket])
+            ->andFilterWhere(['=', 'tickets.phone', $this->phone])
             ->andFilterWhere(['like', 'tickets.name', $this->name])
             ->andFilterWhere(['like', 'tickets.lastname', $this->lastname])
             ->andFilterWhere(['like', 'tickets.state', $this->state])
             ->andFilterWhere(['like', 'tickets.type', $this->type])
+            ->andFilterWhere(['like', 'tickets.date', $this->date])
+            ->andFilterWhere(['like', 'tickets.date_payment', $this->date_payment])
             ->andFilterWhere(['=', 'tickets.status', $this->status]);
 
         return $dataProvider;

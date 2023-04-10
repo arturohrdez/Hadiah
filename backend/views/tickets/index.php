@@ -8,6 +8,8 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+//use yii\jui\DatePicker;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\TicketsSearch */
@@ -133,7 +135,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'     =>function($model){
                                     //return Yii::$app->formatter->asDateTime($model->date);
                                     return date('d/m/Y H:i:s',strtotime($model->date));
-                                }
+                                },
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute' => 'date',
+                                    'options' => ['class' => 'form-control'],
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd',
+                                        'todayHighlight' => true
+                                    ]                                    
+                                ]),
                             ],
                             [
                                 'label' => 'Fecha Pago',
@@ -149,7 +161,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return "-/-/- -:-:-";
                                     }
                                     //return Yii::$app->formatter->asDateTime($model->date);
-                                }
+                                },
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute' => 'date_payment',
+                                    'options' => ['class' => 'form-control'],
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd',
+                                        'todayHighlight' => true
+                                    ]                                    
+                                ]),
                             ],
                             //'state',
                             //'type',
