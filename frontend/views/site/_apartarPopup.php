@@ -117,6 +117,7 @@ $script = <<< JS
 		        				$("#divMsg").html('<div class="alert alert-success">Redirigiendo a Whatsapp...</div>');
 		        			},
 		        			success: function (data) {
+		        				$(".btn_ticketDel").trigger("click");
 								window.location.href = data.link;
 		        			},
 		        		});
