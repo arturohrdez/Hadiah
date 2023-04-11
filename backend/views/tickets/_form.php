@@ -13,6 +13,7 @@ use kartik\datetime\DateTimePicker;
 <div class="tickets-form card-body row">
 
     <?php echo $form->field($model, 'status',['options'=>['class'=>'col-12 mt-3']])->dropDownList([ 'A' => 'APARTADO', 'P' => 'PAGADO', ], ['prompt' => 'Seleccione una opción']) ?>
+    <?php echo $form->field($model, 'transaction_number',['options'=>['class'=>'col-12 mt-3']])->textInput(['placeholder' => 'Número de transacción']); ?>
     <?php 
         echo $form->field($model, 'date_payment',['options'=>['class'=>'col-12 mt-3']])->widget(DateTimePicker::classname(),[
             'name' => 'date_payment',

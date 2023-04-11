@@ -25,7 +25,7 @@ class TicketsController extends Controller
         return [
             'access'=>[
                 'class'=> AccessControl::className(),
-                'only' => ['index','create','update','delete','sales','view','createtickets','searchticket','ticketremove','pagar','sendwp'],
+                'only' => ['index','create','update','delete','sales','view','createtickets','searchticket','ticketremove','pagar','sendwp','expirate'],
                 'rules' => [
                     [
                         'allow' =>true,
@@ -52,6 +52,19 @@ class TicketsController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionExpirate(){
+        $searchModel  = new TicketsSearch();
+
+        $params = Yii::$app->request->queryParams;
+        $params['TicketsSearch']['expiration'] = 1;
+        $dataProvider = $searchModel->search($params);
+
+        return $this->render('expirate', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -111,8 +124,9 @@ class TicketsController extends Controller
                         foreach ($oportunidades as $oportunidad) {
                             $op_s .= "{$oportunidad->ticket},";
                             //Actualiza también las oportunidades relacionadas al boleto
-                            $oportunidad->status       = "P";
-                            $oportunidad->date_payment = $model->date_payment;
+                            $oportunidad->transaction_number = $model->transaction_number;
+                            $oportunidad->status             = "P";
+                            $oportunidad->date_payment       = $model->date_payment;
                             $oportunidad->save();
                         }//end foreach
 

@@ -14,10 +14,11 @@ class TicketsController extends Controller {
         //Verificación de los tickets no pagados
         //Se toma la fecha de expiración 
         $date = date("Y-m-d H:i");
-        $modelTickets = Tickets::find()->where(["<=","date_end",$date])->andWhere(["status"=>"A"])->all();
+        $modelTickets = Tickets::find()->where(["<=","date_end",$date])->andWhere(["status"=>"A",'expiration'=>NULL])->all();
         if(!empty($modelTickets)){
             foreach ($modelTickets as $ticket) {
-                $ticket->delete();
+                $ticket->expiration = 1;
+                $ticket->save(false);
             }//end foreach
 
             die("Proceso terminado");

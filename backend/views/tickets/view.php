@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     if(is_null($model->rifa->name)){
                                         return "-";
                                     }else{
-                                        return $model->rifa->name;
+                                        return "<h3 class='text-danger font-weight-bold'>".$model->rifa->name."</h3>";
                                     }//end if
                                 }//end function
                             ],
@@ -80,6 +80,56 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             //'type',
                             [
+                                'attribute' => 'date',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    //return Yii::$app->formatter->asDateTime($model->date_payment);
+                                    return date('d/m/Y H:i:s',strtotime($model->date));
+                                }
+                            ],
+                            [
+                                'attribute' => 'date_payment',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    //return Yii::$app->formatter->asDateTime($model->date_payment);
+                                    return date('d/m/Y H:i:s',strtotime($model->date_payment));
+                                }
+                            ],
+                            [
+                                'attribute' => 'transaction_number',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    if($model->type_sale == "store"){
+                                        return "N/A";
+                                    }else{
+                                        return $model->transaction_number;
+                                    }
+                                }
+                            ],
+                            [
+                                'attribute' => 'type_sale',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    if($model->type_sale == "store"){
+                                        return "Tienda Física";
+                                    }elseif($model->type_sale == "online"){
+                                        return "En Línea";
+                                    }
+                                }
+                            ],
+                            [
                                 'label'          => 'Estatus',
                                 'attribute'      => 'status',
                                 'format'         => 'html',
@@ -91,19 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return '<div class="right badge badge-success" style="font-size: 15px;">PAGADO</div>';
                                     }//end if
                                 },
-                            ],
-                            [
-                                'attribute' => 'date_payment',
-                                'format'    => 'html',
-                                'contentOptions' => [
-                                    "style" => "text-align: center",
-                                ],
-                                'value'     =>function($model){
-                                    return Yii::$app->formatter->asDateTime($model->date_payment);
-                                    //return date('d-M-Y H:i:s',strtotime($model->date_payment));
-                                }
-                            ],
-
+                            ]
                             //'status',
                             //'parent_id',
                         ],

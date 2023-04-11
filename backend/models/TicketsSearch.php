@@ -18,7 +18,7 @@ class TicketsSearch extends Tickets
     {
         return [
             [['id', 'rifa_id', 'parent_id'], 'integer'],
-            [['ticket', 'date', 'date_end','date_payment', 'phone', 'name', 'lastname', 'state', 'type', 'type_sale', 'status'], 'safe'],
+            [['ticket', 'date', 'date_end','date_payment', 'phone', 'name', 'lastname', 'state', 'type', 'type_sale', 'status','transaction_number','expiration'], 'safe'],
         ];
     }
 
@@ -48,7 +48,7 @@ class TicketsSearch extends Tickets
             'query' => $query,
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
             'pagination' => [
-                'defaultPageSize' => 20,
+                'defaultPageSize' => 15,
             ]
         ]);
 
@@ -67,16 +67,19 @@ class TicketsSearch extends Tickets
             'parent_id' => $this->parent_id,
         ]);
 
-        $query->andFilterWhere(['=', 'tickets.ticket', $this->ticket])
-            ->andFilterWhere(['=', 'tickets.phone', $this->phone])
+        $query->andFilterWhere(['=', 'tickets.ticket', $this->ticket]);
+
+        $query->andFilterWhere(['=', 'tickets.phone', $this->phone])
             ->andFilterWhere(['like', 'tickets.name', $this->name])
             ->andFilterWhere(['like', 'tickets.lastname', $this->lastname])
             ->andFilterWhere(['like', 'tickets.state', $this->state])
+            ->andFilterWhere(['=', 'tickets.transaction_number', $this->transaction_number])
             ->andFilterWhere(['like', 'tickets.type', $this->type])
             ->andFilterWhere(['=', 'tickets.type_sale', $this->type_sale])
             ->andFilterWhere(['like', 'tickets.date', $this->date])
             ->andFilterWhere(['like', 'tickets.date_payment', $this->date_payment])
-            ->andFilterWhere(['=', 'tickets.status', $this->status]);
+            ->andFilterWhere(['=', 'tickets.status', $this->status])
+            ->andFilterWhere(['=', 'tickets.expiration', $this->expiration]);
 
         return $dataProvider;
     }

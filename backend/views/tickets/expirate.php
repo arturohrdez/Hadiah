@@ -15,7 +15,7 @@ use kartik\date\DatePicker;
 /* @var $searchModel backend\models\TicketsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Boletos';
+$this->title = 'Boletos Vencidos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -136,10 +136,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'      => 'lastname',
                                 'contentOptions' => ['style'=>'text-align: center']
                             ],
-                            /*[
+                            [
                                 'attribute'      => 'phone',
                                 'contentOptions' => ['style'=>'text-align: center']
-                            ],*/
+                            ],
                             [
                                 'label' => 'Fecha Apartado',
                                 'attribute' => 'date',
@@ -163,6 +163,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => 'Fecha Expiración',
+                                'attribute' => 'date_end',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    //return Yii::$app->formatter->asDateTime($model->date);
+                                    return date('d/m/Y H:i:s',strtotime($model->date_end));
+                                },
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute' => 'date_end',
+                                    'options' => ['class' => 'form-control'],
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd',
+                                        'todayHighlight' => true
+                                    ]                                    
+                                ]),
+                            ],
+                            /*[
                                 'label' => 'Fecha Pago',
                                 'attribute' => 'date_payment',
                                 'format'    => 'html',
@@ -187,7 +209,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'todayHighlight' => true
                                     ]                                    
                                 ]),
-                            ],
+                            ],*/
                             //'state',
                             //'type',
                             //'status',
@@ -204,7 +226,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' =>  Html::activeDropDownList($searchModel,'type_sale',['online'=>'En línea','store'=>'Tienda Física'],['class' => 'form-control','prompt'=>'Todos'])
                             ],
-                            [
+                           /* [
                                 'label' => 'Transacción / Referencia',
                                 'attribute' => 'transaction_number',
                                 'format'    => 'html',
@@ -218,20 +240,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->transaction_number;
                                     }
                                 }
-                            ],
+                            ],*/
                             [
                                 'label'          => 'Estatus',
-                                'attribute'      => 'status',
+                                'attribute'      => 'expiration',
                                 'format'         => 'html',
                                 'contentOptions' => ['style'=>'text-align: center'],
                                 'value'          => function($model){
-                                    if($model->status == 'A'){
-                                        return '<div class="right badge badge-warning">APARTADO</div>';
-                                    }elseif($model->status == "P"){
-                                        return '<div class="right badge badge-success">PAGADO</div>';
-                                    }//end if
+                                    if($model->expiration == 1){
+                                        return '<div class="right badge badge-danger">VENCIDO</div>';
+                                    }
                                 },
-                                'filter' =>  Html::activeDropDownList($searchModel,'status',['A'=>'APARTADO','P'=>'PAGADO'],['class' => 'form-control','prompt'=>'Todos'])
+                                'filter' =>  Html::activeDropDownList($searchModel,'expiration',[1=>'VENCIDO'],['class' => 'form-control','prompt'=>'Todos'])
                             ],
                             //'parent_id',
 
@@ -240,21 +260,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header'         => 'Actions',
                                 'headerOptions'  => ['class'=>'text-center'],
                                 'contentOptions' => ['class'=>'text-center'],
-                                'template'       => '{update}',
+                                'template'       => '{delete}',
                                 'buttons'        => [
                                     /*'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },*/
-                                    'update'=>function ($url, $model) {
+                                    /*'update'=>function ($url, $model) {
                                         if($model->status == "A"){
                                             return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
                                         }else{
                                             return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                         }
-                                    },
-                                    /*'delete'=>function ($url, $model) {
-                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
                                     },*/
+                                    'delete'=>function ($url, $model) {
+                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
+                                    },
                                 ]
 
                             ],
