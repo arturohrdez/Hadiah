@@ -24,7 +24,7 @@
 			}else{//end if
 			?>
 			<div class="d-flex justify-content-center">
-				<div class="col-md-6 mt-md-0">
+				<div class="col-md-12 col-lg-7 mt-md-0">
 					<div class="box">
 						<h3>&nbsp;</h3>
 						<?php 
