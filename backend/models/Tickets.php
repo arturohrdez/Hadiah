@@ -49,6 +49,7 @@ class Tickets extends \yii\db\ActiveRecord
             [['lastname'], 'string', 'max' => 250],
             [['state'], 'string', 'max' => 100],
             [['type', 'status'], 'string', 'max' => 5],
+            [['type_sale'], 'string', 'max' => 10],
             [['rifa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rifas::class, 'targetAttribute' => ['rifa_id' => 'id']],
         ];
     }
@@ -69,6 +70,7 @@ class Tickets extends \yii\db\ActiveRecord
             'lastname'     => 'Apellidos',
             'state'        => 'Estado',
             'type'         => 'Type',
+            'type_sale'    => 'Vendido',
             'status'       => 'Estatus',
             'parent_id'    => 'Parent ID',
             'date_payment' => 'Fecha de Pago',

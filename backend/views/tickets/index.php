@@ -177,6 +177,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'type',
                             //'status',
                             [
+                                'label'          => 'Vendido',
+                                'attribute'      => 'type_sale',
+                                'contentOptions' => ['style'=>'text-align: center'],
+                                'value'          => function($model){
+                                    if($model->type_sale == "online"){
+                                        return 'En línea';
+                                    }elseif($model->type_sale == "store"){
+                                        return 'Tienda Física';
+                                    }//end if
+                                },
+                                'filter' =>  Html::activeDropDownList($searchModel,'type_sale',['online'=>'En línea','store'=>'Tienda Física'],['class' => 'form-control','prompt'=>'Todos'])
+                            ],
+                            [
                                 'label'          => 'Estatus',
                                 'attribute'      => 'status',
                                 'format'         => 'html',

@@ -390,6 +390,7 @@ class TicketsController extends Controller
                     $model->lastname     = $modelTicket->lastname;
                     $model->state        = $modelTicket->state;
                     $model->type         = "S";
+                    $model->type_sale    = "store";
                     $model->status       = "P";
                     $model->parent_id    = null;
                     $model->save();
@@ -408,6 +409,7 @@ class TicketsController extends Controller
                             $modelTR->lastname     = $modelTicket->lastname;
                             $modelTR->state        = $modelTicket->state;
                             $modelTR->type         = "R";
+                            $modelTR->type_sale    = "store";
                             $modelTR->status       = "P";
                             $modelTR->parent_id    = $model->id;
                             $modelTR->save();

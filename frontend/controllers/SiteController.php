@@ -699,6 +699,7 @@ class SiteController extends Controller
                     $model->lastname  = $modelTicket->lastname;
                     $model->state     = $modelTicket->state;
                     $model->type      = "S";
+                    $model->type_sale = "online";
                     $model->status    = "A";
                     $model->parent_id = null;
                     $model->save();
@@ -717,6 +718,7 @@ class SiteController extends Controller
                             $modelTR->lastname  = $modelTicket->lastname;
                             $modelTR->state     = $modelTicket->state;
                             $modelTR->type      = "R";
+                            $modelTR->type_sale = "online";
                             $modelTR->status    = "A";
                             $modelTR->parent_id = $model->id;
                             $modelTR->save();
