@@ -65,6 +65,10 @@ $this->params['breadcrumbs'][] = 'Update';
                                 }//end function
                             ],
                             [
+                                'attribute' => 'folio',
+                                'contentOptions' => ['style'=>'text-align: center'],
+                            ],
+                            [
                                 'attribute' => 'name',
                                 'contentOptions' => ['style'=>'text-align: center'],
                             ],

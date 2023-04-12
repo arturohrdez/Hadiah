@@ -116,20 +116,24 @@ class TicketsController extends Controller
         $model->scenario = 'payment';
         
         if ($model->load(Yii::$app->request->post())) {
-
             //Solo boletos pagados
             if($model->status == "P"){
+                //Hace la busqueda por folio para poder actualizar todos los tickets con el mismo folio
                 $folio_ = $model->folio;
                 if(!empty($folio_)){
                     $modelTF = Tickets::find()->where(["rifa_id"=>$model->rifa_id,"folio"=>$folio_])->all();
                     if(!empty($modelTF)){
+                        $tickets_update = "";
                         foreach ($modelTF as $ticketF) {
                             $ticketF->transaction_number = $model->transaction_number;
                             $ticketF->status             = "P";
                             $ticketF->date_payment       = $model->date_payment;
                             $ticketF->expiration         = "0";
                             $ticketF->save();
+                            $tickets_update .= $ticketF->ticket.",";
                         }//end foreach
+
+                         $tickets_update = "(".trim($tickets_update, ',').")";
                     }//end if
                 }else{
                     if(is_null($model->parent_id)){
@@ -159,7 +163,8 @@ class TicketsController extends Controller
                 if(isset($op_str) && !empty($op_str)){
                     $msg = "Se actualizaron los boletos: <strong>".$model->ticket." ".$op_str."correctamente</strong>";
                 }else{
-                    $msg = "Se actualizo el boleto #: <strong>".$model->ticket."</strong> correctamente";
+                    //$msg = "Se actualizo el boleto #: <strong>".$model->ticket."</strong> correctamente";
+                    $msg = "Se actualizaron los boletos:: <strong>".$tickets_update."</strong> correctamente";
                 }
 
 
