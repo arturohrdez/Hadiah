@@ -116,30 +116,45 @@ class TicketsController extends Controller
         $model->scenario = 'payment';
         
         if ($model->load(Yii::$app->request->post())) {
+
             //Solo boletos pagados
             if($model->status == "P"){
-                if(is_null($model->parent_id)){
-                    //Busca si tiene oportunidades
-                    $oportunidades = Tickets::find()->where(['parent_id'=>$model->id])->all();
-                    if(!empty($oportunidades)){
-                        $op_s = "";
-                        foreach ($oportunidades as $oportunidad) {
-                            $op_s .= "{$oportunidad->ticket},";
-                            //Actualiza también las oportunidades relacionadas al boleto
-                            $oportunidad->transaction_number = $model->transaction_number;
-                            $oportunidad->status             = "P";
-                            $oportunidad->date_payment       = $model->date_payment;
-                            $oportunidad->expiration         = "0";
-                            $oportunidad->save();
+                $folio_ = $model->folio;
+                if(!empty($folio_)){
+                    $modelTF = Tickets::find()->where(["rifa_id"=>$model->rifa_id,"folio"=>$folio_])->all();
+                    if(!empty($modelTF)){
+                        foreach ($modelTF as $ticketF) {
+                            $ticketF->transaction_number = $model->transaction_number;
+                            $ticketF->status             = "P";
+                            $ticketF->date_payment       = $model->date_payment;
+                            $ticketF->expiration         = "0";
+                            $ticketF->save();
                         }//end foreach
-
-                        $op_str = "(".trim($op_s, ',').")";
                     }//end if
-                }//end if
+                }else{
+                    if(is_null($model->parent_id)){
+                        //Busca si tiene oportunidades
+                        $oportunidades = Tickets::find()->where(['parent_id'=>$model->id])->all();
+                        if(!empty($oportunidades)){
+                            $op_s = "";
+                            foreach ($oportunidades as $oportunidad) {
+                                $op_s .= "{$oportunidad->ticket},";
+                                //Actualiza también las oportunidades relacionadas al boleto
+                                $oportunidad->transaction_number = $model->transaction_number;
+                                $oportunidad->status             = "P";
+                                $oportunidad->date_payment       = $model->date_payment;
+                                $oportunidad->expiration         = "0";
+                                $oportunidad->save();
+                            }//end foreach
 
-                //$model->date_payment = date("Y-m-d H:i:s");
-                $model->expiration = "0";
-                $model->save();
+                            $op_str = "(".trim($op_s, ',').")";
+                        }//end if
+                    }//end if
+
+                    //$model->date_payment = date("Y-m-d H:i:s");
+                    $model->expiration = "0";
+                    $model->save();
+                }//end if
 
                 if(isset($op_str) && !empty($op_str)){
                     $msg = "Se actualizaron los boletos: <strong>".$model->ticket." ".$op_str."correctamente</strong>";
