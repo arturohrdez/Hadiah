@@ -260,25 +260,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header'         => 'Actions',
                                 'headerOptions'  => ['class'=>'text-center'],
                                 'contentOptions' => ['class'=>'text-center'],
-                                'template'       => '{delete}',
+                                'template'       => '{update} {delete}',
                                 'buttons'        => [
-                                    /*'view'=>function($url,$model){
-                                        return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
-                                    },*/
-                                    /*'update'=>function ($url, $model) {
-                                        if($model->status == "A"){
-                                            return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
-                                        }else{
-                                            return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
-                                        }
-                                    },*/
+                                    'update'=>function ($url, $model) {
+                                        return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
+                                    },
                                     'delete'=>function ($url, $model) {
-                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
+                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['style'=>'float: right;','class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
                                     },
                                 ]
 
                             ],
                         ],
+                        'rowOptions' => function($model, $key, $index, $grid){
+                            if($model->expiration == 1){
+                                return ['style' => 'background-color: #f8d7da;'];
+                            }
+                        },
                         'summaryOptions' => ['class' => 'summary mb-2'],
                         'pager' => [
                             'class' => 'yii\bootstrap4\LinkPager',

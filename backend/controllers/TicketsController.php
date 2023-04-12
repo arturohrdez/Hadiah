@@ -48,9 +48,11 @@ class TicketsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TicketsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel  = new TicketsSearch();
 
+        $params = Yii::$app->request->queryParams;
+        $params['TicketsSearch']['expiration'] = "0";
+        $dataProvider = $searchModel->search($params);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -61,7 +63,7 @@ class TicketsController extends Controller
         $searchModel  = new TicketsSearch();
 
         $params = Yii::$app->request->queryParams;
-        $params['TicketsSearch']['expiration'] = 1;
+        $params['TicketsSearch']['expiration'] = "1";
         $dataProvider = $searchModel->search($params);
 
         return $this->render('expirate', [
@@ -127,6 +129,7 @@ class TicketsController extends Controller
                             $oportunidad->transaction_number = $model->transaction_number;
                             $oportunidad->status             = "P";
                             $oportunidad->date_payment       = $model->date_payment;
+                            $oportunidad->expiration         = "0";
                             $oportunidad->save();
                         }//end foreach
 
@@ -135,6 +138,7 @@ class TicketsController extends Controller
                 }//end if
 
                 //$model->date_payment = date("Y-m-d H:i:s");
+                $model->expiration = "0";
                 $model->save();
 
                 if(isset($op_str) && !empty($op_str)){
@@ -407,7 +411,8 @@ class TicketsController extends Controller
                     $model->type_sale    = "store";
                     $model->status       = "P";
                     $model->parent_id    = null;
-                    $model->save();
+                    $model->expiration   = "0";
+                    $model->save(false);
 
 
                     if(is_array($tickets__)){
@@ -426,7 +431,8 @@ class TicketsController extends Controller
                             $modelTR->type_sale    = "store";
                             $modelTR->status       = "P";
                             $modelTR->parent_id    = $model->id;
-                            $modelTR->save();
+                            $modelTR->expiration   = "0";
+                            $modelTR->save(false);
                         }//end foreach
                     }//end if
                 }//end foreach

@@ -689,39 +689,41 @@ class SiteController extends Controller
                 //No existes tickets registrados con anterioridad
                 //Guarda información
                 foreach ($tickets_play_all as $key__ => $tickets__) {
-                    $model            = new Tickets();
-                    $model->rifa_id   = $modelTicket->rifa_id;
-                    $model->ticket    = (string) $key__;
-                    $model->date      = date("Y-m-d H:i");
-                    $model->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
-                    $model->phone     = $modelTicket->phone;
-                    $model->name      = $modelTicket->name;
-                    $model->lastname  = $modelTicket->lastname;
-                    $model->state     = $modelTicket->state;
-                    $model->type      = "S";
-                    $model->type_sale = "online";
-                    $model->status    = "A";
-                    $model->parent_id = null;
-                    $model->save();
+                    $model             = new Tickets();
+                    $model->rifa_id    = $modelTicket->rifa_id;
+                    $model->ticket     = (string) $key__;
+                    $model->date       = date("Y-m-d H:i");
+                    $model->date_end   = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
+                    $model->phone      = $modelTicket->phone;
+                    $model->name       = $modelTicket->name;
+                    $model->lastname   = $modelTicket->lastname;
+                    $model->state      = $modelTicket->state;
+                    $model->type       = "S";
+                    $model->type_sale  = "online";
+                    $model->status     = "A";
+                    $model->parent_id  = null;
+                    $model->expiration = "0";
+                    $model->save(false);
                     //Vacía storage
                     //self::removeTicketStorage($rifaId,$key__);
 
                     if(is_array($tickets__)){
                         foreach ($tickets__ as $ticket_) {
-                            $modelTR            = new Tickets();
-                            $modelTR->rifa_id   = $modelTicket->rifa_id;
-                            $modelTR->ticket    = (string) $ticket_;
-                            $modelTR->date      = date("Y-m-d H:i");
-                            $modelTR->date_end  = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
-                            $modelTR->phone     = $modelTicket->phone;
-                            $modelTR->name      = $modelTicket->name;
-                            $modelTR->lastname  = $modelTicket->lastname;
-                            $modelTR->state     = $modelTicket->state;
-                            $modelTR->type      = "R";
-                            $modelTR->type_sale = "online";
-                            $modelTR->status    = "A";
-                            $modelTR->parent_id = $model->id;
-                            $modelTR->save();
+                            $modelTR             = new Tickets();
+                            $modelTR->rifa_id    = $modelTicket->rifa_id;
+                            $modelTR->ticket     = (string) $ticket_;
+                            $modelTR->date       = date("Y-m-d H:i");
+                            $modelTR->date_end   = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
+                            $modelTR->phone      = $modelTicket->phone;
+                            $modelTR->name       = $modelTicket->name;
+                            $modelTR->lastname   = $modelTicket->lastname;
+                            $modelTR->state      = $modelTicket->state;
+                            $modelTR->type       = "R";
+                            $modelTR->type_sale  = "online";
+                            $modelTR->status     = "A";
+                            $modelTR->parent_id  = $model->id;
+                            $modelTR->expiration = "0";
+                            $modelTR->save(false);
 
                             //Vacía storage
                             //self::removeTicketStorage($rifaId,$ticket_);

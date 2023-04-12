@@ -12,7 +12,13 @@ return [
     'language' => 'es',
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['*'],
+        ],
+    ],
+    'bootstrap' => ['debug'],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',

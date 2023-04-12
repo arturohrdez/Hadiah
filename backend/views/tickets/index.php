@@ -67,10 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         //'pjax' => true,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-
                             //'id',
                             //'rifa_id',
-                           [
+                            [
                                 'label'     => 'Rifa',
                                 'attribute' => 'rifa_id',
                                 'format'    =>'html',
@@ -259,6 +258,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                         ],
+                        'rowOptions' => function($model, $key, $index, $grid){
+                            if($model->status == 'A'){
+                                return ['style' => 'background-color: #fff3cd;'];
+                            }elseif($model->status == "P"){
+                                return ['style' => 'background-color: #d1e7dd;'];
+                            }
+                        },
                         'summaryOptions' => ['class' => 'summary mb-2'],
                         'pager' => [
                             'class' => 'yii\bootstrap4\LinkPager',
