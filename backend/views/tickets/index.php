@@ -107,6 +107,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 },
                             ],
+                            [
+                                'attribute' => 'folio',
+                                'contentOptions' => ['style'=>'text-align: center'],
+                            ],
                             /*[
                                 'label'          => 'Oportunidades',
                                 'contentOptions' => ['style'=>'text-align: center'],

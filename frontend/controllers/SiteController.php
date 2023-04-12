@@ -686,12 +686,21 @@ class SiteController extends Controller
                 }//end if
 
 
+                $resFolio = Tickets::find()->where(["rifa_id"=>$rifaId])->orderBy(["id"=>SORT_DESC])->one();
+                if(is_null($resFolio)){
+                    $folio = self::addcero(5,1);
+                }else{
+                    $folio_ = (int)$resFolio->folio+1;
+                    $folio = self::addcero(5,$folio_);
+                }//end if
+
                 //No existes tickets registrados con anterioridad
                 //Guarda información
                 foreach ($tickets_play_all as $key__ => $tickets__) {
                     $model             = new Tickets();
                     $model->rifa_id    = $modelTicket->rifa_id;
                     $model->ticket     = (string) $key__;
+                    $model->folio      = $folio;
                     $model->date       = date("Y-m-d H:i");
                     $model->date_end   = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
                     $model->phone      = $modelTicket->phone;
@@ -712,6 +721,7 @@ class SiteController extends Controller
                             $modelTR             = new Tickets();
                             $modelTR->rifa_id    = $modelTicket->rifa_id;
                             $modelTR->ticket     = (string) $ticket_;
+                            $modelTR->folio      = $folio;
                             $modelTR->date       = date("Y-m-d H:i");
                             $modelTR->date_end   = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
                             $modelTR->phone      = $modelTicket->phone;

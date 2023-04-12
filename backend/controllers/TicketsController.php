@@ -369,6 +369,7 @@ class TicketsController extends Controller
             }//end if
 
             try{
+                $rifaId            = $modelTicket->rifa_id;
                 //Valida si existen tickets ya apartados o pagados
                 $ticket_duplicados = [];
                 $data              = [];
@@ -394,12 +395,21 @@ class TicketsController extends Controller
                     return ["status"=>false,"tickets_duplicados"=>$ticket_duplicados];
                 }//end if
 
+                $resFolio = Tickets::find()->where(["rifa_id"=>$rifaId])->orderBy(["id"=>SORT_DESC])->one();
+                if(is_null($resFolio)){
+                    $folio = self::addcero(5,1);
+                }else{
+                    $folio_ = (int)$resFolio->folio+1;
+                    $folio = self::addcero(5,$folio_);
+                }//end if
+
                 //No existes tickets registrados con anterioridad
                 //Guarda información
                 foreach ($tickets_play_all as $key__ => $tickets__) {
                     $model               = new Tickets();
                     $model->rifa_id      = $modelTicket->rifa_id;
                     $model->ticket       = (string) $key__;
+                    $model->folio        = $folio;
                     $model->date         = date("Y-m-d H:i");
                     $model->date_end     = date("Y-m-d H:i");
                     $model->date_payment = date("Y-m-d H:i:s");
@@ -420,6 +430,7 @@ class TicketsController extends Controller
                             $modelTR               = new Tickets();
                             $modelTR->rifa_id      = $modelTicket->rifa_id;
                             $modelTR->ticket       = (string) $ticket_;
+                            $modelTR->folio        = $folio;
                             $modelTR->date         = date("Y-m-d H:i");
                             $modelTR->date_end     = date("Y-m-d H:i");
                             $modelTR->date_payment = date("Y-m-d H:i:s");

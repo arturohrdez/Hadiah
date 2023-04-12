@@ -18,7 +18,7 @@ class TicketsSearch extends Tickets
     {
         return [
             [['id', 'rifa_id', 'parent_id'], 'integer'],
-            [['ticket', 'date', 'date_end','date_payment', 'phone', 'name', 'lastname', 'state', 'type', 'type_sale', 'status','transaction_number','expiration'], 'safe'],
+            [['ticket', 'date', 'date_end','date_payment', 'phone', 'name', 'lastname', 'state', 'type', 'type_sale', 'status','transaction_number','expiration','folio'], 'safe'],
         ];
     }
 
@@ -67,7 +67,8 @@ class TicketsSearch extends Tickets
             'parent_id' => $this->parent_id,
         ]);
 
-        $query->andFilterWhere(['=', 'tickets.ticket', $this->ticket]);
+        $query->andFilterWhere(['=', 'tickets.ticket', $this->ticket])
+            ->andFilterWhere(['=', 'tickets.folio', $this->folio]);
 
         $query->andFilterWhere(['=', 'tickets.phone', $this->phone])
             ->andFilterWhere(['like', 'tickets.name', $this->name])
