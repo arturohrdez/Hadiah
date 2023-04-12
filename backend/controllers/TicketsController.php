@@ -535,6 +535,48 @@ Encuentra todos tus bolestos PAGADOS aquí:
         return ["status"=>true,"link"=>$link];
     }//end function
 
+
+    public function actionSendmsn($id){
+        $modelTicket = $this->findModel($id);
+        $rifaId      = $modelTicket->rifa_id;
+        $folio       = $modelTicket->folio;
+        $phone       = $modelTicket->phone;
+        $name        = $modelTicket->name;
+
+        $diassemana = Yii::$app->params["diassemana"];
+        $meses      = Yii::$app->params["meses"];
+
+        //Rifa
+        $modelRifa   = Rifas::find()->where(["id" => $rifaId])->one();
+        $titulo_rifa = $modelRifa->name;
+        $fecha_rifa  = $diassemana[date('w',strtotime($modelRifa->date_init))]." ".date('d',strtotime($modelRifa->date_init))." de ".$meses[date('n',strtotime($modelRifa->date_init))-1]. " del ".date('Y',strtotime($modelRifa->date_init));
+        $terms_rifa  = $modelRifa->terms;
+
+        //Tickets
+        $modelTicketsFolio = Tickets::find()->where(["rifa_id"=>$rifaId,"folio"=>$folio,"type"=>"S"])->all();
+
+        $domainFront = Yii::$app->params["baseUrlFront"]."/index.php/site/boleto/";
+        $uri_ticket_payment = "";
+        foreach ($modelTicketsFolio as $ticketFolio) {
+            $uri_ticket_payment .= $domainFront.$rifaId."?number=".$ticketFolio->ticket."
+
+";
+        }//end foreach
+
+$custom_msg = "¡LISTO! Pago registrado con éxito, muchas gracias.
+
+*{$name}* 
+Encuentra todos tus bolestos PAGADOS aquí:
+
+{$uri_ticket_payment}
+*¡MUCHA SUERTE!*
+🍀🍀
+";
+    
+        $link = "https://wa.me/+52{$phone}/?text=".urlencode($custom_msg);
+        return $this->redirect($link);
+    }//end function
+
     /**
      * Finds the Tickets model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

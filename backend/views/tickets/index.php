@@ -243,11 +243,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header'         => 'Actions',
                                 'headerOptions'  => ['class'=>'text-center'],
                                 'contentOptions' => ['class'=>'text-center'],
-                                'template'       => '{update}',
+                                'template'       => '{update} {sendmsn}',
                                 'buttons'        => [
                                     /*'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },*/
+                                    'sendmsn' => function($url,$model){
+                                        if($model->status == "P"){
+                                            return Html::a('<i class="fab fa-whatsapp"></i>', $url = Url::to(['sendmsn','id' => $model->id]), ['class' => 'btn bg-teal btn-sm','title'=>'Enviar Whatsapp','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de enviar mensaje?','data-method'=>'post']);
+                                        }
+                                    },
                                     'update'=>function ($url, $model) {
                                         if($model->status == "A"){
                                             return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);

@@ -112,7 +112,7 @@ $script = <<< JS
 		        		$.ajax({
 		        			url: "{$URL_sendwp}",
 		        			type: "POST",
-		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone},
+		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone,"folio":data.folio},
 		        			beforeSend: function(data){
 		        				$("#divMsg").html('<div class="alert alert-success">Redirigiendo a Whatsapp...</div>');
 		        			},

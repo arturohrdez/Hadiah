@@ -749,7 +749,8 @@ class SiteController extends Controller
                     "status"   => true,
                     "name"     => $modelTicket->name,
                     "lastname" => $modelTicket->lastname,
-                    "phone"    => $modelTicket->phone
+                    "phone"    => $modelTicket->phone,
+                    "folio"    => $folio
                 ];
 
             } finally {
@@ -773,6 +774,7 @@ class SiteController extends Controller
         $name     = Yii::$app->request->post()["name"];
         $lastname = Yii::$app->request->post()["lastname"];
         $phone    = Yii::$app->request->post()["phone"];
+        $folio    = Yii::$app->request->post()["folio"];
 
         $diassemana = Yii::$app->params["diassemana"];
         $meses      = Yii::$app->params["meses"];
@@ -797,7 +799,9 @@ class SiteController extends Controller
 
         $custom_msg = "Hola, Aparte boletos de la rifa:
 🎉*{$titulo_rifa}*
-🗓️*FECHA SORTEO:* {$fecha_rifa} 
+🗓️*FECHA SORTEO:* {$fecha_rifa}
+------------
+⚠️FOLIO:{$folio}⚠️
 ------------
 🍀*{$num_tickets} - BOLETO(S):*
 {$tickets_play_all_str}
