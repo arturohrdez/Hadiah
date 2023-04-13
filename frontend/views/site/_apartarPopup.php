@@ -56,7 +56,7 @@ $states = [
 					'id'                     => 'ticketForm',
 					'enableClientValidation' => true,
 					'enableAjaxValidation'   => false,
-					'action' => ['/site/apartar'],
+					'action' => [''],
 				]); 
 			?>
 			<?php echo $form->field($modelTicket, 'rifa_id')->hiddenInput(['value'=>$modelRifa->id])->label(false); ?>
@@ -100,8 +100,19 @@ $script = <<< JS
 	        	//console.log(data)
 	        	$("#divBtnA").html('').hide();
 	        	if(data.status == false){
-	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
-	        		$("#divMsg").show();
+	        		if(data.valid == false){
+						let errors   = Object.entries(data.errors);
+						let msgErrors = '';
+	        			errors.forEach(([key, value]) => {
+							msgErrors += value+"<br>";
+						});
+
+	        			$("#divMsg").html('<div class="alert alert-danger">'+msgErrors+'</div>');
+		        		$("#divMsg").show();
+	        		}else if(data.valid == true){
+		        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
+		        		$("#divMsg").show();
+	        		}//end if
 	        	}else if(data.status == true){
 
 	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Tus Boletos han sido apartados con éxito. <br> Por favor no cierre esta ventana.</div>');

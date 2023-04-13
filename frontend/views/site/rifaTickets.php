@@ -37,7 +37,7 @@
 
 						<div class="row pt-4" style="border-top: 5px dashed black;">
 							<div class="col-md-4 col-12 fw-bold">BOLETO :</div>
-							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo $modelTicket->ticket; ?></div>
+							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo \yii\helpers\Html::encode($modelTicket->ticket); ?></div>
 						</div>
 						<?php 
 						if(!empty($oportunidades)){
@@ -59,19 +59,19 @@
 						?>
 						<div class="row mt-4">
 							<div class="col-md-4 col-12 fw-bold">SORTEO :</div>
-							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper($model->name); ?></div>
+							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper(\yii\helpers\Html::encode($model->name)); ?></div>
 						</div>
 						<div class="row mt-4">
 							<div class="col-md-4 col-12 fw-bold">NOMBRE :</div>
-							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper($modelTicket->name); ?></div>
+							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper(\yii\helpers\Html::encode($modelTicket->name)); ?></div>
 						</div>
 						<div class="row mt-4">
 							<div class="col-md-4 col-12 fw-bold">APELLIDO(S) :</div>
-							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper($modelTicket->lastname); ?></div>
+							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper(\yii\helpers\Html::encode($modelTicket->lastname)); ?></div>
 						</div>
 						<div class="row mt-4">
 							<div class="col-md-4 col-12 fw-bold">ESTADO :</div>
-							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper($modelTicket->state); ?></div>
+							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper(\yii\helpers\Html::encode($modelTicket->state)); ?></div>
 						</div>
 						<div class="row mt-4">
 							<div class="col-md-4 col-12 fw-bold">PAGADO :</div>
