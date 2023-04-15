@@ -73,7 +73,7 @@ echo newerton\fancybox3\FancyBox::widget([
 							</div>
 							<div class="clearix"></div>
 							<div class="col-6 text-center mt-3">
-								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','id'=>$model->id,'max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
+								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 								<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 							</div>
 						</div>
@@ -248,7 +248,7 @@ $script = <<< JS
 			$.ajax({
 				url : "{$URL_searcht}",
 				type: 'POST',
-				data: {"tn_s":tn_s,"max":{$model->ticket_end}},
+				data: {"id":{$model->id},"tn_s":tn_s,"max":{$model->ticket_end}},
 				beforeSend: function(data){
 					//$("#ticket_s_m").hide();
 					$("#ticket_e_m").hide();
