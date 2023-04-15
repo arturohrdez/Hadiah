@@ -36,12 +36,14 @@ class Rifas extends \yii\db\ActiveRecord
     {
         return [
             [['imagen'],'required','on'=>'create'],
-            [['name', 'date_init', 'status', 'ticket_init', 'ticket_end','banner'], 'required'],
+            [['name', 'date_init', 'status', 'ticket_init', 'ticket_end','banner','time_apart','state'], 'required'],
             [['description', 'terms'], 'string'],
-            [['ticket_init', 'ticket_end', 'status','banner'], 'integer'],
+            [['ticket_init', 'ticket_end', 'status','banner','time_apart'], 'integer'],
             [['date_init'], 'safe'],
             [['name'], 'string', 'max' => 255],
-            [['main_image'], 'string', 'max' => 2500],
+            [['time_apart'], 'string', 'max' => 255],
+            [['main_image'], 'string', 'max' => 5],
+            [['state'], 'string', 'max' => 20],
             [['name'], 'unique'],
 
             [['imagen'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 190,'maxWidth'=>1500,'minHeight'=>190,'maxHeight'=>1500,'maxSize'=>1024 * 1024 * 2],
@@ -61,6 +63,8 @@ class Rifas extends \yii\db\ActiveRecord
             'ticket_init' => 'Primer Boleto',
             'ticket_end' => 'Último Boleto',
             'date_init' => 'Fecha Rifa',
+            'time_apart' => 'Tiempo Apartado',
+            'state' => 'Aplica para',
             'main_image' => 'Imagen',
             'status' => 'Estatus',
             'banner'=>'¿Mostrar en el Banner?'
