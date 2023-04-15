@@ -602,6 +602,7 @@ class SiteController extends Controller
     }//end function
 
     public function actionSearchticket(){
+        $id   = Yii::$app->request->post()["id"];
         $tn_s = Yii::$app->request->post()["tn_s"];
         $max  = Yii::$app->request->post()["max"];
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -609,7 +610,7 @@ class SiteController extends Controller
             return ["status"=>false];
         }//end if
 
-        $model  = Tickets::find()->where(['ticket' => $tn_s])->one();
+        $model  = Tickets::find()->where(['rifa_id'=>$id,'ticket' => $tn_s])->one();
         if(is_null($model)){
             return ["status"=>true];
         }//end if
