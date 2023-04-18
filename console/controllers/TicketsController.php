@@ -13,6 +13,7 @@ class TicketsController extends Controller {
     public function actionIndex() {
         //Verificación de los tickets no pagados
         //Se toma la fecha de expiración 
+        date_default_timezone_set('America/Mexico_City');
         $date = date("Y-m-d H:i");
         $modelTickets = Tickets::find()->where(["<=","date_end",$date])->andWhere(["status"=>"A",'expiration'=>0])->all();
         if(!empty($modelTickets)){
