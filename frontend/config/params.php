@@ -6,7 +6,7 @@ return [
     'diassemana'   => ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado"],
     'meses'        => ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
     'social-networks' => [
-        "facebook"  => "https://www.facebook.com/",
+        "facebook"  => "https://www.facebook.com/profile.php?id=100092204281093",
         "whatsapp"  => "https://wa.me/+5212212224916"
     ],
     'ticketstorage' => "+10 minute",

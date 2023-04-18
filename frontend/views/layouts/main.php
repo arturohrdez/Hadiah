@@ -28,16 +28,16 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center">
-        <!-- <h1 class="logo me-auto"><a href="/">HADIAH</a></h1> -->
+        <h1 class="logo me-auto"><a href="/" class="text-danger">🍀 RIFAS PABMAN 🍀</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        <a href="/" class="logo me-auto">
-            <?php echo Html::img('@web/images/logo.svg',['alt'=>'Hadiah','class'=>'img-fluid',]); ?>
-            <!-- <img src="assets/img/logo.png" alt="" class="img-fluid"> -->
-        </a>
+        <!-- <a href="/" class="logo me-auto">
+             <?php //echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'',]); ?>
+        </a> -->
 
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a href="/" class="active fs-6">Inicio</a></li>
+                <li><a href="/#quienessomos" class="fs-6">Quienes Somos</a></li>
                 <li><a href="/#faq" class="fs-6">Preguntas Frecuentes</a></li>
                 <li><a href="/#about" class="fs-6">Nosotros</a></li>
                 <li><a href="/#contactus" class="fs-6">Contacto</a></li>
@@ -54,7 +54,7 @@ AppAsset::register($this);
 <footer id="footer">
     <div class="container">
         <div class="copyright">
-            &copy; Copyright <strong><span>AHR</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span>RIFAS PABMAN</span></strong>. All Rights Reserved
         </div>
         <div class="credits">
             <!-- All the links in the footer should remain intact. -->

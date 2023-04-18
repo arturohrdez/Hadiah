@@ -4,7 +4,7 @@
 use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
-$this->title = 'Rifas';
+$this->title = 'RIFAS PABMAN';
 ?>
 
 <!-- ======= Hero Section ======= -->
@@ -60,6 +60,30 @@ if(!empty($rifasBanner)){
 <!-- End Hero -->
 
 
+<!-- ======= About Section ======= -->
+<section id="quienessomos" class="about">
+    <div class="container">
+        <div class="row col-lg-12 pb-5">
+            <h2 class="text-center text-danger fs-1">
+                QUIENES SOMOS
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-12 fs-3 text-justify">
+                Bienvenido(a) al sitio web oficial de <span class="text-danger">🍀RIFAS PABMAN🍀</span>, somos una asociación entre amigos con sede en Puebla, México; somos tu oportunidad de ganar muchos premios con una pequeña inversión.
+                
+                <div class="text-center">
+                    <?php echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+    </div>
+</section>
+<!-- End About Section -->
+
 <section id="faq" class="faq">
     <div class="container">
         <div class="section-title">
@@ -109,9 +133,9 @@ if(!empty($rifasBanner)){
         <div class="row">
             <p class="fs-4 text-center">Encuentra transmisión en vivo de los sorteos en nuestra página de Facebook en las fechas indicadas a las 20:00 hrs CDMX. ¡No te lo pierdas!</p>
         </div>
-        <div class="row">
-            <hr>
-        </div>
+    </div>
+    <div class="row mt-3">
+        <hr>
     </div>
 </section>
 <?php 
@@ -164,6 +188,9 @@ if(!empty($rifasActivas)){
             ?>
         </div>
     </div>
+    <div class="row mt-5">
+        <hr>
+    </div>
 </section>
 <?php 
 }//end if
@@ -186,9 +213,9 @@ if(!empty($rifasActivas)){
             </p>
         </div>
         <br>
-        <div class="row">
-            <hr>
-        </div>
+    </div>
+    <div class="row">
+        <hr>
     </div>
 </section>
 <!-- End About Section -->
