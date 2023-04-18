@@ -5,9 +5,9 @@ use yii\helpers\Url;
 foreach ($tickets_list as $ticket_l) {
 	foreach ($ticket_l as $tickets) {
 		if(in_array($tickets, $tickets_ac)){
-			echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn bg-black btn-secondary text-black mb-3']).'</div>';
+			echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'sel ']).'</div>';
 		}else{
-			echo '<div class="col-lg-1 col-sm-2 col-4">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'btn_ticket btn btn-outline-light mb-3 fw-bold','data-tn'=>$tickets]).'</div>';
+			echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'free  btn_ticket','data-tn'=>$tickets]).'</div>';
 		}//end if
 	}//end foreach
 }//end foreach

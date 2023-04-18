@@ -56,18 +56,18 @@ class Rifas extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Titulo',
+            'id'          => 'ID',
+            'name'        => 'Titulo',
             'description' => 'Descripción',
-            'terms' => 'Terminos y Condiciones',
+            'terms'       => 'Terminos y Condiciones',
             'ticket_init' => 'Primer Boleto',
-            'ticket_end' => 'Último Boleto',
-            'date_init' => 'Fecha Rifa',
-            'time_apart' => 'Tiempo Apartado',
-            'state' => 'Aplica para',
-            'main_image' => 'Imagen',
-            'status' => 'Estatus',
-            'banner'=>'¿Mostrar en el Banner?'
+            'ticket_end'  => 'Último Boleto',
+            'date_init'   => 'Fecha Rifa',
+            'time_apart'  => 'Tiempo Apartado',
+            'state'       => 'Estado donde aplica',
+            'main_image'  => 'Imagen',
+            'status'      => 'Estatus',
+            'banner'      =>'¿Mostrar en el Banner?'
         ];
     }
 

@@ -376,8 +376,9 @@ class TicketsController extends Controller
     }//end function
 
     public function actionPagar(){
-        $modelTicket = new TicketForm();
+        date_default_timezone_set('America/Mexico_City');
 
+        $modelTicket = new TicketForm();
         if ($modelTicket->load(Yii::$app->request->post())) {
             $mutex = \Yii::$app->mutex;
             // Adquirir el bloqueo

@@ -113,7 +113,7 @@ echo newerton\fancybox3\FancyBox::widget([
 
 					<div id="list_tickets" class="row bg-success pt-5 overflow-scroll" style="max-height: 300px;">
 						<div id="loading_tickets_list" class="col-12 text-center mb-5" style="display: none;">
-							<strong class="fs-3 text-light">Generando Boletos ...</strong><br>
+							<strong class="fs-3 text-light">Generando boletos, por favor espere ...</strong><br>
 							<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>
 						</div>
 					</div>
@@ -216,6 +216,8 @@ $script = <<< JS
 			success: function (data) {
 				$("#list_tickets").html(data);
 				$("#loading_tickets_list").hide();
+				$(".sel").addClass("btn bg-black text-black mb-3");
+				$(".free").addClass("btn btn-outline-light mb-3 fw-bold");
 			}//sucess
 		});
 	}//

@@ -34,7 +34,7 @@ use kartik\date\DatePicker;
             ]
         ])
     ?>
-    <?= $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput()->label('Tiempo Apartado (Hrs.)'); ?>
+    <?= $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput()->label('Duración de apartado del boleto (Hrs.)'); ?>
 
     <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])?>   
     <?= $form->field($model, 'state',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList(Yii::$app->params['states'], ['prompt' => 'Seleccione una opción'])?>   

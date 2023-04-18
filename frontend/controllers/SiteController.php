@@ -21,6 +21,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
 //use \aracoool\uuid\Uuid;
+use yii\db\Transaction;
 
 
 /**
@@ -638,9 +639,20 @@ class SiteController extends Controller
     }//end function
 
     public function actionApartar(){
+        date_default_timezone_set('America/Mexico_City');
+        
         //$dump_tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $modelTicket = new TicketForm();
         if ($modelTicket->load(Yii::$app->request->post())) {
+            if(!empty(Yii::$app->request->post()["token"])){
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return [
+                    "status" => false,
+                    "valid"  => false,
+                    "errors" => ["Lo sentimos, falló al procesar su solicitud por favor intente más tarde."]
+                ];
+            }//end if
+
             if($modelTicket->validate()){
                 $mutex = \Yii::$app->mutex;
                 // Adquirir el bloqueo
@@ -698,7 +710,9 @@ class SiteController extends Controller
                     }//end if
 
 
-                    $resFolio = Tickets::find()->where(["rifa_id"=>$rifaId])->orderBy(["id"=>SORT_DESC])->one();
+                    $resFolio   = Tickets::find()->where(["rifa_id"=>$rifaId])->orderBy(["id"=>SORT_DESC])->one();
+                    $time_apart = Yii::$app->request->post()["time_apart"];
+
                     if(is_null($resFolio)){
                         $folio = self::addcero(5,1);
                     }else{
@@ -708,50 +722,58 @@ class SiteController extends Controller
 
                     //No existes tickets registrados con anterioridad
                     //Guarda información
-                    foreach ($tickets_play_all as $key__ => $tickets__) {
-                        $model             = new Tickets();
-                        $model->rifa_id    = $modelTicket->rifa_id;
-                        $model->ticket     = (string) $key__;
-                        $model->folio      = $folio;
-                        $model->date       = date("Y-m-d H:i");
-                        $model->date_end   = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
-                        $model->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
-                        $model->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
-                        $model->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
-                        $model->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
-                        $model->type       = "S";
-                        $model->type_sale  = "online";
-                        $model->status     = "A";
-                        $model->parent_id  = null;
-                        $model->expiration = "0";
-                        $model->save(false);
-                        //Vacía storage
-                        //self::removeTicketStorage($rifaId,$key__);
+                    $connection  = \Yii::$app->db;
+                    $transaction = $connection->beginTransaction();
+                    try {
+                        foreach ($tickets_play_all as $key__ => $tickets__) {
+                            $model             = new Tickets();
+                            $model->rifa_id    = $modelTicket->rifa_id;
+                            $model->ticket     = (string) $key__;
+                            $model->folio      = $folio;
+                            $model->date       = date("Y-m-d H:i");
+                            $model->date_end   = date("Y-m-d H:i",strtotime ( '+'.$time_apart.' hour',strtotime (date("Y-m-d H:i"))));
+                            $model->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
+                            $model->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
+                            $model->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
+                            $model->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
+                            $model->type       = "S";
+                            $model->type_sale  = "online";
+                            $model->status     = "A";
+                            $model->parent_id  = null;
+                            $model->expiration = "0";
+                            $model->save(false);
+                            //Vacía storage
+                            //self::removeTicketStorage($rifaId,$key__);
 
-                        if(is_array($tickets__)){
-                            foreach ($tickets__ as $ticket_) {
-                                $modelTR             = new Tickets();
-                                $modelTR->rifa_id    = $modelTicket->rifa_id;
-                                $modelTR->ticket     = (string) $ticket_;
-                                $modelTR->folio      = $folio;
-                                $modelTR->date       = date("Y-m-d H:i");
-                                $modelTR->date_end   = date("Y-m-d H:i",strtotime ( '+24 hour',strtotime (date("Y-m-d H:i"))));
-                                $modelTR->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
-                                $modelTR->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
-                                $modelTR->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
-                                $modelTR->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
-                                $modelTR->type       = "R";
-                                $modelTR->type_sale  = "online";
-                                $modelTR->status     = "A";
-                                $modelTR->parent_id  = $model->id;
-                                $modelTR->expiration = "0";
-                                $modelTR->save(false);
+                            if(is_array($tickets__)){
+                                foreach ($tickets__ as $ticket_) {
+                                    $modelTR             = new Tickets();
+                                    $modelTR->rifa_id    = $modelTicket->rifa_id;
+                                    $modelTR->ticket     = (string) $ticket_;
+                                    $modelTR->folio      = $folio;
+                                    $modelTR->date       = date("Y-m-d H:i");
+                                    $modelTR->date_end   = date("Y-m-d H:i",strtotime ( '+'.$time_apart.' hour',strtotime (date("Y-m-d H:i"))));
+                                    $modelTR->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
+                                    $modelTR->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
+                                    $modelTR->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
+                                    $modelTR->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
+                                    $modelTR->type       = "R";
+                                    $modelTR->type_sale  = "online";
+                                    $modelTR->status     = "A";
+                                    $modelTR->parent_id  = $model->id;
+                                    $modelTR->expiration = "0";
+                                    $modelTR->save(false);
 
-                                //Vacía storage
-                                //self::removeTicketStorage($rifaId,$ticket_);
-                            }//end foreach
-                        }//end if
-                    }//end foreach
+                                    //Vacía storage
+                                    //self::removeTicketStorage($rifaId,$ticket_);
+                                }//end foreach
+                            }//end if
+                        }//end foreach
+
+                        $transaction->commit();
+                    }catch(Exception $e){
+                        $transaction->rollBack();
+                    }//end try
 
                     // Liberar el bloqueo
                     //$this->mutex->release('lock_apartar');

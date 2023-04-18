@@ -39,6 +39,11 @@ $states = [
 	'Yucatán'             => 'Yucatán',
 	'Zacatecas'           => 'Zacatecas'
 ];
+
+$state_ = $modelRifa->state;
+if($state_ != "all"){
+	$states = [$states[$state_] => $states[$state_]];
+}
 ?>
 <div id="modal" class="col-lg-4 col-md-9 col-sm-9">
 	<div class="container">
@@ -68,9 +73,11 @@ $states = [
 				¡Al finalizar serás redirigido a whatsapp para enviar la información de tu boleto!
 			</div>
 			<div class="col-12 text-center text-danger fw-bold mt-3">
-				Tu boleto sólo dura 24 horas apartado
+				Tu boleto sólo dura <?php echo $modelRifa->time_apart;?> horas apartado
 			</div>
 			<div id="divBtnA" class="form-group text-center mt-3">
+				<?php echo Html::hiddenInput('time_apart', $value = $modelRifa->time_apart, ['class' => '']); ?>
+				<?php echo Html::hiddenInput('token', $value      = null, ['class' => '']); ?>
 				<?php echo  Html::submitButton('<i class="bi bi-check-circle-fill"></i>  APARTAR ', ['id'=>'btnAparta','class' => 'btn pl-5 pr-5 btn-success']) ?>
 			</div>
 

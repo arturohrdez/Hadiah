@@ -39,6 +39,11 @@ $states = [
 	'Yucatán'             => 'Yucatán',
 	'Zacatecas'           => 'Zacatecas'
 ];
+
+$state_ = $modelRifa->state;
+if($state_ != "all"){
+	$states = [$states[$state_] => $states[$state_]];
+}
 ?>
 <div id="modal" class="col-lg-4 col-md-9 col-sm-9">
 	<div class="container">
