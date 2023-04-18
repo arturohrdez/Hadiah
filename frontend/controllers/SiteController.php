@@ -279,12 +279,22 @@ class SiteController extends Controller
         return str_pad($number, $digitos, "0", STR_PAD_LEFT);
     }//end function
 
-    public static function createTickets($init,$end){
-        $digitos = strlen($end);
-        $tickets = [];
-        for ($i=$init; $i <= $end ; $i++) { 
-            $tickets[$i] = self::addcero($digitos,$i);
-        }//end foreach
+    public static function createTickets($init,$end,$rifaId){
+        //Obtener el componente de caché
+        $cache    = Yii::$app->cache;
+        $cacheKey = 'loadTickets_'.$end;
+        $tickets  = $cache->get($cacheKey);
+
+        if($tickets === false){
+            $digitos = strlen($end);
+            $tickets = [];
+            for ($i=$init; $i <= $end ; $i++) { 
+                $tickets[$i] = self::addcero($digitos,$i);
+            }//end foreach
+
+            $cache->set($cacheKey,$tickets);
+        }//end if
+
 
         $tickets_div = array_chunk($tickets,6500);
         //$tickets_div = array_chunk($tickets,5);
@@ -402,7 +412,7 @@ class SiteController extends Controller
         $init  = $model->ticket_init;
         $end   = $model->ticket_end;
         //Tickets List
-        $tickets_list = self::createTickets($init,$end);
+        $tickets_list = self::createTickets($init,$end,$model->id);
         //Tickets apartados y vendidos
         $tickets_ac   = self::dumpTicketAC($model->tickets);
 
@@ -424,7 +434,7 @@ class SiteController extends Controller
         $tn           = $post["tn"];
 
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
-        self     ::createTickets($model->ticket_init,$model->ticket_end);
+        self     ::createTickets($model->ticket_init,$model->ticket_end,$model->id);
         $tickets = Yii::$app->session->get('tickets');
         //$uuid    = Yii::$app->session->get('uuid');
 
