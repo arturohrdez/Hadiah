@@ -5,6 +5,12 @@ use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
 $this->title = 'RIFAS PABMAN';
+
+$this->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
+$this->registerMetaTag(['property' => 'og:type', 'content' => '']);
+$this->registerMetaTag(['property' => 'og:image', 'content' => Url::to('/frontend/web/images/pabmanlogo.png', true)]);
+$this->registerMetaTag(['property' => 'og:url', 'content' => Url::to('/',true)]);
+$this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabMan - Apuesta poco y ganas mucho.']);
 ?>
 
 <!-- ======= Hero Section ======= -->
@@ -24,7 +30,7 @@ if(!empty($rifasBanner)){
                 $rifa_image       = $rifa->main_image;
                 $rifa_date        = $rifa->date_init;
             ?>
-            <div class="carousel-item <?php echo ($i == 0) ? "active" : ""; ?>" style="background-image: url('<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>')">
+            <div class="carousel-item <?php echo ($i == 0) ? "active" : ""; ?>" style="background-image: url('<?php echo Url::base()."/backend/web/".$rifa_image; ?>')">
                 <div class="carousel-container">
                     <div class="container">
                         <h2 class="animate__animated animate__fadeInDown">
@@ -34,7 +40,7 @@ if(!empty($rifasBanner)){
                             <?php
                                 $diassemana = Yii::$app->params["diassemana"];
                                 $meses      = Yii::$app->params["meses"];
-                                echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " del ".date('Y',strtotime($rifa_date)) ; 
+                                echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " de ".date('Y',strtotime($rifa_date)) ; 
                             ?>
                         </p>
                         <a href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>" class="btn-get-started animate__animated animate__fadeInUp">Comprar Boletos</a>
@@ -70,7 +76,7 @@ if(!empty($rifasBanner)){
         </div>
         <div class="row">
             <div class="col-12 fs-3 text-justify">
-                Bienvenido(a) al sitio web oficial de <span class="text-danger">🍀RIFAS PABMAN🍀</span>, somos una asociación entre amigos con sede en Puebla, México; somos tu oportunidad de ganar muchos premios con una pequeña inversión.
+                Bienvenido(a) a la web oficial de <span class="text-danger fw-bold">🍀RIFAS PABMAN🍀</span>, somos una asociación de amigos con sede en la ciudad de Puebla, México; con nosotros tienes la oportunidad de ganar muchos premios. <span class="text-danger fw-bold">¡APUESTA POCO Y GANA MUCHO!</span>
                 
                 <div class="text-center">
                     <?php echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?>
@@ -125,7 +131,7 @@ if(!empty($rifasBanner)){
             </div>
             <div class="col-lg-7">
                 <div class="text-justify fs-6">
-                    En nuestra página oficial de Facebook {!page} puedes encontrar todos y cada uno de nuestros sorteos anteriores, así como las transmisiones en vivo con Lotería Nacional y las entregas de premios a los ganadores!
+                    En nuestra página oficial de <a href="<?php echo Yii::$app->params["social-networks"]["facebook"] ?>" target="_blank">Facebook</a> puedes encontrar todos y cada uno de nuestros sorteos anteriores, así como las transmisiones en vivo con Lotería Nacional y las entregas de premios a los ganadores!
                     Se elige un nuevo ganador realizando la misma dinámica en otra fecha cercana (se anunciará la nueva fecha).
                 </div>
             </div>
@@ -160,7 +166,7 @@ if(!empty($rifasActivas)){
             <div class="col-lg-6 mt-4">
                 <div class="member d-flex align-items-start">
                     <div class="pic">
-                        <img src="<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>" class="img-fluid" alt="">
+                        <img src="<?php echo Url::base()."/backend/web/".$rifa_image; ?>" class="img-fluid" alt="">
                     </div>
                     <div class="member-info">
                         <h4><?php echo $rifa_title;?></h4>
@@ -168,7 +174,7 @@ if(!empty($rifasActivas)){
                             <?php
                                 $diassemana = Yii::$app->params["diassemana"];
                                 $meses      = Yii::$app->params["meses"];
-                                echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " del ".date('Y',strtotime($rifa_date)) ; 
+                                echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " de ".date('Y',strtotime($rifa_date)) ; 
                             ?>
                         </span>
                         <p>
@@ -209,7 +215,7 @@ if(!empty($rifasActivas)){
                 SORTEOS ENTRE AMIGOS EN BASE A LOTERIA NACIONAL
             </p>
             <p class="text-center fs-5">
-                ARRIESGA POCO Y GANA MUCHO!
+                ¡APUESTA POCO Y GANA MUCHO!
             </p>
         </div>
         <br>

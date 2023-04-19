@@ -22,6 +22,13 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:description" content="" />
+
     <link rel="shortcut icon" href="<?php echo Yii::$app->request->baseUrl ?>favicon.ico" type="image/x-icon">
 </head>
 <body>

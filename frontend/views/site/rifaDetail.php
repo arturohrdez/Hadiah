@@ -39,12 +39,12 @@ echo newerton\fancybox3\FancyBox::widget([
 							<?php 
 								$diassemana = Yii::$app->params["diassemana"];
 								$meses      = Yii::$app->params["meses"];
-								echo $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " del ".date('Y',strtotime($model->date_init)) ; 
+								echo $diassemana[date('w',strtotime($model->date_init))]." ".date('d',strtotime($model->date_init))." de ".$meses[date('n',strtotime($model->date_init))-1]. " de ".date('Y',strtotime($model->date_init)) ; 
 							?>
 						</div>
 					</div>
 					<div class="row entry-img text-center mt-3">
-						<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
+						<img src="<?php echo Url::base()."/backend/web/".$model->main_image; ?>" alt="" class="img-fluid">
 					</div>
 					<div class="row text-primary mt-5" style="border: 3px; border-style: dashed double;">
 						<div class="text-center fw-bold fs-4 pt-3">

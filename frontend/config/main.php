@@ -54,5 +54,8 @@ return [
             ],
         ],
     ],
+    'aliases' => [
+        '@frontendUrl' => '/',
+    ],
     'params' => $params,
 ];
