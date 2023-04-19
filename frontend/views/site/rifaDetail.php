@@ -5,6 +5,11 @@ use yii\bootstrap4\ActiveForm;
 
 
 $this->title = $model->name;
+$this->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
+$this->registerMetaTag(['property' => 'og:type', 'content' => '']);
+$this->registerMetaTag(['property' => 'og:image', 'content' => Url::to('/backend/web/'.$model->main_image, true)]);
+$this->registerMetaTag(['property' => 'og:url', 'content' => Url::to('/',true)]);
+$this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabMan - Apuesta poco y ganas mucho.']);
 
 echo newerton\fancybox3\FancyBox::widget([
     'target' => '.data-fancybox-modal',
