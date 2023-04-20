@@ -108,17 +108,18 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'class' => 'hail812\adminlte3\yii\grid\ActionColumn',
                                 'header'        => 'Actions',
                                 'headerOptions' => ['style'=>'text-align:center'],
-                                'template'      => '{view} {update} {delete}',
+                                'contentOptions' => ['class'=>'text-center'],
+                                'template'      => '{view} {update}',
                                 'buttons'       => [
                                     'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },
                                     'update'=>function ($url, $model) {
                                         return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
-                                    },
+                                    }/*
                                     'delete'=>function ($url, $model) {
                                         return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
-                                    },
+                                    },*/
                                 ]
 
                             ],

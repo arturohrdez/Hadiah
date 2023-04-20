@@ -18,12 +18,34 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
-                'title' => 'Boletos',
+                'title' => 'Boletos Activos',
                 'text'  => 'Listado de boletos apartados y vendidos',
                 'icon'  => 'fas fa-ticket-alt',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/tickets/index'])
+            ]) ?>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Boletos Vencidos',
+                'text'  => 'Listado de boletos expirados',
+                'icon'  => 'far fa-calendar-times',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/tickets/index'])
+            ]) ?>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Despreciados',
+                'text'  => 'Listado de boletos despreciados',
+                'icon'  => 'fa fa-ban',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/ticketstorage/index'])
             ]) ?>
         </div>
 
