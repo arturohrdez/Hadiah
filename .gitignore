@@ -51,3 +51,4 @@ ConfigRepo.txt
 /common/config/codeception-local.php
 /common/config/main-local.php
 composer.lock
+sftp-config.json
