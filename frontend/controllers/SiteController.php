@@ -92,6 +92,11 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionPagos()
+    {   
+        return $this->render('metodospagos');
+    }
+
     /**
      * Logs in a user.
      *
@@ -854,9 +859,10 @@ class SiteController extends Controller
 ↘️⬇️↙️
 {$terms_rifa}
 ------------
+*CUENTAS DE PAGO AQUÍ:* https://rifaspabman.com.mx/site/pagos
 El siguiente paso es enviar foto del comprobante de pago por aquí.
-DA CLICK EN ENVIAR➡️
 *¡MUCHA SUERTE!*
+DA CLICK EN ENVIAR➡️
 ";
 
         $link = Yii::$app->params["social-networks"]["whatsapp"]."/?text=".urlencode($custom_msg);
