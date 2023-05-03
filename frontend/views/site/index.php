@@ -8,7 +8,7 @@ $this->title = 'RIFAS PABMAN';
 
 $this->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
 $this->registerMetaTag(['property' => 'og:type', 'content' => '']);
-$this->registerMetaTag(['property' => 'og:image', 'content' => Url::to('/frontend/web/images/pabmanlogo.png', true)]);
+$this->registerMetaTag(['property' => 'og:image', 'content' => Url::to('/frontend/web/images/pabmanlogo.jpeg', true)]);
 $this->registerMetaTag(['property' => 'og:url', 'content' => Url::to('/',true)]);
 $this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabMan - Apuesta poco y ganas mucho.']);
 ?>
@@ -79,7 +79,8 @@ if(!empty($rifasBanner)){
                 Bienvenido(a) a la web oficial de <span class="text-danger fw-bold">🍀RIFAS PABMAN🍀</span>, somos una asociación de amigos con sede en la ciudad de Puebla, México; con nosotros tienes la oportunidad de ganar muchos premios. <span class="text-danger fw-bold">¡APUESTA POCO Y GANA MUCHO!</span>
                 
                 <div class="text-center">
-                    <?php echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?>
+                    <?php echo Html::img('@web/images/pabmanlogo.jpeg',['alt'=>'Banner PABMAN','class'=>'img-fluid col-6 mt-3',]); ?>
+                    <!-- <?php// echo Html::img('@web/images/bannerpabman.jpeg',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?> -->
                 </div>
             </div>
         </div>

@@ -5,9 +5,10 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Ticketstorage;
 use backend\models\TicketstorageSearch;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * TicketstorageController implements the CRUD actions for Ticketstorage model.
@@ -20,6 +21,16 @@ class TicketstorageController extends Controller
     public function behaviors()
     {
         return [
+            'access'=>[
+                'class'=> AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'allow' =>true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
