@@ -237,7 +237,7 @@ if(!empty($rifasActivas)){
         </div>
         <div class="row col-lg-12 pt-4 pt-lg-0">
             <p class="text-center fs-4">
-                <?= Html::a("WHATSAPP: (221) 222 4619", $url = Yii::$app->params["social-networks"]["whatsapp"], ['target' => '_blank']); ?>
+                <?= Html::a("WHATSAPP: (222) 270 7260", $url = Yii::$app->params["social-networks"]["whatsapp"], ['target' => '_blank']); ?>
             </p>
         </div>
         <div class="row col-lg-12 pt-3">

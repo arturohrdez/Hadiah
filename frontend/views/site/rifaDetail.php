@@ -212,13 +212,15 @@ $script = <<< JS
 		$.ajax({
 			url : "$URL_tickets",
 			type: "POST",
-			dataType: "HTML",
+			dataType: "html",
 			data: {"id":$model->id},
 			beforeSend: function(){
 				$("#loading_tickets_list").show();
 				//console.log("beforeSend");
 			},
 			success: function (data) {
+				console.log(data);
+				return false;
 				$("#list_tickets").html(data);
 				$("#loading_tickets_list").hide();
 				/*$(".sel").addClass("btn bg-black text-black mb-3");

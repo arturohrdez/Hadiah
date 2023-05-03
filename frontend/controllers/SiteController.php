@@ -288,24 +288,24 @@ class SiteController extends Controller
     public static function createTickets($init,$end,$rifaId){
         //Obtener el componente de caché
         $cache    = Yii::$app->cache;
-        $cacheKey = 'loadTickets_'.$end;
+        $cacheKey = 'tickets_'.$end;
         $tickets  = $cache->get($cacheKey);
 
         if($tickets === false){
             $digitos = strlen($end);
             $tickets = [];
-            for ($i=$init; $i <= $end ; $i++) { 
-                $tk          = self::addcero($digitos,$i);
-                $tickets[$tk] = $tk;
+            for ($i=$init; $i <= $end ; $i++) {
+                $ticket_          = self::addcero($digitos,$i);
+                $tickets[$ticket_] = $ticket_;
             }//end foreach
 
             $cache->set($cacheKey,$tickets);
         }//end if
 
-        $tickets_div = array_chunk($tickets,5000);
+        $tickets_div = array_chunk($tickets,5000,true);
         //$tickets_div = array_chunk($tickets,5);
-        
-        Yii::$app->session->set('tickets', $tickets);
+
+        //Yii::$app->session->set('tickets', $tickets_div);
         return $tickets_div;
     }//end function
 
@@ -423,11 +423,24 @@ class SiteController extends Controller
         //Tickets apartados y vendidos
         $tickets_ac   = self::dumpTicketAC($model->tickets);
 
-        //Clean Ticket List
-        /*foreach ($tickets_ac as $ticket_ac) {
-            unset($tickets_list[$ticket_ac]);
-        }//end foreach*/
-        //Yii::$app->session->set('tickets', $tickets_list);
+       /* echo "<pre>";
+        var_dump($tickets_list);
+        echo "</pre>";
+        die();*/
+        //$all_tickets_clean = [];
+        $i = 0;
+        foreach ($tickets_list as $list) {
+            $all_tickets_clean[$i] = array_diff($list, $tickets_ac);
+            $i++;
+        }//end foreach
+
+
+        print_r($all_tickets_clean);
+        /*echo "<pre>";
+        var_dump($tickets_ac);
+        echo "</pre>";*/
+        die();
+
 
         return $this->renderAjax('_loadTickets',[
             'model'        => $model,
