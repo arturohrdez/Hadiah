@@ -579,7 +579,7 @@ class TicketsController extends Controller
         $tickets_play_all_str = "";
         $h                    = 0;
 
-        $domainFront = Yii::$app->params["baseUrlFront"]."/index.php/site/boleto/";
+        $domainFront = "https://rifaspabman.com.mx/site/boleto/";
         $uri_ticket_payment = "";
         foreach ($tickets_play_all as $key__ => $tickets__) {
             $uri_ticket_payment .= $domainFront.$model->id."?number=".$key__."
@@ -623,7 +623,7 @@ Encuentra todos tus bolestos PAGADOS aquí:
         //Tickets
         $modelTicketsFolio = Tickets::find()->where(["rifa_id"=>$rifaId,"folio"=>$folio,"type"=>"S"])->all();
 
-        $domainFront = Yii::$app->params["baseUrlFront"]."/index.php/site/boleto/";
+        $domainFront = "https://rifaspabman.com.mx/site/boleto/";
         $uri_ticket_payment = "";
         foreach ($modelTicketsFolio as $ticketFolio) {
             $uri_ticket_payment .= $domainFront.$rifaId."?number=".$ticketFolio->ticket."

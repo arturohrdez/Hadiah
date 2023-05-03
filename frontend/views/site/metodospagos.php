@@ -48,6 +48,24 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabM
         					</tr>
         				</tbody>
         			</table>
+                    <table class="table mt-5">
+                        <thead>
+                            <tr>
+                                <th scope="col">BANCO</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">NÚMERO DE CUENTA</th>
+                                <th scope="col">CLABE INTERBANCARIA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fw-bold">
+                                <td>BBVA</td>
+                                <td>JESUS ENRIQUE ROMERO VÁZQUEZ</td>
+                                <td>0483767329</td>
+                                <td>012650004837673293</td>
+                            </tr>
+                        </tbody>
+                    </table>
         		</div>
         	</div>
         	<div class="col-12 fs-3 text-center">

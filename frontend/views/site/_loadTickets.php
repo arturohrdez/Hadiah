@@ -4,13 +4,25 @@ use yii\helpers\Url;
 
 foreach ($tickets_list as $ticket_l) {
 	foreach ($ticket_l as $tickets) {
-		if(in_array($tickets, $tickets_ac)){
-			echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'sel ']).'</div>';
+		if(!in_array($tickets, $tickets_ac)){
+			echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::a($tickets, $url = null, ['id'=>'tn_'.$tickets, 'class' => 'free  btn_ticket text-white','data-tn'=>$tickets]).'</div>';
 		}else{
-			echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'free  btn_ticket','data-tn'=>$tickets]).'</div>';
+			continue;
+			//echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::button($tickets, ['id'=>'tn_'.$tickets, 'class' => 'sel ']).'</div>';
 		}//end if
+		//echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::a($tickets, $url = null, ['id'=>'tn_'.$tickets, 'class' => 'free  btn_ticket text-white','data-tn'=>$tickets]).'</div>';
 	}//end foreach
 }//end foreach
+
+/*foreach ($tickets_list as $ticket_l) {
+	if(in_array($ticket_l, $tickets_ac)){
+		continue;
+	}else{
+		echo '<div class="col-lg-1 col-sm-2 col-3">'.Html::a($ticket_l, $url = null, ['id'=>'tn_'.$ticket_l, 'class' => 'free  btn_ticket text-white','data-tn'=>$ticket_l]).'</div>';
+	}
+}//end foreach*/
+
+
 
 $URL_promos  = Url::to(['site/promos']);
 $URL_storage = Url::to(['site/validstorageticket']);

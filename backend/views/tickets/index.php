@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="card-body pad table-responsive">
 
 
-                    <?php Pjax::begin(['id' => 'my-pjax-tickets']); ?>
+                    <?php //Pjax::begin(['id' => 'my-pjax-tickets']); ?>
                     <?php echo  GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -280,7 +280,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
 
-                    <?php Pjax::end(); ?>
+                    <?php //Pjax::end(); ?>
 
                 </div>
                 <!--.card-body-->

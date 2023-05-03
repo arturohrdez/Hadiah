@@ -221,8 +221,8 @@ $script = <<< JS
 			success: function (data) {
 				$("#list_tickets").html(data);
 				$("#loading_tickets_list").hide();
-				$(".sel").addClass("btn bg-black text-black mb-3");
-				$(".free").addClass("btn btn-outline-light mb-3 fw-bold");
+				/*$(".sel").addClass("btn bg-black text-black mb-3");
+				$(".free").addClass("btn btn-outline-light mb-3 fw-bold");*/
 			}//sucess
 		});
 	}//
