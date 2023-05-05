@@ -116,7 +116,15 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div id="list_tickets" class="row bg-success pt-5 overflow-scroll" style="max-height: 300px;">
+					<div id="paginatorH" class="row bg-success pt-5 pb-3">
+						<div class="col text-right">
+							<button class="btn btn-warning">Atrás</button>
+						</div>
+						<div class="col text-left">
+							<button class="btn btn-warning">Siguiente</button>
+						</div>
+					</div>
+					<div id="list_tickets" class="row bg-success pt-3 overflow-auto" style="max-height: 300px;">
 						<div id="loading_tickets_list" class="col-12 text-center mb-5" style="display: none;">
 							<strong class="fs-3 text-light">Generando boletos, por favor espere ...</strong><br>
 							<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>
@@ -132,6 +140,7 @@ echo newerton\fancybox3\FancyBox::widget([
 $digitos     = strlen($model->ticket_end);
 $URL_remove  = Url::to(['site/ticketremove']);
 $URL_tickets = Url::to(['site/loadtickets']);
+$URL_showtickets = Url::to(['site/showtickets','page'=>0]);
 $URL_searcht = Url::to(['site/searchticket']);
 ?>
 <script type="text/javascript">
@@ -219,10 +228,24 @@ $script = <<< JS
 				//console.log("beforeSend");
 			},
 			success: function (data) {
-				console.log(data);
-				return false;
-				$("#list_tickets").html(data);
-				$("#loading_tickets_list").hide();
+				/*console.log(data);
+				return false;*/
+				/*console.log(data);
+				return false;*/
+				$.ajax({
+					url : "$URL_showtickets",
+					type: "GET",
+					dataType: "html",
+					beforeSend: function(){
+						//console.log("llamando tickets");
+					},
+					success: function (data) {
+						$("#list_tickets").html(data);
+						return false;
+					}
+				});
+				/*$("#list_tickets").html("complete");
+				$("#loading_tickets_list").hide();*/
 				/*$(".sel").addClass("btn bg-black text-black mb-3");
 				$(".free").addClass("btn btn-outline-light mb-3 fw-bold");*/
 			}//sucess

@@ -397,15 +397,6 @@ class SiteController extends Controller
             ]);
         }//end if
 
-
-        //$promos_ = !empty($model->promos) ? 1 : 0;
-        $init    = $model->ticket_init;
-        $end     = $model->ticket_end;
-        //$tickets_list = self::createTickets($init,$end);
-
-        //Tickets apartados y vendidos
-        //$tickets_ac = self::dumpTicketAC($model->tickets);
-
         return $this->render('rifaDetail', [
             'model'        => $model,
             //'tickets_list' => $tickets_list,
@@ -421,33 +412,54 @@ class SiteController extends Controller
         $tickets_list = self::createTickets($init,$end,$model->id);
 
         //Tickets apartados y vendidos
-        $tickets_ac   = self::dumpTicketAC($model->tickets);
-
-       /* echo "<pre>";
-        var_dump($tickets_list);
-        echo "</pre>";
-        die();*/
-        //$all_tickets_clean = [];
-        $i = 0;
+        $tickets_ac        = self::dumpTicketAC($model->tickets);
+        $all_tickets_clean = [];
+        $i                 = 0;
         foreach ($tickets_list as $list) {
             $all_tickets_clean[$i] = array_diff($list, $tickets_ac);
             $i++;
         }//end foreach
 
+        \Yii::$app->session->set('tickets', $all_tickets_clean);
+        /*\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ["status"=>true,"tickets_list"=>$all_tickets_clean];*/
 
-        print_r($all_tickets_clean);
-        /*echo "<pre>";
-        var_dump($tickets_ac);
-        echo "</pre>";*/
-        die();
+        /*return $this->renderAjax('_loadTickets',[
+            'model'        => $model,
+            'tickets_list' => $all_tickets_clean,
+        ]);*/
 
-
-        return $this->renderAjax('_loadTickets',[
+        /*return $this->renderAjax('_loadTickets',[
             'model'        => $model,
             'tickets_list' => $tickets_list,
             'tickets_ac'   => $tickets_ac
+        ]);*/
+    }//end function
 
+    public function actionShowtickets($page){
+        //Todos los tickets disponibles y en memoría
+        $tickets = \Yii::$app->session->get('tickets');
+
+        return $this->renderAjax('_loadTickets',[
+            //'model'        => $model,
+            'tickets_list' => $tickets[$page],
+            'page'         => $page
         ]);
+
+        /*echo "<pre>";
+        var_dump(count($tickets));
+        echo "</pre>";*/
+       /* echo "<pre>";
+        print_r($tickets[$page]);
+        echo "</pre>";
+        die();*/
+
+       /* if(empty($page)){
+            return $tickets[0];
+        }else{
+            return $tickets[$page];
+        }//end if*/
+
     }//end function
 
     public function actionPromos(){
