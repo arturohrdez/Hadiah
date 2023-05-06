@@ -78,7 +78,7 @@ echo newerton\fancybox3\FancyBox::widget([
 							</div>
 							<div class="clearix"></div>
 							<div class="col-6 text-center mt-3">
-								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
+								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','style'=>'display: none;','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 								<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 							</div>
 						</div>
@@ -116,12 +116,12 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div id="paginatorH" class="row bg-success pt-5 pb-3">
+					<div id="paginatorH" class="row bg-success pt-5 pb-3" style="display: none;">
 						<div class="col text-right">
-							<button class="btn btn-warning">Atrás</button>
+							<button class="btn btn-warning" id="btn-back-page" data-page="">Atrás</button>
 						</div>
 						<div class="col text-left">
-							<button class="btn btn-warning">Siguiente</button>
+							<button class="btn btn-warning" id="btn-next-page" data-page="">Siguiente</button>
 						</div>
 					</div>
 					<div id="list_tickets" class="row bg-success pt-3 overflow-auto" style="max-height: 300px;">
@@ -140,7 +140,7 @@ echo newerton\fancybox3\FancyBox::widget([
 $digitos     = strlen($model->ticket_end);
 $URL_remove  = Url::to(['site/ticketremove']);
 $URL_tickets = Url::to(['site/loadtickets']);
-$URL_showtickets = Url::to(['site/showtickets','page'=>0]);
+$URL_showtickets = Url::to(['site/showtickets']);
 $URL_searcht = Url::to(['site/searchticket']);
 ?>
 <script type="text/javascript">
@@ -235,12 +235,26 @@ $script = <<< JS
 				$.ajax({
 					url : "$URL_showtickets",
 					type: "GET",
+					data: {'page':0},
 					dataType: "html",
-					beforeSend: function(){
-						//console.log("llamando tickets");
-					},
+					beforeSend: function(){},
 					success: function (data) {
+						$("#ticket_s").show();
 						$("#list_tickets").html(data);
+						let page = $("#n_page").val();
+						let next_page = parseInt(page)+1;
+
+						if(page == 0){
+							$("#btn-back-page").attr('disabled',true);
+							$("#btn-back-page").attr('data-page',page);
+						}else{
+							let back_page = parseInt(page)-1;
+							$("#btn-back-page").attr('data-page',back_page);
+							$("#btn-back-page").attr('disabled',false);
+						}//end if
+						$("#btn-next-page").attr('data-page',next_page);
+
+						$("#paginatorH").show();
 						return false;
 					}
 				});
@@ -251,6 +265,57 @@ $script = <<< JS
 			}//sucess
 		});
 	}//
+
+	function paginator(page){
+		$.ajax({
+			url : "$URL_showtickets",
+			type: "GET",
+			data: {'page':page},
+			dataType: "html",
+			beforeSend: function(){
+				$("#list_tickets").html('<div id="loading_tickets_list" class="col-12 text-center mb-5"><strong class="fs-3 text-light">Generando boletos, por favor espere ...</strong><br><div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div></div>')
+				//console.log("llamando tickets");
+			},
+			success: function (data) {
+				$("#list_tickets").html(data);
+				let page = $("#n_page").val();
+				let next_page = parseInt(page)+1;
+
+				if(page == 0){
+					$("#btn-back-page").attr('disabled',true);
+					$("#btn-back-page").attr('data-page',page);
+				}else{
+					let back_page = parseInt(page)-1;
+					$("#btn-back-page").attr('data-page',back_page);
+					$("#btn-back-page").attr('disabled',false);
+				}//end if
+
+				let page_end = $("#n_page_end").val();
+				if(next_page > page_end){
+					$("#btn-next-page").attr('data-page',page);
+					$("#btn-next-page").attr('disabled',true);
+				}else{
+					$("#btn-next-page").attr('data-page',next_page);
+					$("#btn-next-page").attr('disabled',false);
+				}//end if
+
+				$("#paginatorH").show();
+				return false;
+			}
+		});
+	}
+
+	$("#btn-next-page, #btn-back-page").on("click",function(e){
+		let page  = $(this).attr('data-page');
+		$("#btn-next-page").attr('disabled',true);
+		$("#btn-back-page").attr('disabled',true);
+		paginator(page);
+	});
+
+	/*$("#btn-back-page").on("click",function(e){
+		let page = $(this).attr('data-page');
+		alert(page);
+	});*/
 
 	$(function(e){
 		$("#tn_sel").val("");

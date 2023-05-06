@@ -302,7 +302,7 @@ class SiteController extends Controller
             $cache->set($cacheKey,$tickets);
         }//end if
 
-        $tickets_div = array_chunk($tickets,5000,true);
+        $tickets_div = array_chunk($tickets,10000,true);
         //$tickets_div = array_chunk($tickets,5);
 
         //Yii::$app->session->set('tickets', $tickets_div);
@@ -438,12 +438,14 @@ class SiteController extends Controller
 
     public function actionShowtickets($page){
         //Todos los tickets disponibles y en memoría
-        $tickets = \Yii::$app->session->get('tickets');
+        $tickets  = \Yii::$app->session->get('tickets');
+        $page_end = count($tickets) - 1;
 
         return $this->renderAjax('_loadTickets',[
             //'model'        => $model,
             'tickets_list' => $tickets[$page],
-            'page'         => $page
+            'page'         => $page,
+            'page_end'     => $page_end
         ]);
 
         /*echo "<pre>";
