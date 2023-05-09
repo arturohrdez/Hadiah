@@ -116,14 +116,16 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div id="paginatorH" class="row bg-success pt-3 pb-3 overflow-auto" style="display: none; max-height: 100px;">
+					<div id="paginatorH" class="row bg-success pt-3 pb-3 overflow-auto" style="display: none;">
 						<div class="col text-right">
 							<button class="btn btn-warning" id="btn-back-page" data-page=""> &laquo; Atrás</button>
 						</div>
 						<div class="col text-left">
 							<button class="btn btn-warning" id="btn-next-page" data-page="">Siguiente &raquo;</button>
 						</div>
-						<div class="col-12 mt-3 text-center">
+					</div>
+					<div id="paginatorF" class="row bg-success overflow-auto" style="display: none; max-height: 80px;">
+						<div class="col-12 text-center">
 								<?php
 								for ($i=1; $i <= $pages + 1; $i++) {
 									?>
@@ -259,6 +261,7 @@ $script = <<< JS
 						$("#btn-next-page").attr('data-page',next_page);
 
 						$("#paginatorH").show();
+						$("#paginatorF").show();
 						return false;
 					}
 				});
