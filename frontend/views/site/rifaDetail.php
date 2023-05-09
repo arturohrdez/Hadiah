@@ -115,8 +115,19 @@ echo newerton\fancybox3\FancyBox::widget([
 							</div>
 						</div>
 					</div>
-
+					<div id="list_tickets" class="row bg-success pt-3 overflow-auto" style="max-height: 500px;">
+						<div id="loading_tickets_list" class="col-12 text-center mb-5" style="display: none;">
+							<strong class="fs-3 text-light">Generando boletos, por favor espere ...</strong><br>
+							<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>
+						</div>
+					</div>
 					<div id="paginatorH" class="row bg-success pt-3 pb-3 overflow-auto" style="display: none;">
+						<div class="col-12 text-center pb-2">
+							<span class="text-white">MOSTRANDO 1000 BOLETOS POR PÁGINA</span>
+						</div>
+						<div class="col-12 text-center pb-2">
+							<span class="text-white">Página 2 de 100 </span>
+						</div>
 						<div class="col text-right">
 							<button class="btn btn-warning" id="btn-back-page" data-page=""> &laquo; Atrás</button>
 						</div>
@@ -124,7 +135,7 @@ echo newerton\fancybox3\FancyBox::widget([
 							<button class="btn btn-warning" id="btn-next-page" data-page="">Siguiente &raquo;</button>
 						</div>
 					</div>
-					<div id="paginatorF" class="row bg-success overflow-auto" style="display: none; max-height: 80px;">
+					<div id="paginatorF" class="row bg-success overflow-auto" style="display: none; max-height: 150px;">
 						<div class="col-12 text-center">
 								<?php
 								for ($i=1; $i <= $pages + 1; $i++) {
@@ -133,12 +144,6 @@ echo newerton\fancybox3\FancyBox::widget([
 									<?php
 								}
 								?>
-						</div>
-					</div>
-					<div id="list_tickets" class="row bg-success pt-3 overflow-auto" style="max-height: 300px;">
-						<div id="loading_tickets_list" class="col-12 text-center mb-5" style="display: none;">
-							<strong class="fs-3 text-light">Generando boletos, por favor espere ...</strong><br>
-							<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>
 						</div>
 					</div>
 				</article>
