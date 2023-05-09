@@ -77,7 +77,7 @@ echo newerton\fancybox3\FancyBox::widget([
 								</div>
 							</div>
 							<div class="clearix"></div>
-							<div class="col-6 text-center mt-3">
+							<div class="col-12 col-lg-6 text-center mt-3">
 								<?php echo  Html::input('number','ticket_serarch',null, $options=['class'=>'form-control','style'=>'display: none;','max'=>$model->ticket_end,'oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'BUSCAR BOLETO','autocomplete'=>'off']) ?>
 								<?php echo  Html::button("¡LO QUIERO!", ['id' => 'btn_addticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
 							</div>
@@ -116,12 +116,21 @@ echo newerton\fancybox3\FancyBox::widget([
 						</div>
 					</div>
 
-					<div id="paginatorH" class="row bg-success pt-5 pb-3" style="display: none;">
+					<div id="paginatorH" class="row bg-success pt-3 pb-3 overflow-auto" style="display: none; max-height: 100px;">
 						<div class="col text-right">
-							<button class="btn btn-warning" id="btn-back-page" data-page="">Atrás</button>
+							<button class="btn btn-warning" id="btn-back-page" data-page=""> &laquo; Atrás</button>
 						</div>
 						<div class="col text-left">
-							<button class="btn btn-warning" id="btn-next-page" data-page="">Siguiente</button>
+							<button class="btn btn-warning" id="btn-next-page" data-page="">Siguiente &raquo;</button>
+						</div>
+						<div class="col-12 mt-3 text-center">
+								<?php
+								for ($i=1; $i <= $pages + 1; $i++) {
+									?>
+									<a id="pageH<?php echo $i-1; ?>" class="pageItem link-warning btn-sm" href="javascript:0;" data-page="<?php echo $i-1; ?>"><?php echo $i ?></a>
+									<?php
+								}
+								?>
 						</div>
 					</div>
 					<div id="list_tickets" class="row bg-success pt-3 overflow-auto" style="max-height: 300px;">
@@ -225,13 +234,8 @@ $script = <<< JS
 			data: {"id":$model->id},
 			beforeSend: function(){
 				$("#loading_tickets_list").show();
-				//console.log("beforeSend");
 			},
 			success: function (data) {
-				/*console.log(data);
-				return false;*/
-				/*console.log(data);
-				return false;*/
 				$.ajax({
 					url : "$URL_showtickets",
 					type: "GET",
@@ -245,12 +249,12 @@ $script = <<< JS
 						let next_page = parseInt(page)+1;
 
 						if(page == 0){
-							$("#btn-back-page").attr('disabled',true);
+							$("#btn-back-page").addClass('disabled');
 							$("#btn-back-page").attr('data-page',page);
 						}else{
 							let back_page = parseInt(page)-1;
 							$("#btn-back-page").attr('data-page',back_page);
-							$("#btn-back-page").attr('disabled',false);
+							$("#btn-back-page").removeClass('disabled');
 						}//end if
 						$("#btn-next-page").attr('data-page',next_page);
 
@@ -282,21 +286,21 @@ $script = <<< JS
 				let next_page = parseInt(page)+1;
 
 				if(page == 0){
-					$("#btn-back-page").attr('disabled',true);
+					$("#btn-back-page").addClass('disabled');
 					$("#btn-back-page").attr('data-page',page);
 				}else{
 					let back_page = parseInt(page)-1;
 					$("#btn-back-page").attr('data-page',back_page);
-					$("#btn-back-page").attr('disabled',false);
+					$("#btn-back-page").removeClass('disabled');
 				}//end if
 
 				let page_end = $("#n_page_end").val();
 				if(next_page > page_end){
 					$("#btn-next-page").attr('data-page',page);
-					$("#btn-next-page").attr('disabled',true);
+					$("#btn-next-page").addClass('disabled');
 				}else{
 					$("#btn-next-page").attr('data-page',next_page);
-					$("#btn-next-page").attr('disabled',false);
+					$("#btn-next-page").removeClass('disabled');
 				}//end if
 
 				$("#paginatorH").show();
@@ -306,10 +310,21 @@ $script = <<< JS
 	}
 
 	$("#btn-next-page, #btn-back-page").on("click",function(e){
+		$(".pageItem").removeClass("activePage");
 		let page  = $(this).attr('data-page');
-		$("#btn-next-page").attr('disabled',true);
-		$("#btn-back-page").attr('disabled',true);
+		$("#btn-next-page").addClass('disabled');
+		$("#btn-back-page").addClass('disabled');
 		paginator(page);
+		$("#pageH"+page).addClass("activePage");
+	});
+
+	$(".pageItem").on("click",function(e){
+		$(".pageItem").removeClass("activePage");
+		let page  = $(this).attr('data-page');
+		$("#btn-next-page").addClass('disabled');
+		$("#btn-back-page").addClass('disabled');
+		paginator(page);
+		$(this).addClass("activePage");
 	});
 
 	/*$("#btn-back-page").on("click",function(e){

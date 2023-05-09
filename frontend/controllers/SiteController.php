@@ -302,7 +302,7 @@ class SiteController extends Controller
             $cache->set($cacheKey,$tickets);
         }//end if
 
-        $tickets_div = array_chunk($tickets,10000,true);
+        $tickets_div = array_chunk($tickets,1000,true);
         //$tickets_div = array_chunk($tickets,5);
 
         //Yii::$app->session->set('tickets', $tickets_div);
@@ -389,6 +389,7 @@ class SiteController extends Controller
         }//end if*/
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
+        $pages = ($model->ticket_end / 1000);
 
         //Rifa no activas
         if(is_null($model) || !$model->status){
@@ -398,7 +399,8 @@ class SiteController extends Controller
         }//end if
 
         return $this->render('rifaDetail', [
-            'model'        => $model,
+            'model' => $model,
+            'pages' => (int) $pages
             //'tickets_list' => $tickets_list,
             //'tickets_ac'   => $tickets_ac
         ]);
