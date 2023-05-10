@@ -238,6 +238,12 @@ $URL_searcht = Url::to(['site/searchticket']);
 
 <?php 
 $script = <<< JS
+	$(function(e){
+		$("#tn_sel").val("");
+		$("#tn_rand").val("");
+		loadTickets();
+	});
+
 	function loadTickets(){
 		$.ajax({
 			url : "$URL_tickets",
@@ -342,17 +348,6 @@ $script = <<< JS
 		$("#btn-back-page").addClass('disabled');
 		paginator(page);
 		$(this).addClass("activePage");
-	});
-
-	/*$("#btn-back-page").on("click",function(e){
-		let page = $(this).attr('data-page');
-		alert(page);
-	});*/
-
-	$(function(e){
-		$("#tn_sel").val("");
-		$("#tn_rand").val("");
-		loadTickets();
 	});
 
 	//Format Number
