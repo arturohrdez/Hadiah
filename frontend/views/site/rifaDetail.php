@@ -111,6 +111,8 @@ echo newerton\fancybox3\FancyBox::widget([
 									<button id="btnSend" class="btn btn-success bg-gradient pl-5 pr-5 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
 										APARTAR
 									</button>
+
+									<!-- <button id="btn-abrir-modal" data-ts="">Abrir modal</button> -->
 								</div>
 							</div>
 						</div>
@@ -163,6 +165,7 @@ $URL_remove  = Url::to(['site/ticketremove']);
 $URL_tickets = Url::to(['site/loadtickets']);
 $URL_showtickets = Url::to(['site/showtickets']);
 $URL_searcht = Url::to(['site/searchticket']);
+$URL_apartar = Url::to(['site/apartar','id'=>$model->id]);
 ?>
 <script type="text/javascript">
 	const elements_selected = [];

@@ -399,7 +399,6 @@ class SiteController extends Controller
         //Paginador
         $pages = count($tickets_list);
 
-
         //Rifa no activas
         if(is_null($model) || !$model->status){
             return $this->render('rifaEnd', [
@@ -410,8 +409,6 @@ class SiteController extends Controller
         return $this->render('rifaDetail', [
             'model' => $model,
             'pages' => $pages,
-            //'tickets_list' => $tickets_list,
-            //'tickets_ac'   => $tickets_ac
         ]);
     }//end function
 
@@ -431,20 +428,8 @@ class SiteController extends Controller
             $i++;
         }//end foreach
 
+        //Todos los tickets disponibles
         \Yii::$app->session->set('tickets', $all_tickets_clean);
-        /*\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return ["status"=>true,"tickets_list"=>$all_tickets_clean];*/
-
-        /*return $this->renderAjax('_loadTickets',[
-            'model'        => $model,
-            'tickets_list' => $all_tickets_clean,
-        ]);*/
-
-        /*return $this->renderAjax('_loadTickets',[
-            'model'        => $model,
-            'tickets_list' => $tickets_list,
-            'tickets_ac'   => $tickets_ac
-        ]);*/
     }//end function
 
     public function actionShowtickets($page){
@@ -458,21 +443,6 @@ class SiteController extends Controller
             'page'         => $page,
             'page_end'     => $page_end
         ]);
-
-        /*echo "<pre>";
-        var_dump(count($tickets));
-        echo "</pre>";*/
-       /* echo "<pre>";
-        print_r($tickets[$page]);
-        echo "</pre>";
-        die();*/
-
-       /* if(empty($page)){
-            return $tickets[0];
-        }else{
-            return $tickets[$page];
-        }//end if*/
-
     }//end function
 
     public function actionPromos(){
@@ -851,10 +821,14 @@ class SiteController extends Controller
             }//end if
         }//end if
 
+
         $modelRifa   = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
+        //$tickets = Yii::$app->request->get()["tickets"];
+
         return $this->renderAjax('_apartarPopup',[
-            'modelRifa'=>$modelRifa,
-            'modelTicket'=>$modelTicket
+            'modelRifa'   =>$modelRifa,
+            'modelTicket' =>$modelTicket
+            //'tickets'     => $tickets
         ]);
     }//end function
 

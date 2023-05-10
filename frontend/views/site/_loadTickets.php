@@ -17,9 +17,10 @@ $script = <<< JS
 			$("#tn_"+elements_selected[i]).removeClass('btn-outline-light');
 			$("#tn_"+elements_selected[i]).addClass('btn-light');
 			$("#tn_"+elements_selected[i]).addClass('disabled');
-			console.log(elements_selected[i])
+			//console.log(elements_selected[i])
 		}//end foreach
 	});
+
 
 	$(".btn_ticket").on("click",function(e){
 		var tn          = $(this).data("tn");
@@ -29,6 +30,11 @@ $script = <<< JS
 		let search_ti = elements_selected.indexOf(tn);
 		if(search_ti == -1){
 			elements_selected.push(tn);
+			let jTickets = JSON.stringify(elements_selected)
+
+			
+			//$("#tn_sel").val(jTickets);
+			//$("#btn-abrir-modal").attr("data-ts",jTickets);
 			//Tickets Count
 			let n_t = elements_selected.length;
 			$(".n_t").text(n_t);	
@@ -46,14 +52,9 @@ $script = <<< JS
 			$("#tn_"+tn).removeClass('btn-outline-light');
 			$("#tn_"+tn).addClass('btn-light');
 			$(this).addClass('disabled');
+			$("#btnSend").show();
 		}//end if
-		/*if(tn_sel.length > 0){
-
-		}else{
-			
-		}//end if*/
-
-		console.log(elements_selected);
+		//console.log(elements_selected);
 	});
 
 JS;
