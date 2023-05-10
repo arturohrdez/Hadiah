@@ -165,6 +165,7 @@ $URL_showtickets = Url::to(['site/showtickets']);
 $URL_searcht = Url::to(['site/searchticket']);
 ?>
 <script type="text/javascript">
+	const elements_selected = [];
 	function ticketRemove(t){
 		var url_r = "<?php echo $URL_remove ?>";
 		var rifa_id = "<?php echo $model->id ?>";

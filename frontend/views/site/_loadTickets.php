@@ -11,24 +11,47 @@ foreach ($tickets_list as $ticket_l) {
 
 
 $script = <<< JS
-	const elements_selected = [];
+	$(function(e){
+		let n_t = elements_selected.length;
+		for (var i = n_t-1; i >= 0; i--) {
+			$("#tn_"+elements_selected[i]).removeClass('btn-outline-light');
+			$("#tn_"+elements_selected[i]).addClass('btn-light');
+			$("#tn_"+elements_selected[i]).addClass('disabled');
+			console.log(elements_selected[i])
+		}//end foreach
+	});
 
 	$(".btn_ticket").on("click",function(e){
 		var tn          = $(this).data("tn");
 		var tn_sel      = $("#tn_sel").val();
 		var tn_rand     = $("#tn_rand").val();
-		//let elements    = [];
 
-		console.log(tn);
-		/*console.log(tn_sel);
-		console.log(tn_rand);
-		console.log(elements);*/
+		let search_ti = elements_selected.indexOf(tn);
+		if(search_ti == -1){
+			elements_selected.push(tn);
+			//Tickets Count
+			let n_t = elements_selected.length;
+			$(".n_t").text(n_t);	
 
-		if(tn_sel.length > 0){
+			//Tickets selected
+			let t_selectBtn = "";
+			for (var i = n_t-1; i >= 0; i--) {
+				t_selectBtn = t_selectBtn + '<button id="t_'+elements_selected[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements_selected[i]+'`)">'+elements_selected[i]+'</button>';
+			}//end foreach
+			$(".t_opt").html(t_selectBtn);
+
+			//Show Div Selected
+			$("#div_selected").show();
+
+			$("#tn_"+tn).removeClass('btn-outline-light');
+			$("#tn_"+tn).addClass('btn-light');
+			$(this).addClass('disabled');
+		}//end if
+		/*if(tn_sel.length > 0){
 
 		}else{
-			elements_selected.push(tn);
-		}//end if
+			
+		}//end if*/
 
 		console.log(elements_selected);
 	});
