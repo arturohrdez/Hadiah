@@ -121,31 +121,36 @@ echo newerton\fancybox3\FancyBox::widget([
 							<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>
 						</div>
 					</div>
+
+					<?php 
+					//Pagniación
+					if($pages > 1){
+					?>
 					<div id="paginatorH" class="row bg-success pt-3 pb-3 overflow-auto" style="display: none;">
-						<div class="col-12 text-center pb-2">
-							<span class="text-white">MOSTRANDO 1000 BOLETOS POR PÁGINA</span>
-						</div>
-						<div class="col-12 text-center pb-2">
-							<span class="text-white">Página 2 de 100 </span>
+						<div id="sPagesH" class="col-12 text-center pb-2" style="display: none;">
+							<span class="text-white">Página <span id="sPageA">A</span> de <span id="sPageZ">X</span> </span>
 						</div>
 						<div class="col text-right">
-							<button class="btn btn-warning" id="btn-back-page" data-page=""> &laquo; Atrás</button>
+							<button class="btn btn-light" id="btn-back-page" data-page=""> &laquo; Atrás</button>
 						</div>
 						<div class="col text-left">
-							<button class="btn btn-warning" id="btn-next-page" data-page="">Siguiente &raquo;</button>
+							<button class="btn btn-light" id="btn-next-page" data-page="">Siguiente &raquo;</button>
 						</div>
 					</div>
 					<div id="paginatorF" class="row bg-success overflow-auto" style="display: none; max-height: 150px;">
-						<div class="col-12 text-center">
-								<?php
-								for ($i=1; $i <= $pages + 1; $i++) {
-									?>
-									<a id="pageH<?php echo $i-1; ?>" class="pageItem link-warning btn-sm" href="javascript:0;" data-page="<?php echo $i-1; ?>"><?php echo $i ?></a>
-									<?php
-								}
-								?>
+						<div class="col-12 text-center pb-2">
+							<?php 
+							for ($i=1; $i <= $pages; $i++) {
+							?>
+								<a id="pageH<?php echo $i-1; ?>" class="btn pageItem link-light btn-sm" href="javascript:0;" data-page="<?php echo $i-1; ?>"><?php echo $i ?></a>
+							<?php
+							}//end for
+							?>
 						</div>
 					</div>
+					<?php 
+					}//end if
+					?>
 				</article>
 			</div>
 		</div>
@@ -311,7 +316,11 @@ $script = <<< JS
 					$("#btn-next-page").removeClass('disabled');
 				}//end if
 
+				$("#sPageA").text(parseInt(page) + 1);
+				$("#sPageZ").text(parseInt(page_end) + 1);
+
 				$("#paginatorH").show();
+				$("#sPagesH").show();
 				return false;
 			}
 		});

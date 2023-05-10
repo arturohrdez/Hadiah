@@ -2138,4 +2138,5 @@ section {
 .activePage{
   color: white !important;
   background-color: red;
+  font-weight: bold;
 }

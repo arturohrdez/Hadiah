@@ -288,7 +288,7 @@ class SiteController extends Controller
     public static function createTickets($init,$end,$rifaId){
         //Obtener el componente de caché
         $cache    = Yii::$app->cache;
-        $cacheKey = 'tickets_'.$end;
+        $cacheKey = 'tickets_'.$init.'_'.$end;
         $tickets  = $cache->get($cacheKey);
 
         if($tickets === false){
@@ -389,7 +389,16 @@ class SiteController extends Controller
         }//end if*/
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
-        $pages = ($model->ticket_end / 1000);
+        $init  = $model->ticket_init;
+        $end   = $model->ticket_end;
+
+        //Tickets List
+        $tickets_list = self::createTickets($init,$end,$model->id);
+        \Yii::$app->session->set('tickets', $tickets_list);
+
+        //Paginador
+        $pages = count($tickets_list);
+
 
         //Rifa no activas
         if(is_null($model) || !$model->status){
@@ -400,7 +409,7 @@ class SiteController extends Controller
 
         return $this->render('rifaDetail', [
             'model' => $model,
-            'pages' => (int) $pages
+            'pages' => $pages,
             //'tickets_list' => $tickets_list,
             //'tickets_ac'   => $tickets_ac
         ]);
@@ -411,7 +420,7 @@ class SiteController extends Controller
         $init  = $model->ticket_init;
         $end   = $model->ticket_end;
         //Tickets List
-        $tickets_list = self::createTickets($init,$end,$model->id);
+        $tickets_list  = \Yii::$app->session->get('tickets');
 
         //Tickets apartados y vendidos
         $tickets_ac        = self::dumpTicketAC($model->tickets);
