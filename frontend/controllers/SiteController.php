@@ -686,11 +686,11 @@ class SiteController extends Controller
                     //throw new \yii\web\HttpException(503, 'La acción ya se está ejecutando en otra instancia.');
                 }//end if
 
-
                 try{
                     $rifaId            = $modelTicket->rifa_id;
                     $ticket_duplicados = [];
-                    $tickets_play_all  = Yii::$app->session->get('tickets_play_all');
+                    //$tickets_play_all  = Yii::$app->session->get('tickets_play_all');
+                    $tickets_play_all  = explode(",", $modelTicket->tickets_selected);
                     
                     //Valida cada ticket vs Apartados o vendidos
                     foreach ($tickets_play_all as $key__ => $tickets__) {
@@ -823,8 +823,6 @@ class SiteController extends Controller
 
 
         $modelRifa   = Rifas::find()->where(["id" => Yii::$app->request->get()["id"]])->one();
-        //$tickets = Yii::$app->request->get()["tickets"];
-
         return $this->renderAjax('_apartarPopup',[
             'modelRifa'   =>$modelRifa,
             'modelTicket' =>$modelTicket

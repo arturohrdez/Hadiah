@@ -3,7 +3,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Url;
 
-$ticket_n = count(Yii::$app->session->get('tickets_play_all')); 
+//$ticket_n = count(Yii::$app->session->get('tickets_play_all')); 
 $states = [	
 	''                    => 'SELECCIONAR UNA OPCIÓN',
 	'Aguascalientes'      => 'Aguascalientes',
@@ -52,7 +52,7 @@ if($state_ != "all"){
 		</div>
 		<div class="col-12 text-center mt-2">
 			<div class="text-danger fs-5 fw-bold">
-				<?php echo $ticket_n; ?> - BOLETO(S) SELECCIONADO(S)
+				<span id="n_ticket_s"></span> - BOLETO(S) SELECCIONADO(S)
 			</div>
 		</div>
 		<div class="col-12 mt-3">
@@ -69,6 +69,7 @@ if($state_ != "all"){
 			<?php echo $form->field($modelTicket,'name')->textInput(['placeholder'=>'NOMBRE(S)'])->label(false); ?>
 			<?php echo $form->field($modelTicket,'lastname')->textInput(['placeholder'=>'APELLIDOS'])->label(false); ?>
 			<?php echo $form->field($modelTicket, 'state')->dropDownList($states, ['placeholder' => 'ESTADO'])->label(false); ?>
+			<?php echo $form->field($modelTicket, 'tickets_selected')->hiddenInput()->label(false); ?>
 			<div class="col-12 text-center text-success fw-bold">
 				¡Al finalizar serás redirigido a whatsapp para enviar la información de tu boleto!
 			</div>
@@ -91,6 +92,30 @@ if($state_ != "all"){
 <?php
 $URL_sendwp = Url::to(['site/sendwp']);
 $script = <<< JS
+	function getTicketSelected(type = null){
+		let J_tn_sel     = $("#tn_sel").val();
+		let count_tn_sel = JSON.parse($("#tn_sel").val()).length;
+
+		if(type == "count"){
+			return {"count":count_tn_sel};
+		}
+
+		if(type == 'json_tickets'){
+			return {"J_tn_sel":J_tn_sel};
+		}
+
+		if(type == null){
+			return {"count":count_tn_sel,"J_tn_sel":J_tn_sel};
+		}
+	}//end function
+
+	$(function(e){
+		let tickets_selected = getTicketSelected(null);
+		$("#n_ticket_s").text(tickets_selected.count);
+		$("#ticketform-tickets_selected").val(JSON.parse(tickets_selected.J_tn_sel));
+
+	});
+
 	$('#ticketForm').on('beforeSubmit', function(e) {
 		var form     = $(this);
 		var formData = form.serialize();

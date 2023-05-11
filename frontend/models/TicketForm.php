@@ -15,12 +15,13 @@ class TicketForm extends \yii\db\ActiveRecord
     public $name;
     public $lastname;
     public $state;
+    public $tickets_selected;
 
     public function rules()
     {
         return [
             // name, email, subject and body are required
-			[['rifa_id','phone', 'name', 'lastname', 'state'], 'required'],
+			[['rifa_id','phone', 'name', 'lastname', 'state','tickets_selected'], 'required'],
 			[['phone'], 'number', 'max'    => 9999999999],
 			[['name'], 'string', 'max'     => 180],
 			[['lastname'], 'string', 'max' => 250],
@@ -79,7 +80,8 @@ class TicketForm extends \yii\db\ActiveRecord
 			'phone'    => 'Teléfono',
 			'name'     => 'Nombre(s)',
 			'lastname' => 'Apellidos',
-			'state'    => 'Estado'
+			'state'    => 'Estado',
+            'tickets_selected' => 'Tickets'
         ];
     }
 

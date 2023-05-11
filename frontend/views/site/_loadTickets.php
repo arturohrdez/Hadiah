@@ -31,10 +31,8 @@ $script = <<< JS
 		if(search_ti == -1){
 			elements_selected.push(tn);
 			let jTickets = JSON.stringify(elements_selected)
-
+			$("#tn_sel").val(jTickets);
 			
-			//$("#tn_sel").val(jTickets);
-			//$("#btn-abrir-modal").attr("data-ts",jTickets);
 			//Tickets Count
 			let n_t = elements_selected.length;
 			$(".n_t").text(n_t);	

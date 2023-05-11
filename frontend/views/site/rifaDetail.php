@@ -111,8 +111,6 @@ echo newerton\fancybox3\FancyBox::widget([
 									<button id="btnSend" class="btn btn-success bg-gradient pl-5 pr-5 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
 										APARTAR
 									</button>
-
-									<!-- <button id="btn-abrir-modal" data-ts="">Abrir modal</button> -->
 								</div>
 							</div>
 						</div>
