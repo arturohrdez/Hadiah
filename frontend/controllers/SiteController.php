@@ -649,14 +649,32 @@ class SiteController extends Controller
         return ["status"=>false];
     }//end function
 
-    public static function getTicketSelected($rifaId = null,$ticket = null){
+    /*public static function getTicketSelected($rifaId = null,$ticket = null){
         $model  = Tickets::find()->where(['rifa_id'=>$rifaId,'ticket' => $ticket])->one();
         if(is_null($model)){
             return true;
         }//end if
 
         return false;
+    }//end function*/
+
+    public static function getTicketSelected($rifaId = null,$tickets = null){
+
+        $model  = Tickets::find()->where(['rifa_id'=>$rifaId])->andWhere(['IN','ticket',$tickets]);
+        $sql = $model->createCommand()->getRawSql();
+        echo "<pre>";
+        var_dump($sql);
+        echo "</pre>";
+        die();
+
+
+        if(empty($model)){
+            return ["status"=>true];
+        }//end if
+
+        return ["status"=>false,"model"=>$model];
     }//end function
+
 
     public function actionApartar(){
         date_default_timezone_set('America/Mexico_City');
@@ -690,37 +708,29 @@ class SiteController extends Controller
                     $rifaId            = $modelTicket->rifa_id;
                     $ticket_duplicados = [];
                     //$tickets_play_all  = Yii::$app->session->get('tickets_play_all');
-                    $tickets_play_all  = explode(",", $modelTicket->tickets_selected);
+                    $tickets_play_all  = $modelTicket->tickets_selected;
+
+                    //Verifica que los tickets seleccionados no estén ya vendidos
+                    $resGetTicektSelected = self::getTicketSelected($rifaId,$tickets_play_all);
+                    echo "<pre>";
+                    var_dump($resGetTicektSelected);
+                    echo "</pre>";
+                    die();
+
                     
                     //Valida cada ticket vs Apartados o vendidos
-                    foreach ($tickets_play_all as $key__ => $tickets__) {
-                        //Valida cada ticket vs ticketstorage
-                        /*//Parea evitar la concurrencia, no se pueden guardar duplicados
-                        $ticketstorageS = self::getTicketStorage($rifaId,2,$key__);
-                        //Existe más de un registro en storage
-                        if(!$ticketstorageS["status"] && $ticketstorageS["rows"] > 0){
-                            //Concurrencia
-                            $ticket_duplicados[] = $key__;
-                        }//end if*/
-
+                    /*foreach ($tickets_play_all as $key__ => $tickets__) {
                         if(!self::getTicketSelected($rifaId,$key__)){
                             $ticket_duplicados[] = $key__;
                         }//end if
-
                         if(is_array($tickets__)){
                             foreach ($tickets__ as $ticket_) {
-                                //$ticketstorageR = self::getTicketStorage($rifaId,2,$ticket_);
-                                /*if(!$ticketstorageR["status"] && $ticketstorageR["rows"] > 0){
-                                    //Concurrencia
-                                    $ticket_duplicados[] = $ticket_;
-                                }//end if*/
-
                                 if(!self::getTicketSelected($rifaId,$ticket_)){
                                     $ticket_duplicados[] = $ticket_;
                                 }//end if
                             }//end foreach
                         }//end if
-                    }//end foreach
+                    }//end foreach*/
 
                     //Existen tickets ya registrados por alguien más
                     if(!empty($ticket_duplicados)){
