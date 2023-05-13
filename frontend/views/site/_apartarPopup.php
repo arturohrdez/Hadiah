@@ -151,11 +151,12 @@ $script = <<< JS
 	        		$("#divMsg").show();
 
 	        		//
+	        		let json_tickets = getTicketSelected('json_tickets');
 	        		setTimeout(function(e){
 		        		$.ajax({
 		        			url: "{$URL_sendwp}",
 		        			type: "POST",
-		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone,"folio":data.folio},
+		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone,"folio":data.folio,"json_tickets":json_tickets.J_tn_sel},
 		        			beforeSend: function(data){
 		        				$("#divMsg").html('<div class="alert alert-success">Redirigiendo a Whatsapp...</div>');
 		        			},

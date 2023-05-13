@@ -659,15 +659,8 @@ class SiteController extends Controller
     }//end function*/
 
     public static function getTicketSelected($rifaId = null,$tickets = null){
-
-        $model  = Tickets::find()->where(['rifa_id'=>$rifaId])->andWhere(['IN','ticket',$tickets]);
-        $sql = $model->createCommand()->getRawSql();
-        echo "<pre>";
-        var_dump($sql);
-        echo "</pre>";
-        die();
-
-
+        $model  = Tickets::find()->select(['ticket'])->where(['rifa_id'=>$rifaId])->andWhere(['IN','ticket',$tickets])->all();
+        //$sql = $model->createCommand()->getRawSql();
         if(empty($model)){
             return ["status"=>true];
         }//end if
@@ -708,16 +701,17 @@ class SiteController extends Controller
                     $rifaId            = $modelTicket->rifa_id;
                     $ticket_duplicados = [];
                     //$tickets_play_all  = Yii::$app->session->get('tickets_play_all');
-                    $tickets_play_all  = $modelTicket->tickets_selected;
+                    $tickets_play_all  = explode(",", $modelTicket->tickets_selected);
 
                     //Verifica que los tickets seleccionados no estén ya vendidos
                     $resGetTicektSelected = self::getTicketSelected($rifaId,$tickets_play_all);
-                    echo "<pre>";
-                    var_dump($resGetTicektSelected);
-                    echo "</pre>";
-                    die();
+                    if(!$resGetTicektSelected["status"]){
+                        //Existen tickets previamente apartados
+                        foreach ($resGetTicektSelected["model"] as $key__) {
+                            $ticket_duplicados[] = $key__->ticket;
+                        }//end foreach
+                    }//end if
 
-                    
                     //Valida cada ticket vs Apartados o vendidos
                     /*foreach ($tickets_play_all as $key__ => $tickets__) {
                         if(!self::getTicketSelected($rifaId,$key__)){
@@ -755,7 +749,26 @@ class SiteController extends Controller
                     $connection  = \Yii::$app->db;
                     $transaction = $connection->beginTransaction();
                     try {
-                        foreach ($tickets_play_all as $key__ => $tickets__) {
+
+                        foreach ($tickets_play_all as $ticket_aparta) {
+                            $model             = new Tickets();
+                            $model->rifa_id    = $modelTicket->rifa_id;
+                            $model->ticket     = (string) $ticket_aparta;
+                            $model->folio      = $folio;
+                            $model->date       = date("Y-m-d H:i");
+                            $model->date_end   = date("Y-m-d H:i",strtotime ( '+'.$time_apart.' hour',strtotime (date("Y-m-d H:i"))));
+                            $model->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
+                            $model->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
+                            $model->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
+                            $model->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
+                            $model->type       = "S";
+                            $model->type_sale  = "online";
+                            $model->status     = "A";
+                            $model->parent_id  = null;
+                            $model->expiration = "0";
+                            $model->save(false);
+                        }//end foreach
+                        /*foreach ($tickets_play_all as $key__ => $tickets__) {
                             $model             = new Tickets();
                             $model->rifa_id    = $modelTicket->rifa_id;
                             $model->ticket     = (string) $key__;
@@ -772,8 +785,6 @@ class SiteController extends Controller
                             $model->parent_id  = null;
                             $model->expiration = "0";
                             $model->save(false);
-                            //Vacía storage
-                            //self::removeTicketStorage($rifaId,$key__);
 
                             if(is_array($tickets__)){
                                 foreach ($tickets__ as $ticket_) {
@@ -793,12 +804,9 @@ class SiteController extends Controller
                                     $modelTR->parent_id  = $model->id;
                                     $modelTR->expiration = "0";
                                     $modelTR->save(false);
-
-                                    //Vacía storage
-                                    //self::removeTicketStorage($rifaId,$ticket_);
                                 }//end foreach
                             }//end if
-                        }//end foreach
+                        }//end foreach*/
 
                         $transaction->commit();
                     }catch(Exception $e){
@@ -842,7 +850,9 @@ class SiteController extends Controller
 
     public function actionSendwp(){
         $model            = Rifas::find()->where(["id" => Yii::$app->request->post()["id"]])->one();
-        $tickets_play_all = Yii::$app->session->get('tickets_play_all');
+        //$tickets_play_all = Yii::$app->session->get('tickets_play_all');
+
+        $tickets_play_all = json_decode(Yii::$app->request->post()["json_tickets"]);
 
         //Usuario
         $name     = Yii::$app->request->post()["name"];
@@ -861,14 +871,18 @@ class SiteController extends Controller
         $num_tickets          = count($tickets_play_all);
         $tickets_play_all_str = "";
         $h                    = 0;
-        foreach ($tickets_play_all as $key__ => $tickets__) {
+        foreach ($tickets_play_all as $ticket__) {
+            $tickets_play_all_str .= $ticket__."
+";
+        }//end foreach
+        /*foreach ($tickets_play_all as $key__ => $tickets__) {
             $tickets_play_all_str .= $key__." ";
             if(is_array($tickets__)){
                 $tickets_play_all_str .= "(".implode(",", $tickets__).")";
             }//end if
             $tickets_play_all_str .= "
 ";
-        }//end foreach
+        }//end foreach*/
 
 
         $custom_msg = "Hola, Aparte boletos de la rifa:
