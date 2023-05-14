@@ -13,14 +13,17 @@ foreach ($tickets_list as $ticket_l) {
 $script = <<< JS
 	$(function(e){
 		let n_t = elements_selected.length;
-		for (var i = n_t-1; i >= 0; i--) {
-			$("#tn_"+elements_selected[i]).removeClass('btn-outline-light');
-			$("#tn_"+elements_selected[i]).addClass('btn-light');
-			$("#tn_"+elements_selected[i]).addClass('disabled');
-			//console.log(elements_selected[i])
-		}//end foreach
+		if(n_t > 0){
+			for (var i = n_t-1; i >= 0; i--) {
+				$("#tn_"+elements_selected[i]).removeClass('btn-outline-light');
+				$("#tn_"+elements_selected[i]).addClass('btn-light');
+				$("#tn_"+elements_selected[i]).addClass('disabled');
+				//console.log(elements_selected[i])
+			}//end foreach
+		}//end if
 	});
 
+	
 
 	$(".btn_ticket").on("click",function(e){
 		var tn          = $(this).data("tn");

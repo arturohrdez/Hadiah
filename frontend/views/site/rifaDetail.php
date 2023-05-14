@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap4\ActiveForm;
 
-
 $this->title = $model->name;
 $this->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
 $this->registerMetaTag(['property' => 'og:type', 'content' => '']);
@@ -165,76 +164,28 @@ $URL_showtickets = Url::to(['site/showtickets']);
 $URL_searcht = Url::to(['site/searchticket']);
 $URL_apartar = Url::to(['site/apartar','id'=>$model->id]);
 ?>
+
 <script type="text/javascript">
 	const elements_selected = [];
 	function ticketRemove(t){
-		var url_r = "<?php echo $URL_remove ?>";
+		var url_r   = "<?php echo $URL_remove ?>";
 		var rifa_id = "<?php echo $model->id ?>";
-		$.ajax({
-			url: url_r,
-			type: 'POST',
-			data: {"id":rifa_id,"tn":t},
-			beforeSend: function(data){
-				//$(".btn_ticket").attr("disabled",true);
-				$(".btn_ticketDel").attr("disabled",true);
-				$("#btnSend").hide();
-				$("#load_tickets").show();
-			},
-			success: function(response) {
-				$("#load_tickets").hide();
 
-				//Tickets
-				var tn_sel = $("#tn_sel").val();
-				var exp     = tn_sel.split(',');
-				var pos_del = exp.indexOf(t);
-				if(pos_del > -1){
-					exp.splice(pos_del, 1);
-					$("#tn_sel").val(exp.join(','));
+		let ticket_r = elements_selected.indexOf(t);
+		if (ticket_r > -1) {
+			elements_selected.splice(ticket_r, 1);
+			//Tickets Count
+			let n_t = elements_selected.length;
+			$(".n_t").text(n_t);
+			if(n_t == 0){
+				$("#div_selected").hide();
+			}//end if
 
-					let n_t = exp.length;
-					$(".n_t").text(n_t);
-					if(n_t == 0){
-						$("#div_selected").hide();
-					}//end if
+			$("#t_"+t).remove();
+			$("#tn_"+t).removeClass('disabled btn-light');
+			$("#tn_"+t).addClass('btn-outline-light');
 
-					$("#t_"+t).remove();
-					$("#tn_"+t).removeClass('btn-light');
-					$("#tn_"+t).addClass('btn-outline-light');
-				}//end if
-				
-				//Tickets random
-				var tn_rand      = $("#tn_rand").val();
-				var exp_rand     = tn_rand.split(',');
-				if(exp_rand != ""){
-					/*console.log("entra");
-					console.log(exp_rand);*/
-
-					var pos_del_rand = null;
-					let ticketRandomRemove = JSON.parse(response);
-					$("#t_n_"+t).remove();
-					for (let key in ticketRandomRemove) {
-						pos_del_rand = exp_rand.indexOf(ticketRandomRemove[key]);
-						if(pos_del_rand > -1){
-							exp_rand.splice(pos_del_rand, 1);
-							$("#tn_rand").val(exp_rand.join(','));
-
-							
-							$("#tn_"+ticketRandomRemove[key]).removeClass('btn-light');
-							$("#tn_"+ticketRandomRemove[key]).addClass('btn-outline-light');
-						}//end if
-					}//end for
-				}//end if
-
-				//$(".btn_ticket").attr("disabled",false);
-				$(".btn_ticketDel").attr("disabled",false);
-				$("#loadRemove").html("");
-				$("#loadRemove").hide();
-				$("#btnSend").show();
-	        },
-	        error: function() {
-	            console.log('Error occured');
-	        }
-		});
+		}//end if
 	}//end function
 </script>
 
