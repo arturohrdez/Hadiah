@@ -337,7 +337,29 @@ $script = <<< JS
 					$("#btn_addticket").attr("disabled",false);
 
 					if(response.status == true){
-						$("#tn_"+tn_s).trigger('click');
+						//$("#tn_"+tn_s).trigger('click');
+						elements_selected.push(tn_s);
+						let jTickets = JSON.stringify(elements_selected)
+						$("#tn_sel").val(jTickets);
+
+
+						//Tickets Count
+						let n_t = elements_selected.length;
+						$(".n_t").text(n_t);	
+
+						//Tickets selected
+						let t_selectBtn = "";
+						for (var i = n_t-1; i >= 0; i--) {
+							t_selectBtn = t_selectBtn + '<button id="t_'+elements_selected[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements_selected[i]+'`)">'+elements_selected[i]+'</button>';
+						}//end foreach
+						$(".t_opt").html(t_selectBtn);
+
+						//Show Div Selected
+						$("#div_selected").show();
+
+						$("#tn_"+tn_s).removeClass('btn-outline-light');
+						$("#tn_"+tn_s).addClass('btn-light disabled');
+						$("#btnSend").show();
 					}else{
 						$("#ticket_e_m").show();
 					}//end if

@@ -302,7 +302,7 @@ class SiteController extends Controller
             $cache->set($cacheKey,$tickets);
         }//end if
 
-        $tickets_div = array_chunk($tickets,1000,true);
+        $tickets_div = array_chunk($tickets,5000,true);
         //$tickets_div = array_chunk($tickets,5);
 
         //Yii::$app->session->set('tickets', $tickets_div);
