@@ -23,7 +23,6 @@ $script = <<< JS
 		}//end if
 	});
 
-	
 
 	$(".btn_ticket").on("click",function(e){
 		var tn          = $(this).data("tn");
