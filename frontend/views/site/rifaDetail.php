@@ -167,13 +167,24 @@ $URL_apartar = Url::to(['site/apartar','id'=>$model->id]);
 
 <script type="text/javascript">
 	const elements_selected = [];
+
+	function ticketParse(tn){
+		let parseNTicket = parseInt(tn);
+		if(parseNTicket >= 10000){
+			return parseNTicket;
+		}//end if
+
+		return tn;
+	}//end if
+
 	function ticketRemove(t){
 		var url_r   = "<?php echo $URL_remove ?>";
 		var rifa_id = "<?php echo $model->id ?>";
 
-		let ticket_r = elements_selected.indexOf(t);
+		let ticket_r = elements_selected.indexOf(ticketParse(t));
 		if (ticket_r > -1) {
 			elements_selected.splice(ticket_r, 1);
+			console.log(elements_selected);
 			//Tickets Count
 			let n_t = elements_selected.length;
 			$(".n_t").text(n_t);
@@ -337,29 +348,36 @@ $script = <<< JS
 					$("#btn_addticket").attr("disabled",false);
 
 					if(response.status == true){
-						//$("#tn_"+tn_s).trigger('click');
-						elements_selected.push(tn_s);
-						let jTickets = JSON.stringify(elements_selected)
-						$("#tn_sel").val(jTickets);
+						let search_ti = elements_selected.indexOf(ticketParse(tn_s));
+						if(search_ti == -1){
+							//$("#tn_"+tn_s).trigger('click');
+							elements_selected.push(tn_s);
+							console.log(elements_selected);
+
+							let jTickets = JSON.stringify(elements_selected)
+							$("#tn_sel").val(jTickets);
 
 
-						//Tickets Count
-						let n_t = elements_selected.length;
-						$(".n_t").text(n_t);	
+							//Tickets Count
+							let n_t = elements_selected.length;
+							$(".n_t").text(n_t);	
 
-						//Tickets selected
-						let t_selectBtn = "";
-						for (var i = n_t-1; i >= 0; i--) {
-							t_selectBtn = t_selectBtn + '<button id="t_'+elements_selected[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements_selected[i]+'`)">'+elements_selected[i]+'</button>';
-						}//end foreach
-						$(".t_opt").html(t_selectBtn);
+							//Tickets selected
+							let t_selectBtn = "";
+							for (var i = n_t-1; i >= 0; i--) {
+								t_selectBtn = t_selectBtn + '<button id="t_'+elements_selected[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements_selected[i]+'`)">'+elements_selected[i]+'</button>';
+							}//end foreach
+							$(".t_opt").html(t_selectBtn);
 
-						//Show Div Selected
-						$("#div_selected").show();
+							//Show Div Selected
+							$("#div_selected").show();
 
-						$("#tn_"+tn_s).removeClass('btn-outline-light');
-						$("#tn_"+tn_s).addClass('btn-light disabled');
-						$("#btnSend").show();
+							$("#tn_"+tn_s).removeClass('btn-outline-light');
+							$("#tn_"+tn_s).addClass('btn-light disabled');
+							$("#btnSend").show();
+						}else{
+							$("#ticket_e_m").show();
+						}//end if
 					}else{
 						$("#ticket_e_m").show();
 					}//end if

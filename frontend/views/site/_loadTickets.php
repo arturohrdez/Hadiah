@@ -29,9 +29,11 @@ $script = <<< JS
 		var tn_sel      = $("#tn_sel").val();
 		var tn_rand     = $("#tn_rand").val();
 
-		let search_ti = elements_selected.indexOf(tn);
+		let search_ti = elements_selected.indexOf(ticketParse(tn));
 		if(search_ti == -1){
 			elements_selected.push(tn);
+			console.log(elements_selected);
+
 			let jTickets = JSON.stringify(elements_selected)
 			$("#tn_sel").val(jTickets);
 			
