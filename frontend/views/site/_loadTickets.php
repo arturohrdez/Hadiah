@@ -21,15 +21,7 @@ $script = <<< JS
 	var oportunidades = '{$oportunidades}';
 
 	$(function(e){
-		let n_t = elements_selected.length;
-		if(n_t > 0){
-			for (var i = n_t-1; i >= 0; i--) {
-				$("#tn_"+elements_selected[i]).removeClass('btn-outline-light');
-				$("#tn_"+elements_selected[i]).addClass('btn-light');
-				$("#tn_"+elements_selected[i]).addClass('disabled');
-				//console.log(elements_selected[i]) 
-			}//end foreach
-		}//end if
+		disableTickets();
 	});
 
 	$(".btn_ticket").on("click",function(e){
@@ -56,32 +48,8 @@ $script = <<< JS
 					success: function (response) {
 						elements_selected.push(tn);
 						elements_random.push(response.tickets_play_ls);
-
 						reloadTicketsInfo();
-
-						/*alert(tn);
-						alert(elements_random[0][tn]);*/
-
-						/*let jTickets = JSON.stringify(elements_selected);
-						$("#tn_sel").val(jTickets);
-						let jRandoms = JSON.stringify(elements_random);
-						$("#tn_rand").val(jRandoms);
-
-						//Tickets Count
-						let n_t = elements_selected.length;
-						$(".n_t").text(n_t);	
-
-						//Tickets selected
-						let t_selectBtn = "";
-						for (var i = n_t-1; i >= 0; i--) {
-							t_selectBtn = t_selectBtn + '<button id="t_'+elements_selected[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements_selected[i]+'`)">'+elements_selected[i]+'</button>';
-						}//end foreach
-						$(".t_opt").html(t_selectBtn);*/
-
-						//Show Div Selected
 						$("#load_tickets").hide();
-						/*$("#btnSend").show();
-						$("#div_selected").show();*/
 					}
 				});	
 			}else{

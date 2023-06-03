@@ -2,33 +2,6 @@
 const elements_selected = [];
 const elements_random   = [];
 
-/*function ticketsRn(tn,opt,max,tickets){
-	let tickets_arr    = tickets;
-	var tickets_random = generarNumerosAleatorios(opt,1,max,tickets_arr);
-
-	console.log(tickets_random);
-}//end function*/
-
-/*function generarNumerosAleatorios(cantidad, minimo, maximo, tickets) {
-	console.log(tickets);
-
-
-	var numerosAleatorios = [];	
-	for (var i = 1; i <= cantidad; i++) {
-		var n  = Math.floor(Math.random() * (maximo - minimo + 1)) + minimo;
-		var n_ = formatTicket(n,maximo.toString());
-
-		//Busca los aleatorios dentro del conjunto de tickets
-		var p = tickets.indexOf(n_);
-		//elements_random.push(ticketParse(n_));
-		//return false;
-		//numerosAleatorios.push(n_);
-	}//end for
-
-	return "entra";
-	//return numerosAleatorios;
-}//end function*/
-
 function ticketParse(tn){
 	let parseNTicket = tn.toString();
 	return parseNTicket;
@@ -99,6 +72,27 @@ function ticketRemove(t){
 		$("#t_"+t).remove();
 		$("#tn_"+t).removeClass('disabled btn-light');
 		$("#tn_"+t).addClass('btn-outline-light');
+	}//end if
+}//end function
+
+function disableTickets(){
+	let n_t = elements_selected.length;
+	if(n_t > 0){
+		for (var i = n_t-1; i >= 0; i--) {
+			$("#tn_"+elements_selected[i]).removeClass('btn-outline-light');
+			$("#tn_"+elements_selected[i]).addClass('btn-light');
+			$("#tn_"+elements_selected[i]).addClass('disabled');
+			//console.log(elements_selected[i]) 
+		}//end foreach
+	}//end if
+
+	let n_r = elements_random.length;
+	if(n_r > 0){
+		for (var i = n_r - 1; i >= 0; i--) {
+			for (let k in elements_random[i]) {
+				console.log(elements_random[i][key]);
+			}//end for
+		}//end for
 	}//end if
 }//end function
 
