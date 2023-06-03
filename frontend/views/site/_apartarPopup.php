@@ -70,6 +70,7 @@ if($state_ != "all"){
 			<?php echo $form->field($modelTicket,'lastname')->textInput(['placeholder'=>'APELLIDOS'])->label(false); ?>
 			<?php echo $form->field($modelTicket, 'state')->dropDownList($states, ['placeholder' => 'ESTADO'])->label(false); ?>
 			<?php echo $form->field($modelTicket, 'tickets_selected')->hiddenInput()->label(false); ?>
+			<?php echo $form->field($modelTicket, 'tickets_rand')->hiddenInput()->label(false); ?>
 			<div class="col-12 text-center text-success fw-bold">
 				¡Al finalizar serás redirigido a whatsapp para enviar la información de tu boleto!
 			</div>
@@ -94,6 +95,7 @@ $URL_sendwp = Url::to(['site/sendwp']);
 $script = <<< JS
 	function getTicketSelected(type = null){
 		let J_tn_sel     = $("#tn_sel").val();
+		let J_tn_ran     = $("#tn_rand").val();
 		let count_tn_sel = JSON.parse($("#tn_sel").val()).length;
 
 		if(type == "count"){
@@ -105,7 +107,7 @@ $script = <<< JS
 		}
 
 		if(type == null){
-			return {"count":count_tn_sel,"J_tn_sel":J_tn_sel};
+			return {"count":count_tn_sel,"J_tn_sel":J_tn_sel,"J_tn_ran":J_tn_ran};
 		}
 	}//end function
 
@@ -113,6 +115,7 @@ $script = <<< JS
 		let tickets_selected = getTicketSelected(null);
 		$("#n_ticket_s").text(tickets_selected.count);
 		$("#ticketform-tickets_selected").val(JSON.parse(tickets_selected.J_tn_sel));
+		$("#ticketform-tickets_rand").val(tickets_selected.J_tn_ran);
 
 	});
 

@@ -16,6 +16,7 @@ class TicketForm extends \yii\db\ActiveRecord
     public $lastname;
     public $state;
     public $tickets_selected;
+    public $tickets_rand;
 
     public function rules()
     {
@@ -81,7 +82,8 @@ class TicketForm extends \yii\db\ActiveRecord
 			'name'     => 'Nombre(s)',
 			'lastname' => 'Apellidos',
 			'state'    => 'Estado',
-            'tickets_selected' => 'Tickets'
+            'tickets_selected' => 'Tickets',
+            'tickets_rand' => 'oportunidades'
         ];
     }
 

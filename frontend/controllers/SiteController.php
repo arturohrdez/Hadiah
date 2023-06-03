@@ -282,11 +282,12 @@ class SiteController extends Controller
      * 
      * */
     public static function addcero($digitos,$number){
-        return str_pad($number, $digitos, "0", STR_PAD_LEFT);
+        return (string) str_pad($number, $digitos, "0", STR_PAD_LEFT);
     }//end function
 
-    public static function createTickets($init,$end,$rifaId){
+    public static function createTickets($init,$end,$rifaId,$tickets_ac){
         //Obtener el componente de caché
+        //Yii::$app->cache->flush();
         $cache    = Yii::$app->cache;
         $cacheKey = 'tickets_'.$init.'_'.$end;
         $tickets  = $cache->get($cacheKey);
@@ -295,18 +296,24 @@ class SiteController extends Controller
             $digitos = strlen($end);
             $tickets = [];
             for ($i=$init; $i <= $end ; $i++) {
-                $ticket_          = self::addcero($digitos,$i);
+                $ticket_           = self::addcero($digitos,$i);
                 $tickets[$ticket_] = $ticket_;
             }//end foreach
 
             $cache->set($cacheKey,$tickets);
         }//end if
 
-        $tickets_div = array_chunk($tickets,5000,true);
-        //$tickets_div = array_chunk($tickets,5);
+        $all_tickets_clean = [];
+        if(!empty($tickets_ac)){
+            $all_tickets_clean = array_diff($tickets, $tickets_ac);
+        }else{
+            $all_tickets_clean = $tickets;
+        }//end if
 
-        //Yii::$app->session->set('tickets', $tickets_div);
-        return $tickets_div;
+        return $all_tickets_clean;
+
+        //$tickets_div = array_chunk($tickets,5000,true);
+        //return ["tickets_div"=>$tickets_div,"tickets"=>$tickets];
     }//end function
 
     public static function dumpTicketAC($tickets_ac = []){
@@ -321,58 +328,10 @@ class SiteController extends Controller
         return $ticketsAC;
     }//end function
 
-    /*public static function saveTicketStorage($rifaId = null,$arr_tn = null,$uuid = null){
-        if(is_array($arr_tn)){
-            foreach ($arr_tn as $tn) {
-                $modelTS             = new Ticketstorage();
-                $modelTS->rifa_id    = $rifaId;
-                $modelTS->ticket     = $tn;
-                $modelTS->date_ini   = date("Y-m-d H:i:s");
-                $modelTS->date_end   = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
-                $modelTS->created_at = $_SERVER["REQUEST_TIME_FLOAT"];
-                $modelTS->uuid       = $uuid;
-                $modelTS->save();
-            }//end foreach
-        }else{
-            $modelTS             = new Ticketstorage();
-            $modelTS->rifa_id    = $rifaId;
-            $modelTS->ticket     = $arr_tn;
-            $modelTS->date_ini   = date("Y-m-d H:i:s");
-            $modelTS->date_end   = date("Y-m-d H:i:s",strtotime(Yii::$app->params['ticketstorage'],strtotime(date("Y-m-d H:i:s"))));
-            $modelTS->created_at = $_SERVER["REQUEST_TIME_FLOAT"];
-            $modelTS->uuid       = $uuid;
-            $modelTS->save();
-        }//end if
-    }//end function*/
-
-    /*public static function removeTicketStorage($rifaId = null, $tn = null){
-        $uuid = Yii::$app->session->get("uuid");
-        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn,"uuid"=>$uuid])->one();
-        if(!is_null($modelTS)){
-            $modelTS->delete();
-        }//end if
-    }//end if*/
-
-    /*public static function getTicketStorage($rifaId = null,$type = null,$tn = null){
-        if(is_null($type)){
-            $TicketsStorage = [];
-            $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId])->all();
-            if(!empty($modelTS)){
-                foreach ($modelTS as $ticket) {
-                    $TicketsStorage[] = $ticket->ticket;
-                }//end foreach
-            }//end if
-            return $TicketsStorage;
-        }elseif($type == 2){
-            $uuid    = Yii::$app->session->get("uuid");
-            $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->andWhere(["!=","uuid",$uuid])->count();
-            if(!empty($modelTS)){
-                return ["status"=>false,"rows"=>$modelTS];
-            }else{
-                return ["status"=>true];
-            }//end if
-        }//end if
-    }//end if*/
+    public static function chunkTickets($tickets_list){
+        $tickets_div = array_chunk($tickets_list,5000,true);
+        return $tickets_div;
+    }//end function
 
     /**
      * 
@@ -380,24 +339,40 @@ class SiteController extends Controller
      * 
      * */
     public function actionRifa(){
-        Yii::$app->session->set('countClick',0);
-        Yii::$app->session->set('tickets_play_all',[]);
-        Yii::$app->session->set('tickets', []);
+        \Yii::$app->session->set('countClick',0);
+        \Yii::$app->session->set('tickets_play_all',[]);
+        \Yii::$app->session->set('tickets_list', []);
+        \Yii::$app->session->set('tickets_div', []);
         /*$uuid = Yii::$app->session->get('uuid');
         if(empty($uuid)){
             Yii::$app->session->set('uuid', Uuid::v4());
         }//end if*/
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
+
+        //Valida si existen oportunidades
+        if(!empty($model->promos)){
+            \Yii::$app->session->set('oportunities',$model->promos[0]->get_ticket);
+        }else{
+            \Yii::$app->session->set('oportunities',0);
+        }//end if
+
         $init  = $model->ticket_init;
         $end   = $model->ticket_end;
 
+        //Apartados o vendidos
+        $tickets_ac   = self::dumpTicketAC($model->tickets);
+
         //Tickets List
-        $tickets_list = self::createTickets($init,$end,$model->id);
-        \Yii::$app->session->set('tickets', $tickets_list);
+        $tickets_list = self::createTickets($init,$end,$model->id,$tickets_ac);
+        $tickets_div  = self::chunkTickets($tickets_list);
 
         //Paginador
-        $pages = count($tickets_list);
+        $pages = count($tickets_div);
+
+        //Tickets Sessions 
+        \Yii::$app->session->set('tickets_list', $tickets_list);
+        \Yii::$app->session->set('tickets_div', $tickets_div);
 
         //Rifa no activas
         if(is_null($model) || !$model->status){
@@ -412,36 +387,17 @@ class SiteController extends Controller
         ]);
     }//end function
 
-    public function actionLoadtickets(){
-        $model = Rifas::find()->where(["id" => Yii::$app->request->post()["id"]])->one();
-        $init  = $model->ticket_init;
-        $end   = $model->ticket_end;
-        //Tickets List
-        $tickets_list  = \Yii::$app->session->get('tickets');
-
-        //Tickets apartados y vendidos
-        $tickets_ac        = self::dumpTicketAC($model->tickets);
-        $all_tickets_clean = [];
-        $i                 = 0;
-        foreach ($tickets_list as $list) {
-            $all_tickets_clean[$i] = array_diff($list, $tickets_ac);
-            $i++;
-        }//end foreach
-
-        //Todos los tickets disponibles
-        \Yii::$app->session->set('tickets', $all_tickets_clean);
-    }//end function
-
-    public function actionShowtickets($page){
+    public function actionShowtickets($page,$tickets_end){
         //Todos los tickets disponibles y en memoría
-        $tickets  = \Yii::$app->session->get('tickets');
+        $tickets  = \Yii::$app->session->get('tickets_div');
         $page_end = count($tickets) - 1;
 
         return $this->renderAjax('_loadTickets',[
-            //'model'        => $model,
+            //'model'      => $model,
             'tickets_list' => $tickets[$page],
             'page'         => $page,
-            'page_end'     => $page_end
+            'page_end'     => $page_end,
+            'tickets_end'  => $tickets_end
         ]);
     }//end function
 
@@ -962,6 +918,62 @@ DA CLICK EN ENVIAR➡️
         }
         // No existe registro en el storaga
         return ["status"=>true];
+    }//end function
+
+    public function actionTicketsrandom(){
+        $tn                 = Yii::$app->request->post()["tn"]; //Ticket seleccionado
+        $tickets_list       = \Yii::$app->session->get('tickets_list');
+        /*echo "<pre>";
+        var_dump(count($tickets_list));
+        echo "</pre>";*/
+
+        unset($tickets_list[$tn]);
+        \Yii::$app->session->set('tickets_list',$tickets_list);
+        $tickets_list_clean = \Yii::$app->session->get('tickets_list'); //Lista de tickets para obtener randoms
+
+        //Número de oportunidades por boleto seleccionado
+        $oportunidades =  \Yii::$app->session->get('oportunities');
+
+
+        //Obtiene un número aleatorio del conjunto de Tickets
+        $total_tickets_ls = count($tickets_list_clean);
+        //Existe tickets para generar un aleatoreo
+        if($total_tickets_ls > 0){
+            if($total_tickets_ls < $oportunidades){
+                $keys_random = array_rand($tickets_list_clean,$total_tickets_ls);
+            }else{
+                $keys_random = array_rand($tickets_list_clean,$oportunidades);
+            }//end if
+        }elseif($total_tickets_ls == 0){
+            //Ya no existen tickets para generar aleatoreo
+            $keys_random = null;
+        }//end if
+
+        /*echo "<pre>";
+        var_dump(count($tickets_list_clean));
+        echo "</pre>";*/
+
+        if(is_array($keys_random)){
+            foreach ($keys_random as $key_random) {
+                $tickets_play[$tn][] = $tickets_list_clean[$key_random];
+                //Elimina los tickets random del conjutno de tickets
+                unset($tickets_list_clean[$key_random]);
+            }//end foreahc
+        }else{
+            if(!is_null($keys_random)){
+                $tickets_play[$tn][] = $tickets_list_clean[$keys_random];
+                //Elimina los tickets random del conjutno de tickets
+                unset($tickets_list_clean[$keys_random]);
+            }//end if
+        }//end if
+
+        \Yii::$app->session->set('tickets_list',$tickets_list_clean);
+
+        //$tickets_list_update = \Yii::$app->session->get('tickets_list');
+
+        //Aquí retorna los randoms en formato json
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ["status"=>true,"tickets_play_ls"=>$tickets_play];
     }//end function
 
 }

@@ -17,6 +17,7 @@ echo newerton\fancybox3\FancyBox::widget([
 		'clickOutside' => false,
     ]
 ]);
+
 ?>
 <section id="breadcrumbs" class="breadcrumbs ">
 	<div class="container">
@@ -101,10 +102,11 @@ echo newerton\fancybox3\FancyBox::widget([
 							</p>
 
 							<div id="load_tickets" class="col-12" style="display: none;">
-								<div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div>
+								<!-- <div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div> -->
+								<?php echo Html::img("@web/images/suerte.gif", ['class' => 'img-fluid','width'=>'150','height'=>'150']); ?>
 							</div>
 
-							<div id="div_oportunities" class="col-12" style="display: none;"></div>
+							<div id="div_oportunities" class="col-12 overflow-auto" style="max-height: 200px; display: none;"></div>
 							<div class="row mt-3" style="text-align: center;">
 								<div>
 									<button id="btnSend" class="btn btn-success bg-gradient pl-5 pr-5 data-fancybox-modal" data-type="ajax" data-src="<?php echo Url::to(['site/apartar','id'=>$model->id]) ?>" data-touch="false" style="display: none;">
@@ -165,99 +167,51 @@ $URL_searcht = Url::to(['site/searchticket']);
 $URL_apartar = Url::to(['site/apartar','id'=>$model->id]);
 ?>
 
-<script type="text/javascript">
-	const elements_selected = [];
-
-	function ticketParse(tn){
-		let parseNTicket = parseInt(tn);
-		if(parseNTicket >= 10000){
-			return parseNTicket;
-		}//end if
-
-		return tn;
-	}//end if
-
-	function ticketRemove(t){
-		var url_r   = "<?php echo $URL_remove ?>";
-		var rifa_id = "<?php echo $model->id ?>";
-
-		let ticket_r = elements_selected.indexOf(ticketParse(t));
-		if (ticket_r > -1) {
-			elements_selected.splice(ticket_r, 1);
-			console.log(elements_selected);
-			//Tickets Count
-			let n_t = elements_selected.length;
-			$(".n_t").text(n_t);
-			if(n_t == 0){
-				$("#div_selected").hide();
-			}//end if
-
-			$("#t_"+t).remove();
-			$("#tn_"+t).removeClass('disabled btn-light');
-			$("#tn_"+t).addClass('btn-outline-light');
-
-		}//end if
-	}//end function
-</script>
-
 <?php 
 $script = <<< JS
 	$(function(e){
 		$("#tn_sel").val("");
 		$("#tn_rand").val("");
-		loadTickets();
+		showTickets();
 	});
 
-	function loadTickets(){
+	function showTickets(){
 		$.ajax({
-			url : "$URL_tickets",
-			type: "POST",
+			url : "$URL_showtickets",
+			type: "GET",
+			data: {'page':0,'tickets_end':{$model->ticket_end}},
 			dataType: "html",
-			data: {"id":$model->id},
 			beforeSend: function(){
 				$("#loading_tickets_list").show();
 			},
 			success: function (data) {
-				$.ajax({
-					url : "$URL_showtickets",
-					type: "GET",
-					data: {'page':0},
-					dataType: "html",
-					beforeSend: function(){},
-					success: function (data) {
-						$("#ticket_s").show();
-						$("#list_tickets").html(data);
-						let page = $("#n_page").val();
-						let next_page = parseInt(page)+1;
+				$("#ticket_s").show();
+				$("#list_tickets").html(data);
+				let page = $("#n_page").val();
+				let next_page = parseInt(page)+1;
 
-						if(page == 0){
-							$("#btn-back-page").addClass('disabled');
-							$("#btn-back-page").attr('data-page',page);
-						}else{
-							let back_page = parseInt(page)-1;
-							$("#btn-back-page").attr('data-page',back_page);
-							$("#btn-back-page").removeClass('disabled');
-						}//end if
-						$("#btn-next-page").attr('data-page',next_page);
+				if(page == 0){
+					$("#btn-back-page").addClass('disabled');
+					$("#btn-back-page").attr('data-page',page);
+				}else{
+					let back_page = parseInt(page)-1;
+					$("#btn-back-page").attr('data-page',back_page);
+					$("#btn-back-page").removeClass('disabled');
+				}//end if
+				$("#btn-next-page").attr('data-page',next_page);
 
-						$("#paginatorH").show();
-						$("#paginatorF").show();
-						return false;
-					}
-				});
-				/*$("#list_tickets").html("complete");
-				$("#loading_tickets_list").hide();*/
-				/*$(".sel").addClass("btn bg-black text-black mb-3");
-				$(".free").addClass("btn btn-outline-light mb-3 fw-bold");*/
-			}//sucess
+				$("#paginatorH").show();
+				$("#paginatorF").show();
+				return false;
+			}
 		});
-	}//
+	}//end function
 
 	function paginator(page){
 		$.ajax({
 			url : "$URL_showtickets",
 			type: "GET",
-			data: {'page':page},
+			data: {'page':page,'tickets_end':{$model->ticket_end}},
 			dataType: "html",
 			beforeSend: function(){
 				$("#list_tickets").html('<div id="loading_tickets_list" class="col-12 text-center mb-5"><strong class="fs-3 text-light">Generando boletos, por favor espere ...</strong><br><div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div></div>')
@@ -306,6 +260,7 @@ $script = <<< JS
 	});
 
 	$(".pageItem").on("click",function(e){
+		e.preventDefault();
 		$(".pageItem").removeClass("activePage");
 		let page  = $(this).attr('data-page');
 		$("#btn-next-page").addClass('disabled');
@@ -333,6 +288,8 @@ $script = <<< JS
 	$("#btn_addticket").on("click",function(e){
 		let tn_s = $("#ticket_s").val();
 		if(tn_s != ""){
+			tn_s = ticketParse(tn_s);
+			
 			$.ajax({
 				url : "{$URL_searcht}",
 				type: 'POST',

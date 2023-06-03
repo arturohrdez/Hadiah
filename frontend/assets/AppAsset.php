@@ -29,6 +29,7 @@ class AppAsset extends AssetBundle
         'js/vendor/isotope.pkgd.min.js',
         'js/vendor/swiper-bundle.min.js',
         'js/vendor/noframework.waypoints.js',
+        'js/list.js'
         //'js/vendor/php-email-form/validate.js',
     ];
     public $depends = [
