@@ -165,8 +165,63 @@ $URL_tickets = Url::to(['site/loadtickets']);
 $URL_showtickets = Url::to(['site/showtickets']);
 $URL_searcht = Url::to(['site/searchticket']);
 $URL_apartar = Url::to(['site/apartar','id'=>$model->id]);
+
+
+if (\Yii::$app->session->has('oportunities')) {
+	$oportunidades = \Yii::$app->session->get('oportunities');
+} else {
+	$oportunidades = 0;
+}//end if
 ?>
 
+<script type="text/javascript">
+	function ticketRemove(t){
+		var oportunidades = '<?php echo $oportunidades;?>';
+
+		var tn = ticketParse(t);
+		let ticket_r = elements_selected.indexOf(tn);
+		if (ticket_r > -1) {
+			if(oportunidades > 0){
+				let tr = elements_random[ticket_r][tn];
+
+				$.ajax({
+					url : "<?php echo $URL_remove;?>",
+					type: "POST",
+					data: {'tn':tn,'tr':tr},
+					beforeSend: function(){
+						console.log("init remove");
+					},
+					success: function (response) {
+						if(response.status == true){
+							//Aquí se debe eliminar el ticket seleccionado y randoms
+						}//end if
+						console.log(response);
+						console.log("end remove");
+						/*elements_selected.push(tn);
+						elements_random.push(response.tickets_play_ls);
+						reloadTicketsInfo();
+						$("#load_tickets").hide();*/
+					}
+				});	
+			}else{
+				elements_selected.splice(ticket_r, 1);
+				//console.log(elements_selected);
+				
+				//Tickets Count
+				let n_t = elements_selected.length;
+				$(".n_t").text(n_t);
+				if(n_t == 0){
+					$("#div_selected").hide();
+				}//end if
+
+				$("#t_"+t).remove();
+				$("#tn_"+t).removeClass('disabled btn-light');
+				$("#tn_"+t).addClass('btn-outline-light');
+			}//end if
+
+		}//end if
+	}//end function
+</script>
 <?php 
 $script = <<< JS
 	$(function(e){

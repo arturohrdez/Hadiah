@@ -567,26 +567,18 @@ class SiteController extends Controller
         }//end if
     }//end function
 
-    public function actionTicketremove(){
+    /*public function actionTicketremove(){
         $rifaId  = Yii::$app->request->post()["id"];
         $tn      = Yii::$app->request->post()["tn"];
-        //self::removeTicketStorage($rifaId,$tn);
-
 
         $tickets_play_all = Yii::$app->session->get('tickets_play_all');
         $ticketRemove_    = $tickets_play_all[$tn];
-        /*if(is_array($ticketRemove_)){
-            foreach ($ticketRemove_ as $tnr) {
-                self::removeTicketStorage($rifaId,$tnr);
-            }//end foreach
-        }//end if*/
-
 
         unset($tickets_play_all[$tn]);
         Yii::$app->session->set('tickets_play_all',$tickets_play_all);
         $ticketRemove = json_encode($ticketRemove_);
         return $ticketRemove;
-    }//end function
+    }//end function*/
 
     public function actionSearchticket(){
         $id   = Yii::$app->request->post()["id"];
@@ -974,6 +966,24 @@ DA CLICK EN ENVIAR➡️
         //Aquí retorna los randoms en formato json
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ["status"=>true,"tickets_play_ls"=>$tickets_play];
+    }//end function
+
+    public function actionTicketremove(){
+        $tn           = Yii::$app->request->post()["tn"];
+        $tr           = Yii::$app->request->post()["tr"];
+
+        $tickets_list = \Yii::$app->session->get('tickets_list');
+        //Agregar Seleccionado
+        $tickets_list[(string) $tn] = (string) $tn;
+
+        //Agrega Randoms
+        foreach ($tr as $r) {
+            $tickets_list[(string) $r] = (string)$r;
+        }//end foreach
+        \Yii::$app->session->set('tickets_list',$tickets_list);
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ["status"=>true];
     }//end function
 
 }

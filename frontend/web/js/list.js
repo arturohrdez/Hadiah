@@ -55,26 +55,6 @@ function reloadTicketsInfo(){
 	return true;
 }//end if
 
-function ticketRemove(t){
-	/*var url_r   = "<?php echo $URL_remove ?>";
-	var rifa_id = "<?php echo $model->id ?>";*/
-	let ticket_r = elements_selected.indexOf(ticketParse(t));
-	if (ticket_r > -1) {
-		elements_selected.splice(ticket_r, 1);
-		console.log(elements_selected);
-		//Tickets Count
-		let n_t = elements_selected.length;
-		$(".n_t").text(n_t);
-		if(n_t == 0){
-			$("#div_selected").hide();
-		}//end if
-
-		$("#t_"+t).remove();
-		$("#tn_"+t).removeClass('disabled btn-light');
-		$("#tn_"+t).addClass('btn-outline-light');
-	}//end if
-}//end function
-
 function disableTickets(){
 	let n_t = elements_selected.length;
 	if(n_t > 0){
