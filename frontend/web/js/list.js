@@ -89,5 +89,20 @@ function enableTicketsRnd(tr){
 	//console.log(tr);
 }//end function
 
+function searchTickets(tn){
+	let search_ti = elements_selected.indexOf(tn);
+	if(search_ti == -1){
+		var arr_base  = elements_random.flatMap(objeto => Object.values(objeto)).flat();
+		let search_tr = arr_base.indexOf(tn);
+		if(search_tr == -1){
+			return true;
+		}else{
+			return false;
+		}//end if
+	}else{
+		return false;
+	}//end if
+}//end if
+
 
 

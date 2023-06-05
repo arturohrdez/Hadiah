@@ -158,13 +158,13 @@ echo newerton\fancybox3\FancyBox::widget([
 </section>
 
 <?php 
-$digitos     = strlen($model->ticket_end);
-$URL_remove  = Url::to(['site/ticketremove']);
-$URL_tickets = Url::to(['site/loadtickets']);
+$digitos         = strlen($model->ticket_end);
+$URL_remove      = Url::to(['site/ticketremove']);
+$URL_tickets     = Url::to(['site/loadtickets']);
 $URL_showtickets = Url::to(['site/showtickets']);
-$URL_searcht = Url::to(['site/searchticket']);
-$URL_apartar = Url::to(['site/apartar','id'=>$model->id]);
-
+$URL_searcht     = Url::to(['site/searchticket']);
+$URL_apartar     = Url::to(['site/apartar','id'=>$model->id]);
+$URL_random      = Url::to(['site/ticketsrandom']);
 
 if (\Yii::$app->session->has('oportunities')) {
 	$oportunidades = \Yii::$app->session->get('oportunities');
@@ -344,8 +344,16 @@ $script = <<< JS
 	$("#btn_addticket").on("click",function(e){
 		let tn_s = $("#ticket_s").val();
 		if(tn_s != ""){
-			tn_s = ticketParse(tn_s);
-			
+			tn_s           = ticketParse(tn_s);
+			var resSearchT = searchTickets(tn_s);
+
+			if(!resSearchT){
+				$("#ticket_e_m").show();
+				$("#btn_addticket").hide();
+				$("#ticket_s").val('');
+				return false;
+			}//end if
+
 			$.ajax({
 				url : "{$URL_searcht}",
 				type: 'POST',
@@ -362,35 +370,31 @@ $script = <<< JS
 					$("#btn_addticket").attr("disabled",false);
 
 					if(response.status == true){
-						let search_ti = elements_selected.indexOf(ticketParse(tn_s));
-						if(search_ti == -1){
-							//$("#tn_"+tn_s).trigger('click');
-							elements_selected.push(tn_s);
-							console.log(elements_selected);
-
-							let jTickets = JSON.stringify(elements_selected)
-							$("#tn_sel").val(jTickets);
-
-
-							//Tickets Count
-							let n_t = elements_selected.length;
-							$(".n_t").text(n_t);	
-
-							//Tickets selected
-							let t_selectBtn = "";
-							for (var i = n_t-1; i >= 0; i--) {
-								t_selectBtn = t_selectBtn + '<button id="t_'+elements_selected[i]+'" class="btn_ticketDel btn btn-danger ml-2" type="button" onclick="ticketRemove(`'+elements_selected[i]+'`)">'+elements_selected[i]+'</button>';
-							}//end foreach
-							$(".t_opt").html(t_selectBtn);
-
-							//Show Div Selected
-							$("#div_selected").show();
-
-							$("#tn_"+tn_s).removeClass('btn-outline-light');
-							$("#tn_"+tn_s).addClass('btn-light disabled');
-							$("#btnSend").show();
+						if(oportunidades > 0){
+							$.ajax({
+								url : "{$URL_random}",
+								type: "POST",
+								data: {'tn':tn_s},
+								beforeSend: function(){
+									$("#tn_"+tn_s).attr('disabled',true);
+									$("#tn_"+tn_s).removeClass('btn-outline-light');
+									$("#tn_"+tn_s).addClass('btn-light');
+									$("#tn_"+tn_s).addClass('disabled');
+									$("#load_tickets").show();
+									$("#btnSend").hide();
+									$("#div_selected").show();
+								},
+								success: function (response) {
+									elements_selected.push(tn_s);
+									elements_random.push(response.tickets_play_ls);
+									disableTicketRnd();
+									reloadTicketsInfo();
+									$("#load_tickets").hide();
+								}
+							});
 						}else{
-							$("#ticket_e_m").show();
+							elements_selected.push(tn_s);
+							reloadTicketsInfo();
 						}//end if
 					}else{
 						$("#ticket_e_m").show();
