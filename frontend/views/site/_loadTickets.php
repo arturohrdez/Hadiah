@@ -21,7 +21,7 @@ $script = <<< JS
 	var oportunidades = '{$oportunidades}';
 
 	$(function(e){
-		disableTickets();
+		disableTicketRnd();
 	});
 
 	$(".btn_ticket").on("click",function(e){
@@ -37,17 +37,18 @@ $script = <<< JS
 					type: "POST",
 					data: {'tn':tn},
 					beforeSend: function(){
-						console.log("init rnd");
 						$("#tn_"+tn).attr('disabled',true);
 						$("#tn_"+tn).removeClass('btn-outline-light');
 						$("#tn_"+tn).addClass('btn-light');
 						$("#tn_"+tn).addClass('disabled');
 						$("#load_tickets").show();
 						$("#btnSend").hide();
+						$("#div_selected").show();
 					},
 					success: function (response) {
 						elements_selected.push(tn);
 						elements_random.push(response.tickets_play_ls);
+						disableTicketRnd();
 						reloadTicketsInfo();
 						$("#load_tickets").hide();
 					}
@@ -57,7 +58,6 @@ $script = <<< JS
 				reloadTicketsInfo();
 			}//end if
 		}//end if
-		//console.log(elements_selected);
 	});
 JS;
 $this->registerJs($script);

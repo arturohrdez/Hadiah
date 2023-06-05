@@ -102,7 +102,6 @@ echo newerton\fancybox3\FancyBox::widget([
 							</p>
 
 							<div id="load_tickets" class="col-12" style="display: none;">
-								<!-- <div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div> -->
 								<?php echo Html::img("@web/images/suerte.gif", ['class' => 'img-fluid','width'=>'150','height'=>'150']); ?>
 							</div>
 
@@ -187,26 +186,28 @@ if (\Yii::$app->session->has('oportunities')) {
 				$.ajax({
 					url : "<?php echo $URL_remove;?>",
 					type: "POST",
+					async: false,
 					data: {'tn':tn,'tr':tr},
 					beforeSend: function(){
-						console.log("init remove");
+						$("#load_tickets").show();
 					},
 					success: function (response) {
 						if(response.status == true){
-							//Aquí se debe eliminar el ticket seleccionado y randoms
+							elements_selected.splice(ticket_r, 1);
+							elements_random.splice(ticket_r, 1);
+							reloadTicketsInfo();
+							enableTicketsRnd(tr);
+
+							$("#t_"+tn).remove();
+							$("#tn_"+tn).removeClass('disabled btn-light');
+							$("#tn_"+tn).addClass('btn-outline-light');
+							$("#load_tickets").hide();
 						}//end if
-						console.log(response);
-						console.log("end remove");
-						/*elements_selected.push(tn);
-						elements_random.push(response.tickets_play_ls);
-						reloadTicketsInfo();
-						$("#load_tickets").hide();*/
 					}
 				});	
 			}else{
 				elements_selected.splice(ticket_r, 1);
-				//console.log(elements_selected);
-				
+
 				//Tickets Count
 				let n_t = elements_selected.length;
 				$(".n_t").text(n_t);
@@ -214,9 +215,9 @@ if (\Yii::$app->session->has('oportunities')) {
 					$("#div_selected").hide();
 				}//end if
 
-				$("#t_"+t).remove();
-				$("#tn_"+t).removeClass('disabled btn-light');
-				$("#tn_"+t).addClass('btn-outline-light');
+				$("#t_"+tn).remove();
+				$("#tn_"+tn).removeClass('disabled btn-light');
+				$("#tn_"+tn).addClass('btn-outline-light');
 			}//end if
 
 		}//end if
@@ -348,6 +349,7 @@ $script = <<< JS
 			$.ajax({
 				url : "{$URL_searcht}",
 				type: 'POST',
+				async: false,
 				data: {"id":{$model->id},"tn_s":tn_s,"max":{$model->ticket_end}},
 				beforeSend: function(data){
 					//$("#ticket_s_m").hide();
