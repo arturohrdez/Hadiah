@@ -660,6 +660,14 @@ class SiteController extends Controller
                         }//end foreach
                     }//end if
 
+
+                    //$tickets_play_rnd = $modelTicket->tickets_rand;
+                    echo "<pre>";
+                    var_dump($modelTicket);
+                    echo "</pre>";
+                    die();
+
+
                     //Valida cada ticket vs Apartados o vendidos
                     /*foreach ($tickets_play_all as $key__ => $tickets__) {
                         if(!self::getTicketSelected($rifaId,$key__)){
