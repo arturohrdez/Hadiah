@@ -651,7 +651,7 @@ class SiteController extends Controller
                     //$tickets_play_all  = Yii::$app->session->get('tickets_play_all');
                     $tickets_play_all  = explode(",", $modelTicket->tickets_selected);
 
-                    //Verifica que los tickets seleccionados no estén ya vendidos
+                    //Verifica que los tickets seleccionados no estén vendidos o apartados
                     $resGetTicektSelected = self::getTicketSelected($rifaId,$tickets_play_all);
                     if(!$resGetTicektSelected["status"]){
                         //Existen tickets previamente apartados
@@ -661,26 +661,52 @@ class SiteController extends Controller
                     }//end if
 
 
-                    //$tickets_play_rnd = $modelTicket->tickets_rand;
-                    echo "<pre>";
-                    var_dump($modelTicket);
-                    echo "</pre>";
-                    die();
-
-
-                    //Valida cada ticket vs Apartados o vendidos
-                    /*foreach ($tickets_play_all as $key__ => $tickets__) {
-                        if(!self::getTicketSelected($rifaId,$key__)){
-                            $ticket_duplicados[] = $key__;
+                    /**
+                     * 
+                     * Procedimiento para tickets randoms
+                     * 
+                     * */
+                    if(Yii::$app->session->get('oportunities') > 0){
+                        //Verifica que los tickets randoms no estén vendidos o apartados
+                        $tickets_play_rnd = json_decode($modelTicket->tickets_rand,true);
+                        if(is_null($tickets_play_rnd)){
+                            $errorMessage = json_last_error_msg(); //Json mal formado
+                            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                            return [
+                                "status" => false,
+                                "valid"  => false,
+                                "errors" => $errorMessage,
+                            ];
                         }//end if
-                        if(is_array($tickets__)){
-                            foreach ($tickets__ as $ticket_) {
-                                if(!self::getTicketSelected($rifaId,$ticket_)){
-                                    $ticket_duplicados[] = $ticket_;
-                                }//end if
-                            }//end foreach
-                        }//end if
-                    }//end foreach*/
+
+                        // Convertir el arreglo multidimensional en un arreglo simple
+                        $arr_base_rnd = array_reduce($tickets_play_rnd, function ($result, $item) {
+                            return array_merge($result, array_values($item));
+                        }, []);
+
+                        foreach ($arr_base_rnd as $ticket_play_rnd) {
+                            //Valida que no hayan filtrado más oportunidades desde front
+                            $c_opt = count($ticket_play_rnd);
+                            if($c_opt > \Yii::$app->session->get('oportunities')){
+                                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                                return [
+                                    "status"             => false,
+                                    "valid"              => false,
+                                    "errors" => "Valores Modificados"
+                                ];
+                            }//end if
+
+                            $resGetTicektRnd = self::getTicketSelected($rifaId,$ticket_play_rnd);
+                            if(!$resGetTicektRnd["status"]){
+                                //Existen tickets previamente apartados
+                                foreach ($resGetTicektRnd["model"] as $key__) {
+                                    $ticket_duplicados[] = $key__->ticket;
+                                }//end foreach
+                            }//end if
+                        }//end foreach
+                    }//end if
+                    /**************/
+
 
                     //Existen tickets ya registrados por alguien más
                     if(!empty($ticket_duplicados)){
@@ -723,46 +749,44 @@ class SiteController extends Controller
                             $model->parent_id  = null;
                             $model->expiration = "0";
                             $model->save(false);
-                        }//end foreach
-                        /*foreach ($tickets_play_all as $key__ => $tickets__) {
-                            $model             = new Tickets();
-                            $model->rifa_id    = $modelTicket->rifa_id;
-                            $model->ticket     = (string) $key__;
-                            $model->folio      = $folio;
-                            $model->date       = date("Y-m-d H:i");
-                            $model->date_end   = date("Y-m-d H:i",strtotime ( '+'.$time_apart.' hour',strtotime (date("Y-m-d H:i"))));
-                            $model->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
-                            $model->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
-                            $model->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
-                            $model->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
-                            $model->type       = "S";
-                            $model->type_sale  = "online";
-                            $model->status     = "A";
-                            $model->parent_id  = null;
-                            $model->expiration = "0";
-                            $model->save(false);
 
-                            if(is_array($tickets__)){
-                                foreach ($tickets__ as $ticket_) {
-                                    $modelTR             = new Tickets();
-                                    $modelTR->rifa_id    = $modelTicket->rifa_id;
-                                    $modelTR->ticket     = (string) $ticket_;
-                                    $modelTR->folio      = $folio;
-                                    $modelTR->date       = date("Y-m-d H:i");
-                                    $modelTR->date_end   = date("Y-m-d H:i",strtotime ( '+'.$time_apart.' hour',strtotime (date("Y-m-d H:i"))));
-                                    $modelTR->phone      = \yii\helpers\HtmlPurifier::process($modelTicket->phone);
-                                    $modelTR->name       = \yii\helpers\HtmlPurifier::process($modelTicket->name);
-                                    $modelTR->lastname   = \yii\helpers\HtmlPurifier::process($modelTicket->lastname);
-                                    $modelTR->state      = \yii\helpers\HtmlPurifier::process($modelTicket->state);
-                                    $modelTR->type       = "R";
-                                    $modelTR->type_sale  = "online";
-                                    $modelTR->status     = "A";
-                                    $modelTR->parent_id  = $model->id;
-                                    $modelTR->expiration = "0";
-                                    $modelTR->save(false);
+                            /**
+                             *  
+                             * Procedimiento para tickets randoms
+                             * 
+                             * */
+                            if(Yii::$app->session->get('oportunities') > 0){
+                                foreach ($tickets_play_rnd as $ticket_play_rnd) {
+                                    foreach ($ticket_play_rnd as $ticket_s => $ticket_r) {
+                                        if($ticket_aparta == $ticket_s){
+                                            $data_insert = [];
+                                            foreach ($ticket_r as $t_r) {
+                                                $data_insert[] = [
+                                                    'rifa_id'    => $modelTicket->rifa_id,
+                                                    'ticket'     => (string) $t_r,
+                                                    'folio'      => $folio,
+                                                    'date'       => date("Y-m-d H:i"),
+                                                    'date_end'   => date("Y-m-d H:i",strtotime ( '+'.$time_apart.' hour',strtotime (date("Y-m-d H:i")))),
+                                                    'phone'      => \yii\helpers\HtmlPurifier::process($modelTicket->phone),
+                                                    'name'       => \yii\helpers\HtmlPurifier::process($modelTicket->name),
+                                                    'lastname'   => \yii\helpers\HtmlPurifier::process($modelTicket->lastname),
+                                                    'state'      => \yii\helpers\HtmlPurifier::process($modelTicket->state),
+                                                    'type'       => "R",
+                                                    'type_sale'  => "online",
+                                                    'status'     => "A",
+                                                    'parent_id'  => $model->id,
+                                                    'expiration' => "0",
+                                                ];
+                                            }//end foreach
+
+                                            $columnNameArray = ['rifa_id','ticket','folio','date','date_end','phone','name','lastname','state','type','type_sale','status','parent_id','expiration'];
+                                            Yii::$app->db->createCommand()->batchInsert("tickets", $columnNameArray, $data_insert)->execute();
+                                        }//end if
+                                    }//end forecha
                                 }//end foreach
                             }//end if
-                        }//end foreach*/
+                            /**************/
+                        }//end foreach
 
                         $transaction->commit();
                     }catch(Exception $e){

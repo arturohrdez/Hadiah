@@ -26,7 +26,7 @@ class TicketForm extends \yii\db\ActiveRecord
 			[['phone'], 'number', 'max'    => 9999999999],
 			[['name'], 'string', 'max'     => 180],
 			[['lastname'], 'string', 'max' => 250],
-            [['name'], 'safe'],
+            [['name','tickets_rand'], 'safe'],
             [['phone','name','lastname','state'], 'validarSqlInjection'],
             [['phone'], 'filter','filter' => function($value) {
                 $cleanValue = HtmlPurifier::process($value);
