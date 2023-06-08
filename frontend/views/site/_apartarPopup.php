@@ -70,8 +70,7 @@ if($state_ != "all"){
 			<?php echo $form->field($modelTicket,'lastname')->textInput(['placeholder'=>'APELLIDOS'])->label(false); ?>
 			<?php echo $form->field($modelTicket, 'state')->dropDownList($states, ['placeholder' => 'ESTADO'])->label(false); ?>
 			<?php echo $form->field($modelTicket, 'tickets_selected')->hiddenInput()->label(false); ?>
-			<?php //echo $form->field($modelTicket, 'tickets_rand')->hiddenInput()->label(false); ?>
-			<?php echo $form->field($modelTicket,'tickets_rand')->textInput(['placeholder'=>'randoms'])->label(false); ?>
+			<?php echo $form->field($modelTicket, 'tickets_rand')->hiddenInput()->label(false); ?>
 			<div class="col-12 text-center text-success fw-bold">
 				¡Al finalizar serás redirigido a whatsapp para enviar la información de tu boleto!
 			</div>

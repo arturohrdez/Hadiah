@@ -55,6 +55,10 @@ $script = <<< JS
 				});	
 			}else{
 				elements_selected.push(tn);
+				$("#tn_"+tn).attr('disabled',true);
+				$("#tn_"+tn).removeClass('btn-outline-light');
+				$("#tn_"+tn).addClass('btn-light');
+				$("#tn_"+tn).addClass('disabled');
 				reloadTicketsInfo();
 			}//end if
 		}//end if

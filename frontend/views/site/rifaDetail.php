@@ -207,7 +207,7 @@ if (\Yii::$app->session->has('oportunities')) {
 				});	
 			}else{
 				elements_selected.splice(ticket_r, 1);
-
+				console.log(elements_selected);
 				//Tickets Count
 				let n_t = elements_selected.length;
 				$(".n_t").text(n_t);
@@ -218,6 +218,8 @@ if (\Yii::$app->session->has('oportunities')) {
 				$("#t_"+tn).remove();
 				$("#tn_"+tn).removeClass('disabled btn-light');
 				$("#tn_"+tn).addClass('btn-outline-light');
+
+				reloadTicketsInfo();
 			}//end if
 
 		}//end if

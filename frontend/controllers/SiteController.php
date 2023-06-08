@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use Yii;
 use backend\models\Rifas;
 use backend\models\Tickets;
-use backend\models\Ticketstorage;
 use common\models\LoginForm;
 use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
@@ -755,7 +754,7 @@ class SiteController extends Controller
                              * Procedimiento para tickets randoms
                              * 
                              * */
-                            if(Yii::$app->session->get('oportunities') > 0){
+                            if(\Yii::$app->session->get('oportunities') > 0){
                                 foreach ($tickets_play_rnd as $ticket_play_rnd) {
                                     foreach ($ticket_play_rnd as $ticket_s => $ticket_r) {
                                         if($ticket_aparta == $ticket_s){
@@ -930,19 +929,6 @@ DA CLICK EN ENVIAR➡️
         ]);
     }//end function
 
-    public function actionValidstorageticket(){
-        $rifaId = Yii::$app->request->post()["id"];
-        $tn     = Yii::$app->request->post()["tn"];
-
-        $modelTS = Ticketstorage::find()->where(["rifa_id" => $rifaId,"ticket"=>$tn])->count();
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        //Existe registros en el storage
-        if($modelTS > 0){
-            return ["status"=>false];
-        }
-        // No existe registro en el storaga
-        return ["status"=>true];
-    }//end function
 
     public function actionTicketsrandom(){
         $tn                 = Yii::$app->request->post()["tn"]; //Ticket seleccionado

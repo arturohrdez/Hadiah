@@ -50,12 +50,16 @@ function reloadTicketsInfo(){
 	}else{
 		$("#div_oportunities").empty();
 		$("#div_selected").hide();
-		return true;
 	}//end if
 
-	//Show Div Selected
-	$("#div_selected").show();
-	$("#btnSend").show();
+	if(n_t == 0){
+		$("#div_selected").hide();
+		$("#btnSend").hide();
+	}else{
+		$("#div_selected").show();
+		$("#btnSend").show();
+	}//end if
+
 	return true;
 }//end if
 
