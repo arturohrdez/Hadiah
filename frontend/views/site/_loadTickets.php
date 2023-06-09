@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+
 $URL_random    = Url::to(['site/ticketsrandom']);
 if (\Yii::$app->session->has('oportunities')) {
 	$oportunidades = \Yii::$app->session->get('oportunities');

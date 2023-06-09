@@ -390,6 +390,10 @@ class SiteController extends Controller
         //Todos los tickets disponibles y en memoría
         $tickets  = \Yii::$app->session->get('tickets_div');
         $page_end = count($tickets) - 1;
+        
+        if($page_end < 0){
+            return "<div class='col-12 alert-info text-center h1'>LO SENTIMOS, NO HAY BOLETOS ACTIVOS.</div>";
+        }//end if
 
         return $this->renderAjax('_loadTickets',[
             //'model'      => $model,
