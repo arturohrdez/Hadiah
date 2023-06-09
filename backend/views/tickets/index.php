@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'          => 'Boletos / Oportunidades',
                                 'attribute'      => 'ticket',
-                                'contentOptions' => ['style'=>'text-align: center'],
+                                'contentOptions' => ['style'=>'text-align: center; max-width: 100px !important;'],
                                 'value'     => function($model){
                                     $oportunidades = Tickets::find()->where(['parent_id'=>$model->id])->all();
                                     if(!empty($oportunidades)){
