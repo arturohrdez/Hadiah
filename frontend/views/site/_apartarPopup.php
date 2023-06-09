@@ -103,7 +103,7 @@ $script = <<< JS
 		}
 
 		if(type == 'json_tickets'){
-			return {"J_tn_sel":J_tn_sel};
+			return {"J_tn_sel":J_tn_sel,"J_tn_ran":J_tn_ran};
 		}
 
 		if(type == null){
@@ -159,7 +159,7 @@ $script = <<< JS
 		        		$.ajax({
 		        			url: "{$URL_sendwp}",
 		        			type: "POST",
-		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone,"folio":data.folio,"json_tickets":json_tickets.J_tn_sel},
+		        			data: {"id":{$modelRifa->id},"name":data.name,"lastname":data.lastname,"phone":data.phone,"folio":data.folio,"json_tickets":json_tickets.J_tn_sel,"json_tickets_rnd":json_tickets.J_tn_ran},
 		        			beforeSend: function(data){
 		        				$("#divMsg").html('<div class="alert alert-success">Redirigiendo a Whatsapp...</div>');
 		        			},

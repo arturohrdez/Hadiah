@@ -102,7 +102,7 @@ echo newerton\fancybox3\FancyBox::widget([
 							</p>
 
 							<div id="load_tickets" class="col-12" style="display: none;">
-								<?php echo Html::img("@web/images/suerte.gif", ['class' => 'img-fluid','width'=>'150','height'=>'150']); ?>
+								<?php echo Html::img("@web/images/suerte.gif", ['class' => 'img-fluid','width'=>'100','height'=>'100']); ?>
 							</div>
 
 							<div id="div_oportunities" class="col-12 overflow-auto" style="max-height: 200px; display: none;"></div>
@@ -182,13 +182,13 @@ if (\Yii::$app->session->has('oportunities')) {
 		if (ticket_r > -1) {
 			if(oportunidades > 0){
 				let tr = elements_random[ticket_r][tn];
-
 				$.ajax({
 					url : "<?php echo $URL_remove;?>",
 					type: "POST",
-					async: false,
+					async: true,
 					data: {'tn':tn,'tr':tr},
-					beforeSend: function(){
+					beforeSend: function(e){
+						$(".btn_ticketDel").addClass('disabled');
 						$("#load_tickets").show();
 					},
 					success: function (response) {
@@ -201,6 +201,7 @@ if (\Yii::$app->session->has('oportunities')) {
 							$("#t_"+tn).remove();
 							$("#tn_"+tn).removeClass('disabled btn-light');
 							$("#tn_"+tn).addClass('btn-outline-light');
+							$(".btn_ticketDel").removeClass('disabled');
 							$("#load_tickets").hide();
 						}//end if
 					}

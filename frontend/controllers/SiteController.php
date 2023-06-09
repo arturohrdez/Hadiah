@@ -850,10 +850,25 @@ class SiteController extends Controller
         $num_tickets          = count($tickets_play_all);
         $tickets_play_all_str = "";
         $h                    = 0;
-        foreach ($tickets_play_all as $ticket__) {
-            $tickets_play_all_str .= $ticket__."
+
+        if(\Yii::$app->session->get('oportunities') > 0){
+            $tickets_play_rnd = json_decode(Yii::$app->request->post()["json_tickets_rnd"],true);
+            foreach ($tickets_play_rnd as $ticket_play_rnd) {
+                foreach ($ticket_play_rnd as $ticket_s => $ticket_r) {
+                    $tickets_play_all_str .= $ticket_s."[".implode(",",$ticket_r)."]
 ";
-        }//end foreach
+                }//end foreach
+            }//end foreach
+        }else{
+            foreach ($tickets_play_all as $ticket__) {
+                $tickets_play_all_str .= $ticket__."
+";
+            }//end foreach
+        }//end if
+
+
+
+
         /*foreach ($tickets_play_all as $key__ => $tickets__) {
             $tickets_play_all_str .= $key__." ";
             if(is_array($tickets__)){
@@ -979,7 +994,9 @@ DA CLICK EN ENVIAR➡️
 
         \Yii::$app->session->set('tickets_list',$tickets_list_clean);
 
-        //$tickets_list_update = \Yii::$app->session->get('tickets_list');
+        if(is_null($keys_random)){
+            $tickets_play[$tn][] = $tn;
+        }//end if
 
         //Aquí retorna los randoms en formato json
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -987,8 +1004,12 @@ DA CLICK EN ENVIAR➡️
     }//end function
 
     public function actionTicketremove(){
-        $tn           = Yii::$app->request->post()["tn"];
-        $tr           = Yii::$app->request->post()["tr"];
+        $tn = Yii::$app->request->post()["tn"];
+        $tr = Yii::$app->request->post()["tr"];
+        /*if(isset(Yii::$app->request->post()["tr"])){
+        }else{
+            $tr = null;
+        }//end if*/
 
         $tickets_list = \Yii::$app->session->get('tickets_list');
         //Agregar Seleccionado
@@ -998,8 +1019,8 @@ DA CLICK EN ENVIAR➡️
         foreach ($tr as $r) {
             $tickets_list[(string) $r] = (string)$r;
         }//end foreach
-        \Yii::$app->session->set('tickets_list',$tickets_list);
 
+        \Yii::$app->session->set('tickets_list',$tickets_list);
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ["status"=>true];
     }//end function
