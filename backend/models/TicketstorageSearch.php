@@ -41,7 +41,8 @@ class TicketstorageSearch extends Ticketstorage
     public function search($params)
     {
         //$query = Ticketstorage::find();
-        $query = Ticketstorage::find()->where(['IS','parent_id',NULL]);
+        //$query = Ticketstorage::find()->where(['IS','parent_id',NULL]);
+        $query = Ticketstorage::find()->joinWith(['rifa'])->where(['<>','rifas.status',0])->andWhere(['IS','parent_id',NULL]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
