@@ -67,14 +67,14 @@ echo newerton\fancybox3\FancyBox::widget([
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
 
-                            'id',
+                            //'id',
                             'name',
                             [
                                 'label'          => 'Imagen',
                                 'attribute'      => 'main_image',
                                 'format'         => 'html',
                                 'contentOptions' => [
-                                    "style" => "text-align: center",
+                                    "style" => "text-align: center;",
                                 ],
                                 'value'     =>function($model){
                                     return Html::a(Html::img(Url::base()."/".$model->main_image,['height'=>'100']),Url::base()."/".$model->main_image,['title'=>'Ver Imagen','class' => 'data-fancybox']);
@@ -93,7 +93,7 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'label'          => 'Estatus',
                                 'attribute'      => 'status',
                                 'format'         => 'html',
-                                'contentOptions' => ['style'=>'text-align: center'],
+                                'contentOptions' => ['style'=>'text-align: center;'],
                                 'value'          => function($model){
                                     if($model->status == 1){
                                         return '<div class="right badge badge-success">EN JUEGO</div>';
@@ -109,8 +109,11 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'header'        => 'Actions',
                                 'headerOptions' => ['style'=>'text-align:center'],
                                 'contentOptions' => ['class'=>'text-center'],
-                                'template'      => '{view} {update}',
+                                'template'      => '{winners} {view} {update}',
                                 'buttons'       => [
+                                    'winners'=>function($url,$model){
+                                        return Html::button('<i class="fas fa-trophy"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-yellow btn-sm btnViewForm', 'title'=>'Asignar Ganador(es)']);
+                                    },
                                     'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },

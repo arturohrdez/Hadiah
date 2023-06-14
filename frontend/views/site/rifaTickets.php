@@ -74,7 +74,7 @@
 							<div class="col-md-8 col-12 fw-bold text-danger"><?php echo strtoupper(\yii\helpers\Html::encode($modelTicket->state)); ?></div>
 						</div>
 						<div class="row mt-4">
-							<div class="col-md-4 col-12 fw-bold">PAGADO :</div>
+							<div class="col-md-4 col-12 fw-bold">ESTATUS :</div>
 							<div class="col-md-8 col-12 fw-bold text-danger">
 								<?php 
 									if($modelTicket->status == "P"){

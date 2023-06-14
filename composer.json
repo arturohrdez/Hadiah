@@ -21,7 +21,8 @@
         "hail812/yii2-adminlte3": "*",
         "aracoool/yii2-uuid": "^1.1",
         "kartik-v/yii2-widget-datetimepicker": "*",
-        "ezyang/htmlpurifier": "^4.16"
+        "ezyang/htmlpurifier": "^4.16",
+        "ptrnov/yii2-fusionchart": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
