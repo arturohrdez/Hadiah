@@ -35,9 +35,20 @@ use kartik\date\DatePicker;
         ])
     ?>
     <?= $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput()->label('Duración de apartado del boleto (Hrs.)'); ?>
+    <?php 
+    $presorteos = [];
+    for ($i=0; $i <= 10 ; $i++) {
+        if($i == 0){
+            $presorteos[$i] = "No Aplica";
+        }else{
+            $presorteos[$i] = $i;
+        }//end if
+    }//end for
+    ?>
+    <?= $form->field($model, 'presorteos',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList($presorteos)->label('¿Número de presorteos?'); ?>
+    <?= $form->field($model, 'state',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList(Yii::$app->params['states'], ['prompt' => 'Seleccione una opción'])?>   
 
     <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])?>   
-    <?= $form->field($model, 'state',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList(Yii::$app->params['states'], ['prompt' => 'Seleccione una opción'])?>   
     <?= $form->field($model, 'status',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'EN JUEGO', '0' => 'TERMINADA', ], ['prompt' => 'Seleccione una opción'])?>   
     <div class="clearfix"></div>
     <div class="row">

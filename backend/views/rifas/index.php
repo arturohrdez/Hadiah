@@ -112,7 +112,7 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'template'      => '{winners} {view} {update}',
                                 'buttons'       => [
                                     'winners'=>function($url,$model){
-                                        return Html::button('<i class="fas fa-trophy"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-yellow btn-sm btnViewForm', 'title'=>'Asignar Ganador(es)']);
+                                        return Html::button('<i class="fas fa-trophy"></i>',['value'=>Url::to(['winners', 'id' => $model->id]), 'class' => 'btn bg-yellow btn-sm btnViewForm', 'title'=>'Asignar Ganador(es)']);
                                     },
                                     'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);

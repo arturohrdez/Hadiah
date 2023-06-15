@@ -176,6 +176,12 @@ class RifasController extends Controller
         ]);
     }
 
+    public function actionWinners(){
+        echo "entra";
+        die();
+        
+    }//end function
+
     /**
      * Deletes an existing Rifas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
