@@ -3,14 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
+use app\models\Ganadores;
 use backend\models\Promos;
 use backend\models\Rifas;
 use backend\models\RifasSearch;
-use yii\filters\VerbFilter;
+use backend\models\Tickets;
 use yii\filters\AccessControl;
-use yii\web\UploadedFile;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 
 /**
@@ -176,10 +178,27 @@ class RifasController extends Controller
         ]);
     }
 
-    public function actionWinners(){
-        echo "entra";
-        die();
-        
+    public function actionWinners($id){
+        $modelRifa  = Rifas::findOne($id);
+        $presorteos = $modelRifa->presorteos;
+
+
+
+        $modelPM          = new Ganadores();
+        $modelPM->rifa_id = $modelRifa->id;
+        $modelTickets     = Tickets::find()->joinWith(['rifa'])
+                                ->where(['<>','rifas.status',0])
+                                ->andWhere(['rifas.id'=>$id])
+                                ->andWhere(['IS','tickets.parent_id',NULL])
+                                ->andWhere(['tickets.status'=>'P'])
+                                ->orderBy('tickets.ticket ASC')
+                                ->all();
+
+        return $this->renderAjax('winners', [
+            'modelRifa'    => $modelRifa,
+            'modelPM'      => $modelPM,
+            'modelTickets' => $modelTickets,
+        ]);
     }//end function
 
     /**
