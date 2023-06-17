@@ -48,7 +48,7 @@ class Ganadores extends \yii\db\ActiveRecord
             'id' => 'ID',
             'rifa_id' => 'Rifa ID',
             'ticket_id' => 'Ticket ID',
-            'description' => 'Description',
+            'description' => 'Detalle del premio',
         ];
     }
 

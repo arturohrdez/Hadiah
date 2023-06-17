@@ -181,15 +181,49 @@ class RifasController extends Controller
     public function actionWinners($id){
         $modelRifa  = Rifas::findOne($id);
         $presorteos = $modelRifa->presorteos;
+        $modelPM    = new Ganadores();
+
+        if ($modelPM->load(Yii::$app->request->post())) {
+
+            if ($modelPM->validate()) {
+                // Validation passed
+                echo "paso la validación";
+                die();
+            } else {
+                // Validation failed
+                //$errors = $modelPM->errors;
+                echo "<pre>";
+                var_dump($modelPM->errors);
+                echo "</pre>";
+                die();
+            }
+
+            echo "<pre>";
+            var_dump($errors);
+            echo "</pre>";
+            die();
+
+            //$modelPM->save();
+
+            echo "<pre>";
+            var_dump($modelPM->attributes);
+            echo "</pre>";
+            die();
+
+
+            Yii::$app->session->setFlash('success', "Se guardao registro de ganador para la Rifa :  <strong>".$modelRifa->name."</strong>");
+            return $this->redirect(['index']);
+        }//end if
 
 
 
-        $modelPM          = new Ganadores();
+
+
+
         $modelPM->rifa_id = $modelRifa->id;
         $modelTickets     = Tickets::find()->joinWith(['rifa'])
                                 ->where(['<>','rifas.status',0])
                                 ->andWhere(['rifas.id'=>$id])
-                                ->andWhere(['IS','tickets.parent_id',NULL])
                                 ->andWhere(['tickets.status'=>'P'])
                                 ->orderBy('tickets.ticket ASC')
                                 ->all();
@@ -199,6 +233,21 @@ class RifasController extends Controller
             'modelPM'      => $modelPM,
             'modelTickets' => $modelTickets,
         ]);
+    }//end function
+
+    public function actionTicketdetail($id){
+        $modelTicket = Tickets::findOne($id);
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            "ticket"       =>$modelTicket->ticket,
+            "folio"        =>$modelTicket->folio,
+            "phone"        =>$modelTicket->phone,
+            "name"         =>$modelTicket->name,
+            "lastname"     =>$modelTicket->lastname,
+            "state"        =>$modelTicket->state,
+            "date_payment" =>$modelTicket->date_payment
+        ];
     }//end function
 
     /**
