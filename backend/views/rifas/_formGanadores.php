@@ -64,6 +64,7 @@ use yii\helpers\ArrayHelper;
 	</div>
 </div>
 <div class=" card-footer" align="right">
+	<?=  Html::Button('<i class="fas fa-times-circle"></i> Cancelar', ['class' => 'btn btn-danger','id'=>'btnCloseForm','onClick'=>'closeForm("ganadoresForm")']) ?>
     <?= Html::submitButton('<i class="fas fa-check-circle"></i> Aceptar', ['class' => 'btn btn-success']) ?>
 </div>
 <?php ActiveForm::end(); ?>

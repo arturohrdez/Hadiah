@@ -181,45 +181,23 @@ class RifasController extends Controller
     public function actionWinners($id){
         $modelRifa  = Rifas::findOne($id);
         $presorteos = $modelRifa->presorteos;
+
+        /*$winners = Ganadores::find()->where(['rifa_id'=>$id])->all();
+        foreach ($winners as $list) {
+            echo "<pre>";
+            var_dump($list->attributes);
+            echo "</pre>";
+        }
+        die();*/
+
+
         $modelPM    = new Ganadores();
-
-        if ($modelPM->load(Yii::$app->request->post())) {
-
-            if ($modelPM->validate()) {
-                // Validation passed
-                echo "paso la validación";
-                die();
-            } else {
-                // Validation failed
-                //$errors = $modelPM->errors;
-                echo "<pre>";
-                var_dump($modelPM->errors);
-                echo "</pre>";
-                die();
-            }
-
-            echo "<pre>";
-            var_dump($errors);
-            echo "</pre>";
-            die();
-
-            //$modelPM->save();
-
-            echo "<pre>";
-            var_dump($modelPM->attributes);
-            echo "</pre>";
-            die();
-
-
+        if ($modelPM->load(Yii::$app->request->post()) && $modelPM->validate()) {
+            $modelPM->save();
             Yii::$app->session->setFlash('success', "Se guardao registro de ganador para la Rifa :  <strong>".$modelRifa->name."</strong>");
             return $this->redirect(['index']);
         }//end if
-
-
-
-
-
-
+                
         $modelPM->rifa_id = $modelRifa->id;
         $modelTickets     = Tickets::find()->joinWith(['rifa'])
                                 ->where(['<>','rifas.status',0])

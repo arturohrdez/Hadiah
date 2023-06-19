@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use backend\models\Rifas;
+use backend\models\Tickets;
 
 /**
  * This is the model class for table "ganadores".
