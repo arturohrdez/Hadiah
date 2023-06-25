@@ -218,13 +218,14 @@ class RifasController extends Controller
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
-            "ticket"       =>$modelTicket->ticket,
-            "folio"        =>$modelTicket->folio,
-            "phone"        =>$modelTicket->phone,
-            "name"         =>$modelTicket->name,
-            "lastname"     =>$modelTicket->lastname,
-            "state"        =>$modelTicket->state,
-            "date_payment" =>$modelTicket->date_payment
+            "ticket"             =>$modelTicket->ticket,
+            "folio"              =>$modelTicket->folio,
+            "phone"              =>$modelTicket->phone,
+            "name"               =>$modelTicket->name,
+            "lastname"           =>$modelTicket->lastname,
+            "state"              =>$modelTicket->state,
+            "transaction_number" =>$modelTicket->transaction_number,
+            "date_payment"       =>$modelTicket->date_payment
         ];
     }//end function
 

@@ -43,6 +43,7 @@ use yii\helpers\ArrayHelper;
 					      	<th scope="col">Nombre Completo</th>
 					      	<th scope="col">Estado</th>
 					      	<th scope="col">Teléfono</th>
+					      	<th scope="col">Transacción/Referencia</th>
 					      	<th scope="col">Fecha Pago</th>
 					    </tr>
 					  </thead>
@@ -53,6 +54,7 @@ use yii\helpers\ArrayHelper;
 					  		<td class="text-center t_name">null</td>
 					  		<td class="text-center t_state">null</td>
 					  		<td class="text-center t_phone">null</td>
+					  		<td class="text-center t_transaction">null</td>
 					  		<td class="text-center t_payment">null</td>
 					  	</tr>
 					  </tbody>
@@ -94,6 +96,7 @@ $script = <<< JS
 					$(".t_name").text(response.name+" "+response.lastname);
 					$(".t_state").text(response.state);
 					$(".t_payment").text(response.date_payment);
+					$(".t_transaction").text(response.transaction_number);
 					$("#loadSearchTicket").hide();
 					$("#ticketDetailPM").show();
 
