@@ -182,15 +182,24 @@ class RifasController extends Controller
         $modelRifa  = Rifas::findOne($id);
         $presorteos = $modelRifa->presorteos;
 
-       /* $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id])->all();
+
+        if($presorteos > 0){
+            $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id])->all();
+        }else{
+            $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'mayor'])->one();
+        }//end if
         if(!empty($ganadorDetail)){
-            foreach ($ganadorDetail as $list) {
+            echo "<pre>";
+            var_dump($ganadorDetail->attributes);
+            echo "</pre>";
+            die();
+            /*foreach ($ganadorDetail as $list) {
                 echo "<pre>";
                 var_dump($list->attributes);
                 echo "</pre>";
             }
-            die();
-        }//end if*/
+            die();*/
+        }//end if
 
 
         $modelPM    = new Ganadores();
