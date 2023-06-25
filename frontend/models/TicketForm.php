@@ -23,7 +23,9 @@ class TicketForm extends \yii\db\ActiveRecord
         return [
             // name, email, subject and body are required
 			[['rifa_id','phone', 'name', 'lastname', 'state','tickets_selected'], 'required'],
-			[['phone'], 'number', 'max'    => 9999999999],
+			//[['phone'], 'number', 'max'    => 9999999999],
+            ['phone', 'number'],
+            ['phone', 'string', 'length' => 10],
 			[['name'], 'string', 'max'     => 180],
 			[['lastname'], 'string', 'max' => 250],
             [['name','tickets_rand'], 'safe'],
