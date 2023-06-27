@@ -180,31 +180,44 @@ class RifasController extends Controller
 
     public function actionWinners($id){
         $modelRifa  = Rifas::findOne($id);
-        $presorteos = $modelRifa->presorteos;
+        //$presorteos = $modelRifa->presorteos;
 
 
-        if($presorteos > 0){
+        /*if($presorteos > 0){
             $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id])->all();
         }else{
-            $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'mayor'])->one();
-        }//end if
-        if(!empty($ganadorDetail)){
-            echo "<pre>";
-            var_dump($ganadorDetail->attributes);
+            $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'PM'])->one();
+        }//end if*/
+
+        $ganadorPM = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'PM'])->one();
+        if(!empty($ganadorPM)){
+            /*echo "<pre>";
+            var_dump($ganadorPM->rifa->attributes);
+            var_dump($ganadorPM->ticket->attributes);
             echo "</pre>";
-            die();
-            /*foreach ($ganadorDetail as $list) {
-                echo "<pre>";
-                var_dump($list->attributes);
-                echo "</pre>";
-            }
             die();*/
+            return $this->renderAjax('_ganadoresView', [
+                'modelGanadorPM'    => $ganadorPM,
+            ]);
+
+
         }//end if
 
 
         $modelPM    = new Ganadores();
         if ($modelPM->load(Yii::$app->request->post()) && $modelPM->validate()) {
+            $modelPM->type = "PM";
             $modelPM->save();
+
+            $modelRifa->status = "0";
+            $modelRifa->save(false);
+
+            /*echo "<pre>";
+            var_dump($modelPM->attributes);
+            echo "</pre>";
+            die();*/
+
+
             Yii::$app->session->setFlash('success', "Se guardao registro de ganador para la Rifa :  <strong>".$modelRifa->name."</strong>");
             return $this->redirect(['index']);
         }//end if
