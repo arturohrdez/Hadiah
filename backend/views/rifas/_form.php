@@ -22,6 +22,13 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'ticket_init',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput() ?>
     <?= $form->field($model, 'ticket_end',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput() ?>
 
+    <?php 
+        $hrs[null] = "Selecciona una opción";
+        for ($i=1; $i <=24 ; $i++) { 
+            $hrs[$i] = $i;
+        }//end for
+        echo $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList($hrs)->label('Duración de apartado del boleto (Hrs.)');
+    ?>
     
     <?= $form->field($model, 'date_init',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3','style'=>'float: left;']])->widget(DatePicker::classname(),[
             'name' => 'date_init', 
@@ -34,7 +41,7 @@ use kartik\date\DatePicker;
             ]
         ])
     ?>
-    <?= $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput()->label('Duración de apartado del boleto (Hrs.)'); ?>
+    
     <?php 
     /*$presorteos = [];
     for ($i=0; $i <= 10 ; $i++) {
@@ -48,7 +55,7 @@ use kartik\date\DatePicker;
     <!-- <?//= $form->field($model, 'presorteos',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList($presorteos)->label('¿Número de presorteos?'); ?> -->
     <?= $form->field($model, 'state',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList(Yii::$app->params['states'], ['prompt' => 'Seleccione una opción'])?>   
 
-    <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])?>   
+    <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])->label('¿Mostra en el banner princial?')?>   
     <?= $form->field($model, 'status',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'EN JUEGO', '0' => 'TERMINADA', ], ['prompt' => 'Seleccione una opción'])?>   
     <div class="clearfix"></div>
     <div class="row">
@@ -68,8 +75,8 @@ use kartik\date\DatePicker;
     </div>
     <div class="col-12">
         <div class="alert alert-info">
-            Cantidad de oportunidades que el sistema generara por cada boleto seleccionado. <br>
-            <strong>NOTA: Si la rifa no aplica oportunidades el campo debe dejarce vacío.</strong>
+            Número de oportunidades que el sistema otorgará al usurio, por cada boleto seleccionado. <br>
+            <strong>NOTA: Si la rifa no aplica oportunidades el campo debe estar vacío.</strong>
         </div>
     </div>
     <?= $form->field($modelPromos, 'id')->hiddenInput(['option' => 'value'])->label(false); ?>
