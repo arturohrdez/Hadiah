@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'html',
                                 'contentOptions' => ['align'=> 'center'],
                                 'value' => function($modelGanadorPM){
-                                   return $modelGanadorPM->rifa->name;
+                                   return "<div class='h3'>".$modelGanadorPM->rifa->name."</div>";
                                 }
                             ],
                             [
@@ -45,16 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'html',
                                 'contentOptions' => ['align'=> 'center'],
                                 'value' => function($modelGanadorPM){
-                                   return "<div>
-                                   			<strong> 
-                                   				<div class='right badge badge-warning' style='font-size:150%''>".$modelGanadorPM->ticket->ticket."</div></<strong> 
-                                   				<br><br> 
-                                   				*** GANADOR *** <br> ".$modelGanadorPM->ticket->name." ".$modelGanadorPM->ticket->lastname." 
-                                   				<br> 
-                                   				*** ESTADO *** <br> ".$modelGanadorPM->ticket->state." 
-                                   				<br>
-                                   				*** Teléfono *** <br> ".$modelGanadorPM->ticket->phone."
-                                   				"."<div>";
+                                   return "<div><strong><div class='right badge badge-warning' style='font-size:150%'>".$modelGanadorPM->ticket->ticket."</div></<strong><div>";
                                 }
                             ],
                             [
@@ -63,7 +54,44 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'html',
                                 'contentOptions' => ['align'=> 'center'],
                                 'value' => function($modelGanadorPM){
-                                   return $modelGanadorPM->description;
+
+                                    $status = "";
+                                    if($modelGanadorPM->ticket->status == 'A'){
+                                        $status = '<div class="right badge badge-warning" style="font-size: 15px;">APARTADO</div>';
+                                    }elseif($modelGanadorPM->ticket->status == "P"){
+                                        $status = '<div class="right badge badge-success" style="font-size: 15px;">PAGADO</div>';
+                                    }//end if
+
+                                   return "<div class='h6'>
+                                                <table class='col-12'>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Nombre: </td>
+                                                            <td>".$modelGanadorPM->ticket->name." ".$modelGanadorPM->ticket->lastname."</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Estado: </td>
+                                                            <td>".$modelGanadorPM->ticket->state."</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Teléfono: </td>
+                                                            <td>".$modelGanadorPM->ticket->phone."</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Fecha Pago: </td>
+                                                            <td>".date("d/m/Y H:i:s",strtotime($modelGanadorPM->ticket->date_payment))."</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Número de transacción/referencia: </td>
+                                                            <td>".$modelGanadorPM->ticket->transaction_number."</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Estatus: </td>
+                                                            <td>".$status."</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>";
                                 }
                             ]
                         ],
@@ -71,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="card-footer text-center">
-                <?=  Html::button('Cerrar',['value'=>'','class'=>'btn btn-sm btn-success cancelView', 'title'=>'Cerrer']) ?>
+                <?=  Html::button('ACEPTAR',['value'=>'','class'=>'btn btn-sm btn-primary cancelView', 'title'=>'ACEPTAR']) ?>
             </div>
         </div>
     </div>

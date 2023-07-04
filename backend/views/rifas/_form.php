@@ -36,16 +36,16 @@ use kartik\date\DatePicker;
     ?>
     <?= $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput()->label('Duración de apartado del boleto (Hrs.)'); ?>
     <?php 
-    $presorteos = [];
+    /*$presorteos = [];
     for ($i=0; $i <= 10 ; $i++) {
         if($i == 0){
             $presorteos[$i] = "No Aplica";
         }else{
             $presorteos[$i] = $i;
         }//end if
-    }//end for
+    }//end for*/
     ?>
-    <?= $form->field($model, 'presorteos',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList($presorteos)->label('¿Número de presorteos?'); ?>
+    <!-- <?//= $form->field($model, 'presorteos',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList($presorteos)->label('¿Número de presorteos?'); ?> -->
     <?= $form->field($model, 'state',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList(Yii::$app->params['states'], ['prompt' => 'Seleccione una opción'])?>   
 
     <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])?>   
@@ -66,10 +66,16 @@ use kartik\date\DatePicker;
     <div class="col-12">
         <h2>Oportunidades</h2>
     </div>
+    <div class="col-12">
+        <div class="alert alert-info">
+            Cantidad de oportunidades que el sistema generara por cada boleto seleccionado. <br>
+            <strong>NOTA: Si la rifa no aplica oportunidades el campo debe dejarce vacío.</strong>
+        </div>
+    </div>
     <?= $form->field($modelPromos, 'id')->hiddenInput(['option' => 'value'])->label(false); ?>
     <?= $form->field($modelPromos, 'rifa_id')->hiddenInput(['option' => 'value'])->label(false); ?>
-    <?= $form->field($modelPromos, 'buy_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value','maxlength'=>1]); ?>
-    <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput(['option' => 'value']); ?>
+    <?= $form->field($modelPromos, 'buy_ticket')->hiddenInput(['value' => '1'])->label(false); ?>
+    <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-12 mt-3']])->textInput(['option' => 'value']); ?>
     <div id="infoOportunidades" class="col-12 text-center mt-2" style="display: none;">
         <div class="alert alert-warning"> 
             <span class="compraBoleto"></span><span class="oportunidadesBoleto"></span>
@@ -116,7 +122,7 @@ $script = <<< JS
         }
     }
 
-    $("#promos-buy_ticket").on("keyup",function(e){
+    /*$("#promos-buy_ticket").on("keyup",function(e){
         let nt = $(this).val();
         if(nt != ""){
             $(".compraBoleto").text(nt+" Boleto(s) te da ");
@@ -124,14 +130,17 @@ $script = <<< JS
         }else{
             $("#infoOportunidades").hide();
         }
-    });
+    });*/
+
     $("#promos-get_ticket").on("keyup change",function(e){
-        let no = $(this).val();
-        if(no != ""){
-            console.log(no);
-            no = parseInt(no);
+        let boleto        = $("#promos-buy_ticket").val();
+        let oportunidades = $(this).val();
+        if(oportunidades != ""){
+            console.log(oportunidades);
+            oportunidades = parseInt(oportunidades);
             let nt = parseInt($("#promos-buy_ticket").val());
-            let op = nt + no;
+            let op = nt + oportunidades;
+            $(".compraBoleto").text(nt+" Boleto te da ");
             $(".oportunidadesBoleto").text(op + " oportunidades.");
             $("#infoOportunidades").show();
         }else{
