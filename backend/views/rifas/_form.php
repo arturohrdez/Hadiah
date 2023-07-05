@@ -22,6 +22,8 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'ticket_init',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput() ?>
     <?= $form->field($model, 'ticket_end',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput() ?>
 
+    <?= $form->field($model, 'price',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->textInput()->label('Precio por boleto') ?>
+
     <?php 
         $hrs[null] = "Selecciona una opción";
         for ($i=1; $i <=24 ; $i++) { 

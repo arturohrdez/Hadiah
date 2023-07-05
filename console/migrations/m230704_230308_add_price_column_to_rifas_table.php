@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles adding columns to table `{{%rifas}}`.
  */
-class m230409_044202_add_banner_column_to_rifas_table extends Migration
+class m230704_230308_add_price_column_to_rifas_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addColumn('{{%rifas}}', 'banner', $this->integer(2));
+        $this->addColumn('{{%rifas}}', 'price', $this->float("12,6")->notNull()." AFTER ticket_end");
     }
 
     /**
@@ -20,6 +20,6 @@ class m230409_044202_add_banner_column_to_rifas_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('{{%rifas}}', 'banner');
+        $this->dropColumn('{{%rifas}}', 'price');
     }
 }
