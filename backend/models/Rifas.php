@@ -39,6 +39,8 @@ class Rifas extends \yii\db\ActiveRecord
             [['price','name', 'date_init', 'status', 'ticket_init', 'ticket_end','banner','time_apart','state'], 'required'],
             [['description', 'terms'], 'string'],
             [['ticket_init', 'ticket_end', 'status','banner','time_apart'], 'integer'],
+            ['ticket_init', 'compare', 'compareValue'=>0, 'operator'=>'>='],
+            ['ticket_end', 'compare', 'compareValue'=>0, 'operator'=>'>'],
             [['date_init'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['time_apart'], 'string', 'max' => 255],
