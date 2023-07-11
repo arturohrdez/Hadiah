@@ -83,8 +83,8 @@ use kartik\date\DatePicker;
     <?= $form->field($modelPromos, 'id')->hiddenInput(['option' => 'value'])->label(false); ?>
     <?= $form->field($modelPromos, 'rifa_id')->hiddenInput(['option' => 'value'])->label(false); ?>
     <?= $form->field($modelPromos, 'buy_ticket')->hiddenInput(['value' => '1'])->label(false); ?>
-    <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-12 mt-3']])->textInput(['option' => 'value']); ?>
-    <div id="infoOportunidades" class="col-12 text-center mt-2" style="display: none;">
+    <?= $form->field($modelPromos, 'get_ticket',['options'=>['class'=>'col-2 mt-3']])->textInput(['option' => 'value']); ?>
+    <div id="infoOportunidades" class="col-10 text-center mt-5" style="display: none;">
         <div class="alert alert-warning"> 
             <span class="compraBoleto"></span><span class="oportunidadesBoleto"></span>
         </div>
