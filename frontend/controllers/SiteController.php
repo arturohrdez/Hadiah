@@ -855,6 +855,11 @@ class SiteController extends Controller
         $tickets_play_all_str = "";
         $h                    = 0;
 
+        //Totales
+        $precioxboleto = $model->price;
+        $totalpago     = ($num_tickets * $precioxboleto);
+        $totalpago     = number_format($totalpago,2,'.',',');
+
         if(\Yii::$app->session->get('oportunities') > 0){
             $tickets_play_rnd = json_decode(Yii::$app->request->post()["json_tickets_rnd"],true);
             foreach ($tickets_play_rnd as $ticket_play_rnd) {
@@ -887,12 +892,14 @@ class SiteController extends Controller
 🎉*{$titulo_rifa}*
 🗓️*FECHA SORTEO:* {$fecha_rifa}
 ------------
-⚠️FOLIO:{$folio}⚠️
+⚠️*FOLIO:*{$folio}⚠️
 ------------
 🍀*{$num_tickets} - BOLETO(S):*
 {$tickets_play_all_str}
 ------------
-*NOMBRE :* {$name} {$lastname}
+💵*TOTAL:* {$totalpago}
+------------
+*NOMBRE:* {$name} {$lastname}
 *CELULAR:* {$phone}
 ------------
 ↘️⬇️↙️
