@@ -74,15 +74,27 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'attribute'      => 'main_image',
                                 'format'         => 'html',
                                 'contentOptions' => [
-                                    "style" => "text-align: center;",
+                                    "style" => "text-align: center; width: 50px !important",
                                 ],
                                 'value'     =>function($model){
                                     return Html::a(Html::img(Url::base()."/".$model->main_image,['height'=>'100']),Url::base()."/".$model->main_image,['title'=>'Ver Imagen','class' => 'data-fancybox']);
                                 }
 
                             ],
-                            'description:ntext',
-                            'terms:ntext',
+                            [
+                                'label'     => 'Descripción',
+                                'attribute' => 'description',
+                                'contentOptions' => ['style'=>'text-align: center; max-width: 100px !important;'],
+                            ],
+                            [
+                                'label'     => 'Terminos y Condiciones',
+                                'attribute' => 'terms',
+                                'contentOptions' => ['style'=>'text-align: center; max-width: 150px !important;'],
+                                'format'         => 'html',
+                                'value' => function($model){
+                                    return nl2br($model->terms);
+                                }
+                            ],
                             //'ticket_init',
                             //'ticket_end',
                             //'opportunities',

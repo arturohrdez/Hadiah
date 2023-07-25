@@ -49,7 +49,7 @@ class Rifas extends \yii\db\ActiveRecord
             [['presorteos'], 'integer'],
             [['name'], 'unique'],
             ['price','number','numberPattern' => "/^\d+(\.\d{1,3})?$/"],
-            [['imagen'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 190,'maxWidth'=>1500,'minHeight'=>190,'maxHeight'=>1500,'maxSize'=>1024 * 1024 * 2],
+            [['imagen'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 190,'maxWidth'=>1980,'minHeight'=>190,'maxHeight'=>1980,'maxSize'=>1024 * 1024 * 2],
         ];
     }
 
