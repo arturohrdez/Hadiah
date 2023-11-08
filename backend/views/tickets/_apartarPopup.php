@@ -102,7 +102,7 @@ $script = <<< JS
 	        		$("#divMsg").html('<div class="alert alert-danger">Lo sentimos el boleto: <strong>'+data.tickets_duplicados+'</strong> fue seleccionado por alguien más. Por favor intente con otro.</div>');
 	        		$("#divMsg").show();
 	        	}else if(data.status == true){
-	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Los Boletos han sido registrados con éxito. <br> Por favor no cierre esta ventana.');
+	        		$("#divMsg").html('<div class="alert alert-success">¡FELICIDADES! Los Boletos han sido registrados con éxito. <br> ¡POR FAVOR NO CIERRE ESTA VENTANA!.');
 	        		$("#divMsg").show();
 
 	        		//
