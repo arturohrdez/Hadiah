@@ -392,7 +392,7 @@ class SiteController extends Controller
         $page_end = count($tickets) - 1;
         
         if($page_end < 0){
-            return "<div class='col-12 alert-info text-center h1'>LO SENTIMOS, NO HAY BOLETOS ACTIVOS.</div>";
+            return "<div class='col-12 alert alert-warning text-center h1'>LO SENTIMOS, POR EL MOMENTO NO HAY BOLETOS DISPONIBLES. <br> <sub>Regresa en un par de horas o estar atento a la lista de despreciados.</sub></div>";
         }//end if
 
         return $this->renderAjax('_loadTickets',[
