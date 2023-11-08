@@ -243,21 +243,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header'         => 'Actions',
                                 'headerOptions'  => ['class'=>'text-center'],
                                 'contentOptions' => ['class'=>'text-center'],
-                                'template'       => '{update} {sendmsn}',
+                                'template'       => '{update}{sendmsn}',
                                 'buttons'        => [
                                     /*'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },*/
                                     'sendmsn' => function($url,$model){
                                         if($model->status == "P"){
-                                            return Html::a('<i class="fab fa-whatsapp"></i>', $url = Url::to(['sendmsn','id' => $model->id]), ['class' => 'btn bg-teal btn-sm','title'=>'Enviar Whatsapp','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de enviar mensaje?','data-method'=>'post']);
+                                            return Html::a('<i class="fab fa-whatsapp"></i>', $url = Url::to(['sendmsn','id' => $model->id]), ['class' => 'btn bg-teal btn-sm','title'=>'Enviar Whatsapp','data-pajax'=>0, 'data-confirm'=>'Se envíara un mensaje confirmando el pago de los boletos ¿Deseas continuar?','data-method'=>'post']);
                                         }
                                     },
                                     'update'=>function ($url, $model) {
                                         if($model->status == "A"){
-                                            return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
+                                            return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-orange btn-sm btnUpdateForm','title'=>'Editar']);
                                         }else{
-                                            return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
+                                            return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-yellow btn-sm btnViewForm', 'title'=>'Consultar']);
                                         }
                                     },
                                     /*'delete'=>function ($url, $model) {
