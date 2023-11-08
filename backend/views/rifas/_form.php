@@ -19,9 +19,9 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'terms',['options'=>['class'=>' col-lg-6 col-sm-12 mt-3']])->textarea(['rows' => 6]) ?>
     
-    <?= $form->field($model, 'ticket_init',['options'=>['class'=>'col-lg-4 col-sm-12 mt-3']])->textInput() ?>
-    <?= $form->field($model, 'ticket_end',['options'=>['class'=>'col-lg-4 col-sm-12 mt-3']])->textInput() ?>
-    <?= $form->field($model, 'price',['options'=>['class'=>'col-lg-4 col-sm-12 mt-3']])->textInput()->label('Precio por boleto') ?>
+    <?= $form->field($model, 'ticket_init',['options'=>['class'=>'col-lg-3 col-sm-12 mt-3']])->textInput() ?>
+    <?= $form->field($model, 'ticket_end',['options'=>['class'=>'col-lg-3 col-sm-12 mt-3']])->textInput() ?>
+    <!-- <?//=$form->field($model, 'price',['options'=>['class'=>'col-lg-4 col-sm-12 mt-3']])->textInput()->label('Precio por boleto') ?> -->
 
     <?php 
         $hrs[null] = "Selecciona una opción";
@@ -57,7 +57,7 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'state',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList(Yii::$app->params['states'], ['prompt' => 'Seleccione una opción'])?>   
 
     <?= $form->field($model, 'banner',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'Si', '0' => 'No', ], ['prompt' => 'Seleccione una opción'])->label('¿Mostra en el banner princial?')?>   
-    <?= $form->field($model, 'status',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'EN JUEGO', '0' => 'TERMINADA', ], ['prompt' => 'Seleccione una opción'])?>   
+    <?= $form->field($model, 'status',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList([ '1' => 'EN JUEGO','2' => 'PAUSAR','0' => 'TERMINAR', ], ['prompt' => 'Seleccione una opción'])?>   
     <div class="clearfix"></div>
     <div class="row">
         <?= $form->field($model, 'imagen',['options'=>['class'=>'col-12 mt-3 bg-light']])->fileInput()->label('<div>Imagen: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño de Imagen: 1000px X 1000px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>

@@ -83,8 +83,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {   
-        $modelRifasBanner  = Rifas::find()->where(['status' => 1,'banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
-        $modelRifasActivas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->all(); 
+        $modelRifasBanner  = Rifas::find()->where(['<>','status', 0])->andWhere(['banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
+        $modelRifasActivas = Rifas::find()->where(['<>','status', 0])->orderBy(['date_init' => SORT_ASC])->all(); 
         return $this->render('index',[
             'rifasBanner'  =>$modelRifasBanner,
             'rifasActivas' =>$modelRifasActivas,
@@ -349,6 +349,13 @@ class SiteController extends Controller
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
 
+        //Rifa no activas
+        if(is_null($model) || $model->status != 1){
+            return $this->render('rifaEnd', [
+                'model'        => $model,
+            ]);
+        }//end if
+
         //Valida si existen oportunidades
         if(!empty($model->promos)){
             \Yii::$app->session->set('oportunities',$model->promos[0]->get_ticket);
@@ -372,13 +379,6 @@ class SiteController extends Controller
         //Tickets Sessions 
         \Yii::$app->session->set('tickets_list', $tickets_list);
         \Yii::$app->session->set('tickets_div', $tickets_div);
-
-        //Rifa no activas
-        if(is_null($model) || !$model->status){
-            return $this->render('rifaEnd', [
-                'model'        => $model,
-            ]);
-        }//end if
 
         return $this->render('rifaDetail', [
             'model' => $model,

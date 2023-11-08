@@ -109,8 +109,12 @@ echo newerton\fancybox3\FancyBox::widget([
                                 'value'          => function($model){
                                     if($model->status == 1){
                                         return '<div class="right badge badge-success">EN JUEGO</div>';
-                                    }elseif($model->status == 0){
+                                    }//end if
+                                    if($model->status == 0){
                                         return '<div class="right badge badge-danger">TERMINADA</div>';
+                                    }//end if
+                                    if($model->status == 2){
+                                        return '<div class="right badge badge-warning">EN PAUSA</div>';
                                     }//end if
                                 },
                                 'filter' =>  Html::activeDropDownList($searchModel,'status',[1=>'EN JUEGO',0=>'TERMINADA'],['class' => 'form-control','prompt'=>'Todos'])
@@ -130,7 +134,11 @@ echo newerton\fancybox3\FancyBox::widget([
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },
                                     'update'=>function ($url, $model) {
-                                        return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
+                                        if($model->status != 0){
+                                            return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
+                                        }//end if
+
+                                        return "&nbsp";
                                     }/*
                                     'delete'=>function ($url, $model) {
                                         return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);

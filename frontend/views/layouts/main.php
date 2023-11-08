@@ -38,7 +38,7 @@ AppAsset::register($this);
         <h1 class="logo me-auto"><a href="/" class="text-danger">🍀 RIFAS PABMAN 🍀</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="/" class="logo me-auto">
-             <?php //echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'',]); ?>
+             <?php // echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'',]); ?>
         </a> -->
 
         <nav id="navbar" class="navbar">
