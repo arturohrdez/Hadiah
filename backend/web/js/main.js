@@ -1,5 +1,5 @@
 $(function(){
-	console.log("entra");
+	//console.log("entra");
 	
 	/*** Action Button Add Form ***/
 	if(("#btnAddForm").length > 0){

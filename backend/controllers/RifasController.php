@@ -178,32 +178,41 @@ class RifasController extends Controller
         ]);
     }
 
-    public function actionWinners($id){
+
+    public function actionGanadores($id){
+        $modelRifa  = Rifas::findOne($id);
+        $modelGanadores = new Ganadores();
+
+        $modelGanadores->rifa_id = $modelRifa->id;
+        $modelTickets     = Tickets::find()->joinWith(['rifa'])
+                                ->where(['<>','rifas.status',0])
+                                ->andWhere(['rifas.id'=>$id])
+                                ->andWhere(['tickets.status'=>'P'])
+                                ->orderBy('tickets.ticket ASC')
+                                ->all();
+
+        return $this->render('ganadores', [
+            'modelRifa'      => $modelRifa,
+            'modelGanadores' => $modelGanadores,
+            'modelTickets'   => $modelTickets,
+        ]);
+    }//end function
+
+    /*public function actionWinners($id){
         $modelRifa  = Rifas::findOne($id);
         //$presorteos = $modelRifa->presorteos;
-
-
-        /*if($presorteos > 0){
-            $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id])->all();
-        }else{
-            $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'PM'])->one();
-        }//end if*/
+        // if($presorteos > 0){
+        //     $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id])->all();
+        // }else{
+        //     $ganadorDetail = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'PM'])->one();
+        // }//end if
 
         $ganadorPM = Ganadores::find()->where(['rifa_id'=>$id,'type'=>'PM'])->one();
         if(!empty($ganadorPM)){
-            /*echo "<pre>";
-            var_dump($ganadorPM->rifa->attributes);
-            var_dump($ganadorPM->ticket->attributes);
-            echo "</pre>";
-            die();*/
             return $this->renderAjax('_ganadoresView', [
                 'modelGanadorPM'    => $ganadorPM,
             ]);
-
-
         }//end if
-
-
         $modelPM    = new Ganadores();
         if ($modelPM->load(Yii::$app->request->post()) && $modelPM->validate()) {
             $modelPM->type = "PM";
@@ -212,10 +221,10 @@ class RifasController extends Controller
             $modelRifa->status = "0";
             $modelRifa->save(false);
 
-            /*echo "<pre>";
-            var_dump($modelPM->attributes);
-            echo "</pre>";
-            die();*/
+            // echo "<pre>";
+            // var_dump($modelPM->attributes);
+            // echo "</pre>";
+            // die();
 
 
             Yii::$app->session->setFlash('success', "Se guardao registro de ganador para la Rifa :  <strong>".$modelRifa->name."</strong>");
@@ -235,7 +244,7 @@ class RifasController extends Controller
             'modelPM'      => $modelPM,
             'modelTickets' => $modelTickets,
         ]);
-    }//end function
+    }//end function*/
 
     public function actionTicketdetail($id){
         $modelTicket = Tickets::findOne($id);
