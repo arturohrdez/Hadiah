@@ -30,8 +30,8 @@ use kartik\date\DatePicker;
         }//end for
         echo $form->field($model, 'time_apart',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3']])->dropDownList($hrs)->label('Duración de apartado del boleto (Hrs.)');
     ?>
-    
-    <?= $form->field($model, 'date_init',['options'=>['class'=>'col-lg-6 col-sm-12 mt-3','style'=>'float: left;']])->widget(DatePicker::classname(),[
+    <?= $form->field($model, 'phone',['options'=>['class'=>'col-lg-3 col-sm-12 mt-3']])->textInput() ?>
+    <?= $form->field($model, 'date_init',['options'=>['class'=>'col-lg-3 col-sm-12 mt-3','style'=>'float: left;']])->widget(DatePicker::classname(),[
             'name' => 'date_init', 
             'value' => date('Y-m-d'),
             'options' => ['placeholder' => 'Seleccione la fecha'],

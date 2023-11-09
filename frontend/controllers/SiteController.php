@@ -908,8 +908,12 @@ El siguiente paso es enviar foto del comprobante de pago por aquí.
 *¡MUCHA SUERTE!*
 DA CLICK EN ENVIAR➡️
 ";
-
-        $link = Yii::$app->params["social-networks"]["whatsapp"]."/?text=".urlencode($custom_msg);
+        
+        if(!empty($model->phone)){
+            $link = "https://wa.me/+52".$model->phone."/?text=".urlencode($custom_msg);
+        }else{
+            $link = Yii::$app->params["social-networks"]["whatsapp"]."/?text=".urlencode($custom_msg);
+        }//end if
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ["status"=>true,"link"=>$link];
     }//end function
