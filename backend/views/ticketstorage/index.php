@@ -14,7 +14,7 @@ use kartik\date\DatePicker;
 /* @var $searchModel backend\models\TicketstorageSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ticketstorages';
+$this->title = 'Despreciados';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

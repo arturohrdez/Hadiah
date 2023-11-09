@@ -270,7 +270,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
                                     },
                                     'delete'=>function ($url, $model) {
-                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['style'=>'float: right;','class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
+                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['style'=>'float: right;','class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'Todos los tickets con folio '.$model->folio.' del cliente '.$model->name.' '.$model->lastname.' serán despreciados ¿Desea continuar?','data-method'=>'post']);
                                     },
                                 ]
 
