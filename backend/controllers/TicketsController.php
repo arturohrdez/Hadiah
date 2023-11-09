@@ -193,72 +193,48 @@ class TicketsController extends Controller
     public function actionDelete($id)
     {
         //$this->findModel($id)->delete();
-        $modelTicket = $this->findModel($id);
-        //Busca si tiene oportunidades
-        $oportunidadesTicket = Tickets::find()->where(['parent_id'=>$modelTicket->id])->all();
+        $modelTicket   = $this->findModel($id);
+        $ticket_folio  = $modelTicket->folio;
+        $ticket_rifaId = $modelTicket->rifa_id;
+
+        $modelTF = Tickets::find()->where(["rifa_id"=>$ticket_rifaId,"folio"=>$ticket_folio])->all();
 
         $connection  = \Yii::$app->db;
         $transaction = $connection->beginTransaction();
         try {
-            $modelStorage                     =  new Ticketstorage();
-            $modelStorage->id                 = $modelTicket->id;
-            $modelStorage->rifa_id            = $modelTicket->rifa_id;
-            $modelStorage->ticket             = $modelTicket->ticket;
-            $modelStorage->folio              = $modelTicket->folio;
-            $modelStorage->date               = $modelTicket->date;
-            $modelStorage->date_ini           = $modelTicket->date;
-            $modelStorage->date_end           = $modelTicket->date_end;
-            $modelStorage->expiration         = $modelTicket->expiration;
-            $modelStorage->phone              = $modelTicket->phone;
-            $modelStorage->name               = $modelTicket->name;
-            $modelStorage->lastname           = $modelTicket->lastname;
-            $modelStorage->state              = $modelTicket->state;
-            $modelStorage->transaction_number = $modelTicket->transaction_number;
-            $modelStorage->type               = $modelTicket->type;
-            $modelStorage->status             = $modelTicket->status;
-            $modelStorage->parent_id          = $modelTicket->parent_id;
-            $modelStorage->date_payment       = $modelTicket->date_payment;
-            $modelStorage->type_sale          = $modelTicket->type_sale;
-            $modelStorage->save();
-
-            if(!empty($oportunidadesTicket)){
-                foreach ($oportunidadesTicket as $oportunidad) {
-                    $modelStorageOp                     =  new Ticketstorage();
-                    $modelStorageOp->id                 = $oportunidad->id;
-                    $modelStorageOp->rifa_id            = $oportunidad->rifa_id;
-                    $modelStorageOp->ticket             = $oportunidad->ticket;
-                    $modelStorageOp->folio              = $oportunidad->folio;
-                    $modelStorageOp->date               = $oportunidad->date;
-                    $modelStorageOp->date_ini           = $oportunidad->date;
-                    $modelStorageOp->date_end           = $oportunidad->date_end;
-                    $modelStorageOp->expiration         = $oportunidad->expiration;
-                    $modelStorageOp->phone              = $oportunidad->phone;
-                    $modelStorageOp->name               = $oportunidad->name;
-                    $modelStorageOp->lastname           = $oportunidad->lastname;
-                    $modelStorageOp->state              = $oportunidad->state;
-                    $modelStorageOp->transaction_number = $oportunidad->transaction_number;
-                    $modelStorageOp->type               = $oportunidad->type;
-                    $modelStorageOp->status             = $oportunidad->status;
-                    $modelStorageOp->parent_id          = $oportunidad->parent_id;
-                    $modelStorageOp->date_payment       = $oportunidad->date_payment;
-                    $modelStorageOp->type_sale          = $oportunidad->type_sale;
-                    $modelStorageOp->save();
-
-                    //Libera las oportunidades 
-                    $oportunidad->delete();
-                }//end foreach
-            }//end if
-
-            //libera el ticket seleccionado
-            $modelTicket->delete();
+            foreach ($modelTF as $modelTicket) {
+                $modelStorage                     =  new Ticketstorage();
+                $modelStorage->id                 = $modelTicket->id;
+                $modelStorage->rifa_id            = $modelTicket->rifa_id;
+                $modelStorage->ticket             = $modelTicket->ticket;
+                $modelStorage->folio              = $modelTicket->folio;
+                $modelStorage->date               = $modelTicket->date;
+                $modelStorage->date_ini           = $modelTicket->date;
+                $modelStorage->date_end           = $modelTicket->date_end;
+                $modelStorage->expiration         = $modelTicket->expiration;
+                $modelStorage->phone              = $modelTicket->phone;
+                $modelStorage->name               = $modelTicket->name;
+                $modelStorage->lastname           = $modelTicket->lastname;
+                $modelStorage->state              = $modelTicket->state;
+                $modelStorage->transaction_number = $modelTicket->transaction_number;
+                $modelStorage->type               = $modelTicket->type;
+                $modelStorage->status             = $modelTicket->status;
+                $modelStorage->parent_id          = $modelTicket->parent_id;
+                $modelStorage->date_payment       = $modelTicket->date_payment;
+                $modelStorage->type_sale          = $modelTicket->type_sale;
+                $modelStorage->save();
+                
+                //libera el ticket seleccionado
+                $modelTicket->delete();
+            }//end foreach
 
             $transaction->commit();
-        }catch(\Exception $e){
+
+        } catch (Exception $e) {
             $transaction->rollBack();
-            throw $e;
+            Yii::error('Error en la transacción: ' . $e->getMessage());
+            return false;
         }//end try
-
-
         return $this->redirect(['ticketstorage/index']);
     }
 
