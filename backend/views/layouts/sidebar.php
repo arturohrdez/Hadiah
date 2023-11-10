@@ -39,9 +39,13 @@ use yii\helpers\Url;
             <?php
             $items   = [];
             $items[] = ['label' => 'Inicio', 'icon' => 'fas fa-home', 'url' => [Url::to('/site/index')], 'target' => ''];
-            $items[] = ['label' => 'Rifas', 'icon' => 'fa fa-bolt', 'url' => [Url::to('/rifas/index')], 'target' => ''];
-            $items[] = ['label' => 'Boletos Activos', 'icon' => 'fas fa-ticket-alt', 'url' => [Url::to('/tickets/index')], 'target' => ''];
-            $items[] = ['label' => 'Boletos Vencidos', 'icon' => 'far fa-calendar-times', 'url' => [Url::to('/tickets/expirate')], 'target' => ''];
+            $items[] = ['label' => 'RIFAS', 'header' => true];
+            $items[] = ['label' => 'Rifas', 'icon' => 'fa fa-bolt', 'url' => [Url::to('/rifas/index')], 'target' => '',];
+            $items[] = ['label' => 'Ganadores', 'icon' => 'fas fa-trophy', 'url' => [Url::to('/ganadores/index')], 'target' => ''];
+
+            $items[] = ['label' => 'BOLETOS', 'header' => true];
+            $items[] = ['label' => 'Activos', 'icon' => 'fas fa-ticket-alt', 'url' => [Url::to('/tickets/index')], 'target' => ''];
+            $items[] = ['label' => 'Vencidos', 'icon' => 'far fa-calendar-times', 'url' => [Url::to('/tickets/expirate')], 'target' => ''];
             $items[] = ['label' => 'Despreciados', 'icon' => 'fa fa-ban', 'url' => [Url::to('/ticketstorage/index')], 'target' => ''];
             //$items[] = ['label' => 'Punto de Venta', 'icon' => 'fas fa-cart-arrow-down', 'url' => [Url::to('/tickets/sales')], 'target' => ''];
             

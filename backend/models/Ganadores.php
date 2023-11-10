@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace backend\models;
 
 use Yii;
 use backend\models\Rifas;
@@ -13,6 +13,7 @@ use backend\models\Tickets;
  * @property int $rifa_id
  * @property int $ticket_id
  * @property string $description
+ * @property string|null $type 
  *
  * @property Rifas $rifa
  * @property Tickets $ticket
@@ -33,9 +34,10 @@ class Ganadores extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rifa_id', 'ticket_id', 'description'], 'required'],
+            [['rifa_id', 'ticket_id', 'description','type'], 'required'],
             [['rifa_id', 'ticket_id'], 'integer'],
             [['description'], 'string', 'max' => 250],
+            [['type'], 'string', 'max' => 15], 
             [['rifa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rifas::class, 'targetAttribute' => ['rifa_id' => 'id']],
             [['ticket_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tickets::class, 'targetAttribute' => ['ticket_id' => 'id']],
         ];
@@ -47,10 +49,11 @@ class Ganadores extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'rifa_id' => 'Rifa ID',
-            'ticket_id' => 'Ticket ID',
+            'id'          => 'ID',
+            'rifa_id'     => 'Rifa',
+            'ticket_id'   => 'Ticket',
             'description' => 'Detalle del premio',
+            'type'        => 'Tipo de premio',
         ];
     }
 
