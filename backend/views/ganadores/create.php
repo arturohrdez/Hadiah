@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Ganadores */
 
-$this->title = 'Create Ganadores';
+$this->title = 'Agregar Ganador';
 $this->params['breadcrumbs'][] = ['label' => 'Ganadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -19,7 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <button type="button" class="btn close text-white" onclick='closeForm("ganadoresForm")'>×</button>
                 </div>
                 <?=$this->render('_form', [
-                    'model' => $model
+                    'model' => $model,
+                    'rifas' => $rifas,
+                    'modelTickets' => $modelTickets
                 ]) ?>
             </div>
         </div>

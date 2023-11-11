@@ -5,9 +5,11 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Ganadores;
 use backend\models\GanadoresSearch;
+use backend\models\Rifas;
+use backend\models\Tickets;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * GanadoresController implements the CRUD actions for Ganadores model.
@@ -35,13 +37,21 @@ class GanadoresController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new GanadoresSearch();
-        //$searchModel->rifa_id = Yii::$app->request->get('id');
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel          = new GanadoresSearch();
 
+        if(!empty(Yii::$app->request->get('id'))){
+            $searchModel->rifa_id = Yii::$app->request->get('id');
+            $modelRifa            = Rifas::findOne(Yii::$app->request->get('id'));
+        }else{
+            $searchModel->rifa_id = NULL;
+            $modelRifa            = NULL;
+        }//end if
+
+        $dataProvider         = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
+            'modelRifa'    => $modelRifa
         ]);
     }
 
@@ -63,16 +73,35 @@ class GanadoresController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Ganadores();
+    public function actionCreate(){
+        $model          = new Ganadores();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        if(!empty(Yii::$app->request->get('rifa_id'))){
+            $model->rifa_id = Yii::$app->request->get('rifa_id');
+        }//end if
 
-        return $this->render('create', [
-            'model' => $model,
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            if($model->type == "PM"){
+                $modelRifa = Rifas::find()->where(["id"=>$model->rifa_id])->one();
+                $modelRifa->status = 0;
+                $modelRifa->save(false);
+            }//end if
+
+            $model->save();
+            return $this->redirect(['index',"id"=>Yii::$app->request->get('rifa_id')]);
+        }//end if
+
+        $rifas        = Rifas::find()->where(["=","status",1])->all();
+        $modelTickets = Tickets::find()->joinWith(['rifa'])
+                            ->where(['=','rifas.status',1])
+                            ->andWhere(['rifas.id'       =>$model->rifa_id])
+                            ->andWhere(['tickets.status' =>'P'])
+                            ->orderBy('tickets.ticket ASC')
+                            ->all();
+        return $this->renderAjax('create', [
+            'model'        => $model,
+            'rifas'        => $rifas,
+            'modelTickets' => $modelTickets
         ]);
     }
 
@@ -103,10 +132,9 @@ class GanadoresController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id){  
+        
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 

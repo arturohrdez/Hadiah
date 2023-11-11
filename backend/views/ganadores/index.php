@@ -26,11 +26,39 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-12">
             <div class="card card-danger card-outline">
+                <?php 
+                if(!is_null($modelRifa)){
+                ?>
                 <div class="card-header">
-                    <div class="col-6 float-right pb-3">
-                        <?= Html::button('<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Agregar Ganador', ['value' => Url::to('create'), 'class' => 'btn bg-gradient-danger float-right','id'=>'btnAddForm']) ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card card-widget widget-user" style="margin: 0 !important;">
+                                <div class="widget-user-header bg-gradient-primary text-left" style="height: auto !important;">
+                                    <h3 class="h1 text-center">
+                                        <?php echo $modelRifa->name; ?>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <?php 
+                    if($modelRifa->status <> 0){
+                    ?>
+                    <div class="row mt-2">
+                        <div class="col-lg-6 col-md-12 pb-3">
+                            <?= Html::a('<i class="fas fa-chevron-circle-left"></i>&nbsp;&nbsp;Regresar al listado de Rifas', $url = Url::to(['rifas/index']), ['class' => 'col-lg-6 col-md-12 btn bg-gradient-danger float-left']); ?>
+                        </div>
+                        <div class="col-lg-6 col-md-12 pb-3">
+                            <?= Html::button('<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Agregar Ganador', ['value' => Url::to('create?rifa_id='.$modelRifa->id), 'class' => 'col-lg-6 col-md-12 btn bg-gradient-danger float-right','id'=>'btnAddForm']) ?>
+                        </div>
+                    </div>
+                    <?php 
+                    }//end if
+                    ?>
                 </div>
+                <?php 
+                }//end if
+                ?>
                 <div class="card-body pad table-responsive">
 
 
@@ -48,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'rifa_id',
                                 'format'    => 'html',
                                 'contentOptions' => [
-                                    "style" => "text-align: center; width: 200px !important",
+                                    "style" => "text-align: center; width: 10% !important",
                                 ],
                                 'value'     => function($model){
                                     if(is_null($model->rifa->name)){
@@ -69,17 +97,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'ticket_id',
                                 'format'    => 'html',
                                 'contentOptions' => [
-                                    "style" => "text-align: center; width: 150px !important",
+                                    "style" => "text-align: center; width: 10% !important",
                                 ],
                                 'value' => function($model){
                                     return '<strong>'.$model->ticket->ticket.'</strong>';
                                 }
                             ],
                             [
+                                'label'     => 'Descripción',
+                                'attribute' => 'description',
+                                'contentOptions' => [
+                                    "style" => "text-align: center; width: 20% !important",
+                                ],
+                            ],
+                            [
                                 'label' => 'Datos del cliente',
                                 'format' => 'html',
                                 'contentOptions' => [
-                                    "style" => "text-align: center; width: 50% !important",
+                                    "style" => "text-align: center; width: 45% !important",
                                 ],
                                 'value' => function($model){
                                     return '
@@ -121,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     if($model->type == "PM"){
                                         return '<i class="nav-icon fas fa-fas fa-trophy"></i> <br> Premio Mayor';
                                     }elseif($model->type == "PS"){
-                                        return "Presorteo";
+                                        return '<i class="fas fa-medal"></i> <br> Presorteo';
                                     }//end if
                                 },
                                 'filter' => Html::activeDropDownList(
@@ -138,15 +173,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'hail812\adminlte3\yii\grid\ActionColumn',
                                 'header'        => 'Actions',
+                                'contentOptions' => [
+                                    "style" => "text-align: center; width: 10% !important",
+                                ],
                                 'headerOptions' => ['style'=>'text-align:center'],
-                                'template'      => '{view} {update} {delete}',
+                                'template'      => '{delete}',
                                 'buttons'       => [
-                                    'view'=>function($url,$model){
+                                    /*'view'=>function($url,$model){
                                         return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
                                     },
                                     'update'=>function ($url, $model) {
                                         return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
-                                    },
+                                    },*/
                                     'delete'=>function ($url, $model) {
                                         return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
                                     },
