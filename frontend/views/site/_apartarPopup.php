@@ -5,7 +5,7 @@ use yii\helpers\Url;
 
 //$ticket_n = count(Yii::$app->session->get('tickets_play_all')); 
 $states = [	
-	''                    => 'SELECCIONAR UNA OPCIÓN',
+	''                    => 'SELECCIONA ESTADO',
 	'Aguascalientes'      => 'Aguascalientes',
 	'Baja California'     => 'Baja California',
 	'Baja California Sur' => 'Baja California Sur',
