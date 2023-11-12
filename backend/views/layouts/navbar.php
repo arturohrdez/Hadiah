@@ -174,7 +174,19 @@ use yii\helpers\Html;
             </div>
         </li> -->
         <li class="nav-item">
-            <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
+            <a href="javascript:void(0);" class="nav-link">
+                Bienvenido : <?php echo Yii::$app->user->identity->attributes["username"]; ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <?= Html::a(
+                '<i class="fas fa-sign-out-alt"></i>',
+                ['/site/logout'], 
+                [
+                    'data-method' => 'post', 
+                    'class' => 'nav-link',
+                    'title'=>'Cerrar Sesión',
+                ]) ?>
         </li>
         <!-- <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">

@@ -8,11 +8,22 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Rifas',
-                'text'  => 'Administra la creación de Rifas',
+                'text'  => 'Administra la creación y edicioń de Rifas',
                 'icon'  => 'fa fa-bolt',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/rifas/index'])
+            ]) ?>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Ganadores',
+                'text'  => 'Muestra la lista de ganadores que podras filtrar por rifa y tipo de ganador',
+                'icon'  => 'fas fa-trophy',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/ganadores/index'])
             ]) ?>
         </div>
 
@@ -49,16 +60,16 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
             ]) ?>
         </div>
 
-        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\SmallBox::widget([
+        <!-- <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?/*= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Punto de Venta',
                 'text'  => 'Terminal de venta de Boletos',
                 'icon'  => 'fas fa-cart-arrow-down',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/tickets/sales'])
-            ]) ?>
-        </div>
+            ])*/ ?>
+        </div> -->
     </div>
     
     <!-- <div class="row">

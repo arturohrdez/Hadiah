@@ -29,7 +29,7 @@ echo newerton\fancybox3\FancyBox::widget([
                 <div class="card card-danger card-outline">
                     <div class="card-header">
                         <div class="col-6 float-right pb-3">
-                            <?= Html::button('<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Agregar Rifas', ['value' => Url::to('create'), 'class' => 'btn bg-gradient-danger float-right','id'=>'btnAddForm']) ?>
+                            <?= Html::button('<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Crear Nueva Rifa', ['value' => Url::to('create'), 'class' => 'btn bg-gradient-danger float-right','id'=>'btnAddForm']) ?>
                         </div>
                     </div>
 

@@ -34,14 +34,14 @@ if(is_null($sales)){
             ?>
             <div class="contact-view card-body">
                 <div class="col-12" align="right">
-                    <?= Html::button('<i class="fas fa-edit"></i>', ['value'=>Url::to(['update','id' => $model->id]),'class' => 'btn bg-teal btn-sm btnUpdateView', 'title'=>'Editar']) ?>
-                    <?= Html::a('<i class="fas fa-trash-alt"></i>', ['delete', 'id' => $model->id], [
+                    <!-- <?//= Html::button('<i class="fas fa-edit"></i>', ['value'=>Url::to(['update','id' => $model->id]),'class' => 'btn bg-teal btn-sm btnUpdateView', 'title'=>'Editar']) ?> -->
+                    <!-- <?/*= Html::a('<i class="fas fa-trash-alt"></i>', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger btn-sm',
                             'data' => [
                                 'confirm' => '¿Está seguro de eliminar este elemento?',
                                 'method' => 'post',
                             ],
-                        ]) ?>
+                        ])*/ ?> -->
                 </div>
 
                 <div class="col-12 pt-3">

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Rifas */
 
-$this->title = 'Create Rifas';
+$this->title = 'Crear Nueva Rifa';
 $this->params['breadcrumbs'][] = ['label' => 'Rifas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
