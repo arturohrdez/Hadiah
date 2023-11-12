@@ -85,6 +85,8 @@ class GanadoresController extends Controller
                 $modelRifa = Rifas::find()->where(["id"=>$model->rifa_id])->one();
                 $modelRifa->status = 0;
                 $modelRifa->save(false);
+
+                Yii::$app->session->setFlash('success', "Se guardo correctamente el registro del ganador y se desactivo la Rifa :  <strong>".$modelRifa->name."</strong>");
             }//end if
 
             $model->save();
@@ -132,10 +134,23 @@ class GanadoresController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id){  
-        
-        $this->findModel($id)->delete();
-        return $this->redirect(['index']);
+    public function actionDelete($id){
+        $modelGanador = $this->findModel($id);
+        if($modelGanador->type == "PM"){
+            $modelRifa         = Rifas::findOne($modelGanador->rifa->id);
+            $modelRifa->status = 1;
+            $modelRifa->save(false);
+            $rifa_id           = $modelGanador->rifa->id;
+            Yii::$app->session->setFlash('success', "Se elimino correctamente el registro de ganador y se activo la Rifa :  <strong>".$modelRifa->name."</strong>");
+        }else{
+            $rifa_id = $modelGanador->rifa->id;
+            Yii::$app->session->setFlash('success', "Se elimino correctamente el ticket: <strong>".$modelGanador->ticket->ticket."</strong>");
+        }//end if
+
+        $modelGanador->delete();
+
+        //$this->findModel($id)->delete();
+        return $this->redirect(['index','id'=>$rifa_id]);
     }
 
     /**

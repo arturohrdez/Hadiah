@@ -32,7 +32,7 @@ use yii\helpers\ArrayHelper;
         <div class="spinner-border text-danger mt-3" role="status"><span class="visually-hidden"></span></div>
     </div>
 
-    <div id="ticketDetailPM" class="text-center pt-2" style="display: none;">
+    <div id="ticketDetailPM" class="table-responsive text-center pt-2" style="display: none;">
         <table id="table_ticketDetailPM" class="table table-light">
             <thead>
                 <tr class="bg-gradient-light">
@@ -76,6 +76,17 @@ use yii\helpers\ArrayHelper;
 <?php
 $URL_ticketdetail   = Url::to(['rifas/ticketdetail']);
 $script = <<< JS
+    $('input[name="Ganadores[type]"]').on('click',function(e) {
+        var type_val = $(this).val();
+
+        if(type_val == "PM"){
+            var resp_ = confirm("Al seleccionar ganador del premio mayor se dará por terminada la rifa, ¿Desea continuar?");
+            if(!resp_){
+                $('input[name="Ganadores[type]"]').prop('checked', false);
+            }//end if
+        }//end if
+    });
+
     $("#ganadores-ticket_id").on("change",function(e){
         let ticket_id = $(this).val();
         if(ticket_id == ""){

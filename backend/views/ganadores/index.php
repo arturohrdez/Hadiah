@@ -59,12 +59,35 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php 
                 }//end if
                 ?>
+
+                <?php if (Yii::$app->session->hasFlash('success')): ?>
+                    <div class="row-fluid mt-2" align="center">
+                        <div class="col-sm-12">
+                            <div class="alert bg-teal alert-dismissable">
+                               <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                               <i class="icon fa fa-check"></i> <?= Yii::$app->session->getFlash('success') ?>
+                           </div>
+                       </div>
+                   </div>
+               <?php endif; ?>
+
+                <?php if (Yii::$app->session->hasFlash('danger')): ?>
+                    <div class="row-fluid mt-2" align="center">
+                        <div class="col-sm-12">
+                            <div class="alert bg-danger alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                <i class="icon fa fa-check"></i> <?= Yii::$app->session->getFlash('danger') ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                
                 <div class="card-body pad table-responsive">
 
 
                     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                    <?= GridView::widget([
+                    <?php echo  GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
@@ -167,8 +190,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ),
 
                             ],
-                            //'description',
-                            //'type',
 
                             [
                                 'class' => 'hail812\adminlte3\yii\grid\ActionColumn',
@@ -179,14 +200,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['style'=>'text-align:center'],
                                 'template'      => '{delete}',
                                 'buttons'       => [
-                                    /*'view'=>function($url,$model){
-                                        return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
-                                    },
-                                    'update'=>function ($url, $model) {
-                                        return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
-                                    },*/
                                     'delete'=>function ($url, $model) {
-                                        return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
+                                        if(!is_null(Yii::$app->request->get('id'))){
+                                            if($model->type == "PM"){
+                                                $data_confirm = "Eliminar el ganador del premio mayor activará la rifa. ¿Desea continuar?";
+                                            }else{
+                                                $data_confirm = '¿Está seguro de eliminar este elemento?';
+                                            }//end if
+
+                                            return Html::a(
+                                                '<i class="fas fa-trash-alt"></i>', 
+                                                $url = Url::to(['delete','id' => $model->id]), 
+                                                [
+                                                    'class'        => 'btn bg-danger btn-sm',
+                                                    'title'        => 'Eliminar',
+                                                    'data-pajax'   => 0,
+                                                    'data-confirm' => $data_confirm,
+                                                    'data-method'  => 'post'
+                                                ]
+                                            );
+                                        }//end if
                                     },
                                 ]
 
