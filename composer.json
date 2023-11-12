@@ -14,7 +14,7 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.4.0",
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap4": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
@@ -22,7 +22,8 @@
         "aracoool/yii2-uuid": "^1.1",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "ezyang/htmlpurifier": "^4.16",
-        "ptrnov/yii2-fusionchart": "*"
+        "ptrnov/yii2-fusionchart": "*",
+        "phpoffice/phpspreadsheet": "^1.28"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
