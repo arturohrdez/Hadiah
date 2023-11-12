@@ -10,6 +10,7 @@ use backend\models\Tickets;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 
 /**
  * GanadoresController implements the CRUD actions for Ganadores model.
@@ -22,6 +23,16 @@ class GanadoresController extends Controller
     public function behaviors()
     {
         return [
+            'access'=>[
+                'class'=> AccessControl::className(),
+                'only' => ['index','create','view','update','delete'],
+                'rules' => [
+                    [
+                        'allow' =>true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
