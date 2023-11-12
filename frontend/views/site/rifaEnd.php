@@ -47,8 +47,8 @@ if(is_null($model)){
 				}elseif($model->status == 2){
 				?>
 					<div class="alert alert-warning">
-						<h1>ESTA RIFA SE ENCUENTRA EN PAUSA, EN BREVE REGRESAREMOS...</h1>
-						<H3>POR FAVOR ESTAR ATENTOS A LA LISTA DE DESPECIADOS.</H3>
+						<h1>ESTA RIFA SE ENCUENTRA EN PAUSA, EN BREVE REGRESAMOS...</h1>
+						<H3>POR FAVOR ESTAR ATENTOS A LA LISTA DE DESPRECIADOS.</H3>
 					</div>
 				<?php
 				}

@@ -30,8 +30,10 @@ $script = <<< JS
 		var tn_sel      = $("#tn_sel").val();
 		var tn_rand     = $("#tn_rand").val();
 
-		let search_ti = elements_selected.indexOf(tn);
-		if(search_ti == -1){
+		var arr_base_ran = elements_random.flatMap(objeto => Object.values(objeto)).flat();
+		let search_ti    = elements_selected.indexOf(tn);
+		let search_tr    = arr_base_ran.indexOf(tn);
+		if(search_ti == -1 && search_tr == -1){
 			if(oportunidades > 0){
 				$.ajax({
 					url : "{$URL_random}",
