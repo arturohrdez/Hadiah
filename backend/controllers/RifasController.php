@@ -13,6 +13,10 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 
 /**
@@ -28,7 +32,7 @@ class RifasController extends Controller
         return [
             'access'=>[
                 'class'=> AccessControl::className(),
-                'only' => ['index','create','update','delete','view'],
+                'only' => ['index','create','update','delete','view','export'],
                 'rules' => [
                     [
                         'allow' =>true,
@@ -260,6 +264,105 @@ class RifasController extends Controller
             "transaction_number" =>$modelTicket->transaction_number,
             "date_payment"       =>$modelTicket->date_payment
         ];
+    }//end function
+
+    public function actionExport($id){
+        $modelRifa = Rifas::findOne($id);
+        // Crear una instancia de PhpSpreadsheet
+        $spreadsheet = new Spreadsheet();
+
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+                'rotation' => 90,
+                'startColor' => [
+                    'argb' => 'FFA0A0A0',
+                ],
+                'endColor' => [
+                    'argb' => '45CA8D',
+                ],
+            ],
+        ];
+        // Seleccionar la hoja activa
+        $sheet = $spreadsheet->getActiveSheet();
+        // Agregar datos y estilo a las cabeceras
+        $sheet->setCellValue('A1', 'RIFA');
+        $sheet->setCellValue('B1', 'TICKET');
+        $sheet->setCellValue('C1', 'FOLIO');
+        $sheet->setCellValue('D1', 'NOMBRE(S)');
+        $sheet->setCellValue('E1', 'APELLIDO(S)');
+        $sheet->setCellValue('F1', 'TELÉFONO');
+        $sheet->setCellValue('G1', 'ESTADO');
+        $sheet->setCellValue('H1', 'FECHA APARTADO');
+        $sheet->setCellValue('I1', 'FECHA PAGO');
+        $sheet->setCellValue('J1', 'ESTATUS');
+        $sheet->getStyle('A1:J1')->applyFromArray($styleArray);
+        
+        //DATOS
+        $tickets_activos = Tickets::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>0])->all();
+        $data = [];
+        //for ($i=1; $i <= 99999 ; $i++) { 
+            foreach ($tickets_activos as $ta) {
+                $estatus_ = ($ta->status == "P") ? "PAGADO" : "APARTADO";
+                $data[] = [$modelRifa->name,$ta->ticket,$ta->folio,$ta->name,$ta->lastname,$ta->phone,$ta->state,$ta->date,$ta->date_payment,$estatus_];
+                break;
+            }//end foreach
+        //}//end foreach
+
+
+        // Agregar datos a la hoja de cálculo
+        $row = 2;
+        foreach ($data as $rowData) {
+            $col = 'A';
+            foreach ($rowData as $value) {
+                if($col == "B") : 
+                    $type_cell = DataType::TYPE_STRING;
+                endif;
+                $sheet->setCellValue($col . $row, $value , $type_cell = null);
+                // Ajustar el tamaño de la columna al contenido
+                $sheet->getColumnDimension($col)->setAutoSize(true);
+
+                // Configurar la alineación central en la celda
+                $sheet->getStyle($col . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $col++;
+            }
+            $row++;
+        }
+
+        // Configurar la respuesta de Yii para la descarga
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_RAW;
+        $headers = $response->headers;
+
+        // Definir el tipo de contenido y el nombre del archivo
+        $filename = "reporte_rifa_".$modelRifa->id."_".$modelRifa->name;
+        $headers->add('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $headers->add('Content-Disposition', 'attachment;filename="'.$filename.'".xlsx"');
+        $headers->add('Cache-Control', 'max-age=0');
+
+        // Crear el escritor y guardar el archivo Excel en el flujo de salida
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        // Configurar el tamaño de la respuesta y enviarla
+        $response->content = $content;
+        $headers->add('Content-Length', strlen($content));
+        //return $this->redirect(['index','response'=>$response]);
+        return $response;
     }//end function
 
     /**

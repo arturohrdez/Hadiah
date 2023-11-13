@@ -58,7 +58,7 @@ echo newerton\fancybox3\FancyBox::widget([
                     <div class="card-body pad table-responsive">
 
 
-                        <?php Pjax::begin(); ?>
+                        <?php //Pjax::begin(); ?>
                         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
                         <?= GridView::widget([
@@ -125,11 +125,16 @@ echo newerton\fancybox3\FancyBox::widget([
                                     'header'        => 'Actions',
                                     'headerOptions' => ['style'=>'text-align:center'],
                                     'contentOptions' => ['class'=>'text-center'],
-                                    'template'      => '{winners} {view} {update}',
+                                    'template'      => '{winners} {excel} {view} {update}',
                                     'buttons'       => [
                                         'winners'=>function($url,$model){
                                             //return Html::button('<i class="fas fa-trophy"></i>',['value'=>Url::to(['ganadores', 'id' => $model->id]), 'class' => 'btn bg-yellow btn-sm', 'title'=>'Asignar Ganador(es)']);
                                             return Html::a('<i class="fas fa-trophy"></i>', $url = Url::to(['ganadores/index', 'id' => $model->id]), ['class' => 'btn bg-yellow btn-sm','title'=>'Asignar Ganador(es)']);
+                                        },
+                                        'excel'=> function($url,$model){
+                                            if($model->status == 0){
+                                                return Html::a('<i class="fas fa-download"></i>', ['export', 'id' => $model->id], ['class' => 'btn bg-yellow btn-sm','title'=>'Descargar Reporte','target'=>'_blank']);
+                                            }//end if
                                         },
                                         'view'=>function($url,$model){
                                             return Html::button('<i class="fas fa-eye"></i>',['value'=>Url::to(['view', 'id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnViewForm', 'title'=>'Consultar']);
@@ -138,9 +143,8 @@ echo newerton\fancybox3\FancyBox::widget([
                                             if($model->status != 0){
                                                 return Html::button('<i class="fas fa-edit"></i>',['value'=>Url::to(['update','id' => $model->id]), 'class' => 'btn bg-teal btn-sm btnUpdateForm','title'=>'Editar']);
                                             }//end if
-
-                                            return "&nbsp";
-                                        }/*
+                                        }
+                                        /*
                                         'delete'=>function ($url, $model) {
                                             return Html::a('<i class="fas fa-trash-alt"></i>', $url = Url::to(['delete','id' => $model->id]), ['class' => 'btn bg-danger btn-sm','title'=>'Eliminar','data-pajax'=>0, 'data-confirm'=>'¿Está seguro de eliminar este elemento?','data-method'=>'post']);
                                         },*/
@@ -154,7 +158,7 @@ echo newerton\fancybox3\FancyBox::widget([
                             ]
                         ]); ?>
 
-                        <?php Pjax::end(); ?>
+                        <?php //Pjax::end(); ?>
 
                     </div>
                     <!--.card-body-->
