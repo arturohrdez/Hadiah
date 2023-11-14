@@ -2,21 +2,22 @@
 
 namespace backend\controllers;
 
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Yii;
 use app\models\Ganadores;
 use backend\models\Promos;
 use backend\models\Rifas;
 use backend\models\RifasSearch;
 use backend\models\Tickets;
+use backend\models\Ticketstorage;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 
 /**
@@ -289,7 +290,31 @@ class RifasController extends Controller
             // Configurar la alineación central en la celda
             $sheet->getStyle("A".($startRow + $index).":J".($startRow + $index))->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
-    }
+    }//end function
+
+    private function procesarLoteVencidos($sheet, $data, $modelRifa ,$startRow){
+        foreach ($data as $index => $record) {
+            $estatus_ = ($record->status == "P") ? "PAGADO" : "APARTADO";
+            $sheet->setCellValue('A'. ($startRow + $index), $modelRifa->name);
+            $sheet->setCellValue('B'. ($startRow + $index), $record->ticket);
+            $sheet->setCellValue('C'. ($startRow + $index), $record->folio);
+            $sheet->setCellValue('D'. ($startRow + $index), $record->name);
+            $sheet->setCellValue('E'. ($startRow + $index), $record->lastname);
+            $sheet->setCellValue('F'. ($startRow + $index), $record->phone);
+            $sheet->setCellValue('G'. ($startRow + $index), $record->state);
+            $sheet->setCellValue('H'. ($startRow + $index), $record->date);
+            $sheet->setCellValue('I'. ($startRow + $index), $record->date_end);
+            $sheet->setCellValue('J'. ($startRow + $index), $estatus_);
+
+            $columnas = ['A','B','C','D','E','F','G','H','I','J'];
+            foreach ($columnas as $columna) {
+                $sheet->getColumnDimension($columna)->setAutoSize(true);
+            }
+            //$sheet->getColumnDimension('A:J')->setAutoSize(true);
+            // Configurar la alineación central en la celda
+            $sheet->getStyle("A".($startRow + $index).":J".($startRow + $index))->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        }
+    }//end function
 
     public function actionReporteactivos($id){
         $modelRifa = Rifas::findOne($id);
@@ -353,7 +378,7 @@ class RifasController extends Controller
         $headers = $response->headers;
 
         // Definir el tipo de contenido y el nombre del archivo
-        $filename = "reporte_boletosactivos_rifa_".$modelRifa->id."_".$modelRifa->name;
+        $filename = "boletospagadosapartados_rifa_".$modelRifa->id."_".$modelRifa->name;
         $headers->add('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $headers->add('Content-Disposition', 'attachment;filename="'.$filename.'".xlsx"');
         $headers->add('Cache-Control', 'max-age=0');
@@ -372,7 +397,170 @@ class RifasController extends Controller
         return $response;
     }//end function
 
-    
+    public function actionReportevencidos($id){
+        $modelRifa = Rifas::findOne($id);
+        // Crear una instancia de PhpSpreadsheet
+        $spreadsheet = new Spreadsheet();
+
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+                'rotation' => 90,
+                'startColor' => [
+                    'argb' => 'FFA0A0A0',
+                ],
+                'endColor' => [
+                    'argb' => 'DC3545',
+                ],
+            ],
+        ];
+        // Seleccionar la hoja activa
+        $sheet = $spreadsheet->getActiveSheet();
+        // Agregar datos y estilo a las cabeceras
+        $sheet->setCellValue('A1', 'RIFA');
+        $sheet->setCellValue('B1', 'TICKET');
+        $sheet->setCellValue('C1', 'FOLIO');
+        $sheet->setCellValue('D1', 'NOMBRE(S)');
+        $sheet->setCellValue('E1', 'APELLIDO(S)');
+        $sheet->setCellValue('F1', 'TELÉFONO');
+        $sheet->setCellValue('G1', 'ESTADO');
+        $sheet->setCellValue('H1', 'FECHA APARTADO');
+        $sheet->setCellValue('I1', 'FECHA VENCIDO');
+        $sheet->setCellValue('J1', 'ESTATUS');
+        $sheet->getStyle('A1:J1')->applyFromArray($styleArray);
+        
+        //DATOS
+        $batchSize    = 5000;
+        $totalRecords = Tickets::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>1])->count();
+
+        // Procesa por lotes
+        for ($offset = 0; $offset < $totalRecords; $offset += $batchSize) {
+            // Obtén un lote de registros
+            $data = Tickets::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>1])->offset($offset)->limit($batchSize)->all();
+
+            // Procesa el lote y agrega los datos al archivo Excel
+            $this->procesarLoteVencidos($sheet, $data, $modelRifa ,$offset + 2); // Offset + 2 para empezar desde la tercera fila
+        }//end foreach
+
+        // Configurar la respuesta de Yii para la descarga
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_RAW;
+        $headers = $response->headers;
+
+        // Definir el tipo de contenido y el nombre del archivo
+        $filename = "boletosvencidos_rifa_".$modelRifa->id."_".$modelRifa->name;
+        $headers->add('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $headers->add('Content-Disposition', 'attachment;filename="'.$filename.'".xlsx"');
+        $headers->add('Cache-Control', 'max-age=0');
+
+        // Crear el escritor y guardar el archivo Excel en el flujo de salida
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        // Configurar el tamaño de la respuesta y enviarla
+        $response->content = $content;
+        $headers->add('Content-Length', strlen($content));
+        //return $this->redirect(['index','response'=>$response]);
+        return $response;
+    }//end function
+
+    public function actionReportedespreciados($id){
+        $modelRifa = Rifas::findOne($id);
+        // Crear una instancia de PhpSpreadsheet
+        $spreadsheet = new Spreadsheet();
+
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+                'rotation' => 90,
+                'startColor' => [
+                    'argb' => 'FFA0A0A0',
+                ],
+                'endColor' => [
+                    'argb' => 'D4D2D2',
+                ],
+            ],
+        ];
+        // Seleccionar la hoja activa
+        $sheet = $spreadsheet->getActiveSheet();
+        // Agregar datos y estilo a las cabeceras
+        $sheet->setCellValue('A1', 'RIFA');
+        $sheet->setCellValue('B1', 'TICKET');
+        $sheet->setCellValue('C1', 'FOLIO');
+        $sheet->setCellValue('D1', 'NOMBRE(S)');
+        $sheet->setCellValue('E1', 'APELLIDO(S)');
+        $sheet->setCellValue('F1', 'TELÉFONO');
+        $sheet->setCellValue('G1', 'ESTADO');
+        $sheet->setCellValue('H1', 'FECHA APARTADO');
+        $sheet->setCellValue('I1', 'FECHA VENCIDO');
+        $sheet->setCellValue('J1', 'ESTATUS');
+        $sheet->getStyle('A1:J1')->applyFromArray($styleArray);
+        
+        //DATOS
+        $batchSize    = 5000;
+        $totalRecords = Ticketstorage::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>1])->count();
+
+        // Procesa por lotes
+        for ($offset = 0; $offset < $totalRecords; $offset += $batchSize) {
+            // Obtén un lote de registros
+            $data = Ticketstorage::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>1])->offset($offset)->limit($batchSize)->all();
+
+            // Procesa el lote y agrega los datos al archivo Excel
+            $this->procesarLoteVencidos($sheet, $data, $modelRifa ,$offset + 2); // Offset + 2 para empezar desde la tercera fila
+        }//end foreach
+
+        // Configurar la respuesta de Yii para la descarga
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_RAW;
+        $headers = $response->headers;
+
+        // Definir el tipo de contenido y el nombre del archivo
+        $filename = "boletosdespreciados_rifa_".$modelRifa->id."_".$modelRifa->name;
+        $headers->add('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $headers->add('Content-Disposition', 'attachment;filename="'.$filename.'".xlsx"');
+        $headers->add('Cache-Control', 'max-age=0');
+
+        // Crear el escritor y guardar el archivo Excel en el flujo de salida
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        // Configurar el tamaño de la respuesta y enviarla
+        $response->content = $content;
+        $headers->add('Content-Length', strlen($content));
+        //return $this->redirect(['index','response'=>$response]);
+        return $response;
+    }//end function
+
+
+
 
     /**
      * Deletes an existing Rifas model.

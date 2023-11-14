@@ -142,7 +142,7 @@ echo newerton\fancybox3\FancyBox::widget([
                                                     'dropdown'    => [
                                                         'items'       => [
                                                             [
-                                                                'label'  => '<i class="fas fa-ticket-alt"></i>&nbsp;Boletos Activos',
+                                                                'label'  => '<i class="fas fa-ticket-alt"></i>&nbsp;Boletos Pagados/Apartados',
                                                                 'encode' => false,
                                                                 'url'    => ['reporteactivos', 'id' => $key]
                                                             ],
