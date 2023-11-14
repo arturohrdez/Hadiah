@@ -266,7 +266,32 @@ class RifasController extends Controller
         ];
     }//end function
 
-    public function actionExport($id){
+    // Función para procesar un lote de datos y agregarlos al archivo Excel
+    private function procesarLote($sheet, $data, $modelRifa ,$startRow){
+        foreach ($data as $index => $record) {
+            $estatus_ = ($record->status == "P") ? "PAGADO" : "APARTADO";
+            $sheet->setCellValue('A'. ($startRow + $index), $modelRifa->name);
+            $sheet->setCellValue('B'. ($startRow + $index), $record->ticket);
+            $sheet->setCellValue('C'. ($startRow + $index), $record->folio);
+            $sheet->setCellValue('D'. ($startRow + $index), $record->name);
+            $sheet->setCellValue('E'. ($startRow + $index), $record->lastname);
+            $sheet->setCellValue('F'. ($startRow + $index), $record->phone);
+            $sheet->setCellValue('G'. ($startRow + $index), $record->state);
+            $sheet->setCellValue('H'. ($startRow + $index), $record->date);
+            $sheet->setCellValue('I'. ($startRow + $index), $record->date_payment);
+            $sheet->setCellValue('J'. ($startRow + $index), $estatus_);
+
+            $columnas = ['A','B','C','D','E','F','G','H','I','J'];
+            foreach ($columnas as $columna) {
+                $sheet->getColumnDimension($columna)->setAutoSize(true);
+            }
+            //$sheet->getColumnDimension('A:J')->setAutoSize(true);
+            // Configurar la alineación central en la celda
+            $sheet->getStyle("A".($startRow + $index).":J".($startRow + $index))->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        }
+    }
+
+    public function actionReporteactivos($id){
         $modelRifa = Rifas::findOne($id);
         // Crear una instancia de PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
@@ -310,35 +335,17 @@ class RifasController extends Controller
         $sheet->getStyle('A1:J1')->applyFromArray($styleArray);
         
         //DATOS
-        $tickets_activos = Tickets::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>0])->all();
-        $data = [];
-        //for ($i=1; $i <= 99999 ; $i++) { 
-            foreach ($tickets_activos as $ta) {
-                $estatus_ = ($ta->status == "P") ? "PAGADO" : "APARTADO";
-                $data[] = [$modelRifa->name,$ta->ticket,$ta->folio,$ta->name,$ta->lastname,$ta->phone,$ta->state,$ta->date,$ta->date_payment,$estatus_];
-                break;
-            }//end foreach
-        //}//end foreach
+        $batchSize    = 5000;
+        $totalRecords = Tickets::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>0])->count();
 
+        // Procesa por lotes
+        for ($offset = 0; $offset < $totalRecords; $offset += $batchSize) {
+            // Obtén un lote de registros
+            $data = Tickets::find()->where(["rifa_id" => $modelRifa->id,"expiration"=>0])->offset($offset)->limit($batchSize)->all();
 
-        // Agregar datos a la hoja de cálculo
-        $row = 2;
-        foreach ($data as $rowData) {
-            $col = 'A';
-            foreach ($rowData as $value) {
-                if($col == "B") : 
-                    $type_cell = DataType::TYPE_STRING;
-                endif;
-                $sheet->setCellValue($col . $row, $value , $type_cell = null);
-                // Ajustar el tamaño de la columna al contenido
-                $sheet->getColumnDimension($col)->setAutoSize(true);
-
-                // Configurar la alineación central en la celda
-                $sheet->getStyle($col . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $col++;
-            }
-            $row++;
-        }
+            // Procesa el lote y agrega los datos al archivo Excel
+            $this->procesarLote($sheet, $data, $modelRifa ,$offset + 2); // Offset + 2 para empezar desde la tercera fila
+        }//end foreach
 
         // Configurar la respuesta de Yii para la descarga
         $response = Yii::$app->response;
@@ -346,7 +353,7 @@ class RifasController extends Controller
         $headers = $response->headers;
 
         // Definir el tipo de contenido y el nombre del archivo
-        $filename = "reporte_rifa_".$modelRifa->id."_".$modelRifa->name;
+        $filename = "reporte_boletosactivos_rifa_".$modelRifa->id."_".$modelRifa->name;
         $headers->add('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $headers->add('Content-Disposition', 'attachment;filename="'.$filename.'".xlsx"');
         $headers->add('Cache-Control', 'max-age=0');
@@ -364,6 +371,8 @@ class RifasController extends Controller
         //return $this->redirect(['index','response'=>$response]);
         return $response;
     }//end function
+
+    
 
     /**
      * Deletes an existing Rifas model.

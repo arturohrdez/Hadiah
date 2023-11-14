@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\bootstrap4\ButtonDropdown;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\RifasSearch */
@@ -125,15 +126,39 @@ echo newerton\fancybox3\FancyBox::widget([
                                     'header'        => 'Actions',
                                     'headerOptions' => ['style'=>'text-align:center'],
                                     'contentOptions' => ['class'=>'text-center'],
-                                    'template'      => '{winners} {excel} {view} {update}',
+                                    'template'      => '{reports} {winners} {view} {update}',
                                     'buttons'       => [
                                         'winners'=>function($url,$model){
                                             //return Html::button('<i class="fas fa-trophy"></i>',['value'=>Url::to(['ganadores', 'id' => $model->id]), 'class' => 'btn bg-yellow btn-sm', 'title'=>'Asignar Ganador(es)']);
                                             return Html::a('<i class="fas fa-trophy"></i>', $url = Url::to(['ganadores/index', 'id' => $model->id]), ['class' => 'btn bg-yellow btn-sm','title'=>'Asignar Ganador(es)']);
                                         },
-                                        'excel'=> function($url,$model){
+                                        'reports'=> function($url,$model,$key){
                                             if($model->status == 0){
-                                                return Html::a('<i class="fas fa-download"></i>', ['export', 'id' => $model->id], ['class' => 'btn bg-yellow btn-sm','title'=>'Descargar Reporte','target'=>'_blank']);
+                                                /*return Html::a('<i class="fas fa-download"></i>', ['reports', 'id' => $model->id], ['class' => 'btn bg-yellow btn-sm','title'=>'Descargar Reporte','target'=>'_blank']);*/
+                                                return ButtonDropdown::widget([
+                                                    'label'       => '<i class="fas fa-download"></i>',
+                                                    'encodeLabel' => false,
+                                                    'options'     => ['class' => 'btn bg-yellow btn-xs'],
+                                                    'dropdown'    => [
+                                                        'items'       => [
+                                                            [
+                                                                'label'  => '<i class="fas fa-ticket-alt"></i>&nbsp;Boletos Activos',
+                                                                'encode' => false,
+                                                                'url'    => ['reporteactivos', 'id' => $key]
+                                                            ],
+                                                            [
+                                                                'label'  => '<i class="far fa-calendar-times"></i>&nbsp;Boletos Vencidos', 
+                                                                'encode' => false,
+                                                                'url'    => ['reportevencidos', 'id' => $key]
+                                                            ],
+                                                            [
+                                                                'label'  => '<i class="fa fa-ban"></i>&nbsp;Boletos Despreciados', 
+                                                                'encode' => false,
+                                                                'url'    => ['reportedespreciados', 'id' => $key]
+                                                            ],
+                                                        ]
+                                                    ],
+                                                ]);
                                             }//end if
                                         },
                                         'view'=>function($url,$model){
@@ -170,3 +195,13 @@ echo newerton\fancybox3\FancyBox::widget([
         <!--.row-->
     </div>
 </div>
+
+
+<?php 
+$script = <<< JS
+    $(function(e){
+        $(".btn .dropdown-toggle").addClass('btn-xs');
+    });
+JS;
+$this->registerJs($script);
+?>
