@@ -49,7 +49,7 @@ class TicketstorageSearch extends Ticketstorage
             'query' => $query,
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
             'pagination' => [
-                'defaultPageSize' => 15,
+                'defaultPageSize' => 100,
             ]
         ]);
 

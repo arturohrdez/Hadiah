@@ -48,7 +48,7 @@ class TicketsSearch extends Tickets
             'query' => $query,
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
             'pagination' => [
-                'defaultPageSize' => 50,
+                'defaultPageSize' => 100,
             ]
         ]);
 
