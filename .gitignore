@@ -48,6 +48,8 @@ phpunit.phar
 ConfigRepo.txt
 /frontend/config/main-local.php
 /backend/config/main-local.php
+/backend/web/uploads/logos
+/backend/web/uploads/favicon
 /common/config/codeception-local.php
 /common/config/main-local.php
 composer.lock

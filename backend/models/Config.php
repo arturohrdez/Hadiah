@@ -36,8 +36,13 @@ class Config extends \yii\db\ActiveRecord
         return [
             [['sitename', 'logo'], 'required'],
             [['slogan', 'logo', 'favicon'], 'string'],
+            [['logo'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 777,'maxWidth'=>777,'minHeight'=>777,'maxHeight'=>777,'maxSize'=>1024 * 1024 * 2],
+            [['favicon'],'image','extensions'=>'ico','minWidth' => 48,'maxWidth'=>48,'minHeight'=>48,'maxHeight'=>48,'maxSize'=>1024 * 1024 * 2],
             [['sitename'], 'string', 'max' => 150],
-            [['whatsapp'], 'string', 'max' => 15],
+            //[['whatsapp'], 'string', 'max' => 15]
+            [['whatsapp'], 'string', 'min' => 10, 'max' => 15],
+            [['whatsapp'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'El número debe contener solo dígitos.'],
+
             [['instagram', 'facebook', 'youtube', 'video'], 'string', 'max' => 250],
         ];
     }

@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * Site controller
@@ -69,6 +70,31 @@ class SiteController extends Controller
 
     public function actionConfig(){
         $model = new Config();
+
+        if($model->load(Yii::$app->request->post())) {
+            $model->logo = UploadedFile::getInstance($model,'logo');
+            if(!empty($model->logo)){
+                $logoName    = $model->logo->name;
+                $model->logo->saveAs('uploads/logos/'.$logoName);
+                $model->logo = 'uploads/logos/'.$logoName;
+            }//end if
+
+            $model->favicon = UploadedFile::getInstance($model,'favicon');
+            if(!empty($model->favicon)){
+                $faviconName    = $model->favicon->name;
+                $model->favicon->saveAs('uploads/favicon/'.$faviconName);
+                $model->favicon    = 'uploads/favicon/'.$faviconName;
+            }//end if
+
+            if(!$model->validate()){
+                return $this->render('config',[
+                    'model'=> $model
+                ]);
+            }//end if
+
+            $model->save();
+        }//end if
+
         return $this->render('config',[
             'model'=> $model
         ]);
