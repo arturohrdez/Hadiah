@@ -2,10 +2,11 @@
 
 namespace backend\controllers;
 
-use common\models\LoginForm;
 use Yii;
-use yii\filters\VerbFilter;
+use app\models\Config;
+use common\models\LoginForm;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -28,7 +29,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index','config'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -64,6 +65,13 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionConfig(){
+        $model = new Config();
+        return $this->render('config',[
+            'model'=> $model
+        ]);
     }
 
     /**
