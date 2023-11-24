@@ -50,6 +50,7 @@ ConfigRepo.txt
 /backend/config/main-local.php
 /backend/web/uploads/logos
 /backend/web/uploads/favicon
+/backend/web/uploads/backlogin
 /common/config/codeception-local.php
 /common/config/main-local.php
 composer.lock

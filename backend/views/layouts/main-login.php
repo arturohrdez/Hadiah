@@ -1,4 +1,5 @@
 <?php
+use app\models\Config;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -19,7 +20,23 @@ $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionic
     <?php $this->registerCsrfMetaTags() ?>
     <?php $this->head() ?>
 </head>
-<body class="hold-transition login-page bg-gradient-primary">
+<?php 
+//Busca registros en la tabla Config
+$searchConfig = Config::find()->count();
+if($searchConfig > 0){
+    $modelConfig     = Config::find()->one();
+    $loginBackground = !empty($modelConfig->backgroundimg) ? $modelConfig->backgroundimg : false;
+
+    if(!$loginBackground){
+        $class_background = "bg-gradient-primary";
+        $style_background = "";
+    }else{
+        $class_background = "";
+        $style_background = "background-image: url('/".$loginBackground."'); background-size:cover; background-repeat: no-repeat; ";
+    }
+}//end if
+?>
+<body class="hold-transition login-page <?php echo $class_background; ?>" style="<?php echo $style_background; ?>">
 <?php  $this->beginBody() ?>
 <div class="login-box">
     <div class="login-logo">

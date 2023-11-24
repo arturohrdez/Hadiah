@@ -35,6 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div id="preview_favicon" class="col-lg-6 col-md-12 mt-3" align="center"></div>
             </div>
             <div class="card-body row">
+                <?php echo $form->field($model, 'img_background')->hiddenInput()->label(false); ?>
+                <?php echo $form->field($model, 'backgroundimg',['options'=>['class'=>'col-lg-6 col-md-12 mt-3 bg-light']])->fileInput()->label('<div>Login (Imagen de fondo): </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+                <div id="preview_backlogin" class="col-lg-6 col-md-12 mt-3" align="center"></div>
+            </div>
+            <div class="card-body row">
                 <div class="col-12">
                     <h2>Redes Sociales</h2>
                 </div>
@@ -70,6 +75,13 @@ $script = <<< JS
         image.classList.add('img-fluid');
         preview_favicon.innerHTML = '';
         preview_favicon.append(image);
+        
+        var previewLogin = '/$model->backgroundimg';
+        image = document.createElement('img');
+        image.src = previewLogin;
+        image.classList.add('img-fluid');
+        preview_backlogin.innerHTML = '';
+        preview_backlogin.append(image);
     });
 
     document.getElementById("config-logo").onchange = function(e) {
@@ -109,5 +121,26 @@ $script = <<< JS
             };
         }
     }
+    
+    document.getElementById("config-backgroundimg").onchange = function(e) {
+        if(e.target.files[0] === undefined){
+            document.getElementById('preview_backlogin').innerHTML = "";
+        }else{
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(){
+                let preview = document.getElementById('preview_backlogin'),
+                    image = document.createElement('img');
+
+                image.src = reader.result;
+                image.classList.add('img-fluid');
+
+                preview.innerHTML = '';
+                preview.append(image);
+            };
+        }
+    }
+
+    
 JS;
 $this->registerJs($script);

@@ -71,9 +71,10 @@ class SiteController extends Controller
     public function actionConfig(){
         $searchConfig = Config::find()->count();
         if($searchConfig > 0){
-            $model              = Config::find()->one();
-            $model->img         = $model->logo;
-            $model->img_favicon = $model->favicon;
+            $model                 = Config::find()->one();
+            $model->img            = $model->logo;
+            $model->img_favicon    = $model->favicon;
+            $model->img_background = $model->backgroundimg;
         }else{
             $model = new Config();
             $model->scenario = 'create';
@@ -81,8 +82,9 @@ class SiteController extends Controller
 
         if($model->load(Yii::$app->request->post())) {
             //Aux IMG
-            $aux_logo    = Yii::$app->request->post()["Config"]["img"];
-            $aux_favicon = Yii::$app->request->post()["Config"]["img_favicon"];
+            $aux_logo      = Yii::$app->request->post()["Config"]["img"];
+            $aux_favicon   = Yii::$app->request->post()["Config"]["img_favicon"];
+            $aux_backlogin = Yii::$app->request->post()["Config"]["img_background"];
 
             if(empty($aux_logo)){
                 $model->logo = UploadedFile::getInstance($model,'logo');
@@ -105,6 +107,19 @@ class SiteController extends Controller
             }else{
                 $model->favicon = $aux_favicon;
             }//end if
+            
+            if(empty($aux_backlogin)){
+                $model->backgroundimg = UploadedFile::getInstance($model,'backgroundimg');
+                if(!empty($model->backgroundimg)){
+                    $backgroundimgName = $model->backgroundimg->name;
+                    $model->backgroundimg->saveAs('uploads/backlogin/'.$backgroundimgName);
+                    $model->backgroundimg = 'uploads/backlogin/'.$backgroundimgName;
+                }//end if
+            }else{
+                $model->backgroundimg = $aux_backlogin;
+            }//end if
+
+
 
             if(!$model->validate()){
                 return $this->render('config',[
@@ -134,7 +149,7 @@ class SiteController extends Controller
         //Layout Login
         $this->layout = "main-login";
         $model        = new LoginForm();
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
@@ -142,7 +157,7 @@ class SiteController extends Controller
         $model->password = '';
 
         return $this->render('login', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 
