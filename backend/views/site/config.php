@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap4\ActiveForm;
-
+use yii\bootstrap4\ButtonGroup;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\RifasSearch */
@@ -18,6 +18,28 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card-header">
                 <h1 class="card-title"><strong><i class="nav-icon fas fa-tools"></i>&nbsp;&nbsp;&nbsp;<?= Html::encode($this->title) ?></strong></h1>
             </div>
+            <?php if (Yii::$app->session->hasFlash('success')): ?>
+                <div class="row-fluid mt-2" align="center">
+                    <div class="col-sm-12">
+                        <div class="alert bg-teal alert-dismissable">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            <i class="icon fa fa-check"></i> <?= Yii::$app->session->getFlash('success') ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (Yii::$app->session->hasFlash('danger')): ?>
+                <div class="row-fluid mt-2" align="center">
+                    <div class="col-sm-12">
+                        <div class="alert bg-danger alert-dismissable">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            <i class="icon fa fa-check"></i> <?= Yii::$app->session->getFlash('danger') ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            
             <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data','id'=>'configForm']]); ?>
             <div class="config-form card-body row">
                 <?php echo $form->field($model, 'id')->hiddenInput()->label(false); ?>
@@ -26,17 +48,17 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="card-body row">
                 <?php echo $form->field($model, 'img')->hiddenInput()->label(false); ?>
-                <?php echo $form->field($model, 'logo',['options'=>['class'=>'col-lg-6 col-md-12 mt-3 bg-light']])->fileInput()->label('<div>Logo: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del Logo: 770px X 770px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
-                <div id="preview_logo" class="col-lg-6 col-md-12 mt-3" align="center"></div>
+                <?php echo $form->field($model, 'logo',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Logo: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del Logo: 770px X 770px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+                <div id="preview_logo" class="col-lg-5 col-md-12" align="center"></div>
             </div>
             <div class="card-body row">
                 <?php echo $form->field($model, 'img_favicon')->hiddenInput()->label(false); ?>
-                <?php echo $form->field($model, 'favicon',['options'=>['class'=>'col-lg-6 col-md-12 mt-3 bg-light']])->fileInput()->label('<div>Favicon: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+                <?php echo $form->field($model, 'favicon',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Favicon: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
                 <div id="preview_favicon" class="col-lg-6 col-md-12 mt-3" align="center"></div>
             </div>
             <div class="card-body row">
                 <?php echo $form->field($model, 'img_background')->hiddenInput()->label(false); ?>
-                <?php echo $form->field($model, 'backgroundimg',['options'=>['class'=>'col-lg-6 col-md-12 mt-3 bg-light']])->fileInput()->label('<div>Login (Imagen de fondo): </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+                <?php echo $form->field($model, 'backgroundimg',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Login (Imagen de fondo): </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
                 <div id="preview_backlogin" class="col-lg-6 col-md-12 mt-3" align="center"></div>
             </div>
             <div class="card-body row">

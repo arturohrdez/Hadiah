@@ -94,7 +94,14 @@ class SiteController extends Controller
                     $model->logo = 'uploads/logos/'.$logoName;
                 }//end if
             }else{
-                $model->logo = $aux_logo;
+                $model->logo = UploadedFile::getInstance($model,'logo');
+                if(!empty($model->logo)){
+                    $logoName    = $model->logo->name;
+                    $model->logo->saveAs('uploads/logos/'.$logoName);
+                    $model->logo = 'uploads/logos/'.$logoName;
+                }else{
+                    $model->logo = $aux_logo;
+                }//end if
             }//end if
 
             if(empty($aux_favicon)){
@@ -105,7 +112,14 @@ class SiteController extends Controller
                     $model->favicon    = 'uploads/favicon/'.$faviconName;
                 }//end if
             }else{
-                $model->favicon = $aux_favicon;
+                $model->favicon = UploadedFile::getInstance($model,'favicon');
+                if(!empty($model->favicon)){
+                    $faviconName    = $model->favicon->name;
+                    $model->favicon->saveAs('uploads/favicon/'.$faviconName);
+                    $model->favicon    = 'uploads/favicon/'.$faviconName;
+                }else{
+                    $model->favicon = $aux_favicon;
+                }//end if
             }//end if
             
             if(empty($aux_backlogin)){
@@ -116,18 +130,26 @@ class SiteController extends Controller
                     $model->backgroundimg = 'uploads/backlogin/'.$backgroundimgName;
                 }//end if
             }else{
-                $model->backgroundimg = $aux_backlogin;
+                $model->backgroundimg = UploadedFile::getInstance($model,'backgroundimg');
+                if(!empty($model->backgroundimg)){
+                    $backgroundimgName = $model->backgroundimg->name;
+                    $model->backgroundimg->saveAs('uploads/backlogin/'.$backgroundimgName);
+                    $model->backgroundimg = 'uploads/backlogin/'.$backgroundimgName;
+                }else{
+                    $model->backgroundimg = $aux_backlogin;
+                }//end if
             }//end if
 
-
-
             if(!$model->validate()){
+                Yii::$app->session->setFlash('danger', "La información no se guardo, por favor intente nuevamente.");
                 return $this->render('config',[
                     'model'=> $model
                 ]);
             }//end if
 
+            //Save Config
             $model->save();
+            Yii::$app->session->setFlash('success', "La información se guardo correctamente.");
         }//end if
 
         return $this->render('config',[
