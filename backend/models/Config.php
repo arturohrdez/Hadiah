@@ -20,6 +20,8 @@ use Yii;
  */
 class Config extends \yii\db\ActiveRecord
 {
+    public $img;
+    public $img_favicon;
     /**
      * {@inheritdoc}
      */
@@ -34,7 +36,8 @@ class Config extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sitename', 'logo'], 'required'],
+            [['logo'],'required','on'=>'create'],
+            [['sitename'], 'required'],
             [['slogan', 'logo', 'favicon'], 'string'],
             [['logo'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 777,'maxWidth'=>777,'minHeight'=>777,'maxHeight'=>777,'maxSize'=>1024 * 1024 * 2],
             [['favicon'],'image','extensions'=>'ico','minWidth' => 48,'maxWidth'=>48,'minHeight'=>48,'maxHeight'=>48,'maxSize'=>1024 * 1024 * 2],
@@ -43,7 +46,7 @@ class Config extends \yii\db\ActiveRecord
             [['whatsapp'], 'string', 'min' => 10, 'max' => 15],
             [['whatsapp'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'El número debe contener solo dígitos.'],
 
-            [['instagram', 'facebook', 'youtube', 'video'], 'string', 'max' => 250],
+            [['instagram', 'facebook', 'youtube','tiktok' ,'video','img','img_favicon'], 'string', 'max' => 250],
         ];
     }
 
@@ -62,6 +65,7 @@ class Config extends \yii\db\ActiveRecord
             'instagram' => 'Instagram',
             'facebook' => 'Facebook',
             'youtube' => 'Youtube',
+            'tiktok' => 'Tik Tok',
             'video' => 'Video de presentación',
         ];
     }

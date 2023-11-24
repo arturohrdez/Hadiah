@@ -69,21 +69,41 @@ class SiteController extends Controller
     }
 
     public function actionConfig(){
-        $model = new Config();
+        $searchConfig = Config::find()->count();
+        if($searchConfig > 0){
+            $model              = Config::find()->one();
+            $model->img         = $model->logo;
+            $model->img_favicon = $model->favicon;
+        }else{
+            $model = new Config();
+            $model->scenario = 'create';
+        }//end if
 
         if($model->load(Yii::$app->request->post())) {
-            $model->logo = UploadedFile::getInstance($model,'logo');
-            if(!empty($model->logo)){
-                $logoName    = $model->logo->name;
-                $model->logo->saveAs('uploads/logos/'.$logoName);
-                $model->logo = 'uploads/logos/'.$logoName;
+            //Aux IMG
+            $aux_logo    = Yii::$app->request->post()["Config"]["img"];
+            $aux_favicon = Yii::$app->request->post()["Config"]["img_favicon"];
+
+            if(empty($aux_logo)){
+                $model->logo = UploadedFile::getInstance($model,'logo');
+                if(!empty($model->logo)){
+                    $logoName    = $model->logo->name;
+                    $model->logo->saveAs('uploads/logos/'.$logoName);
+                    $model->logo = 'uploads/logos/'.$logoName;
+                }//end if
+            }else{
+                $model->logo = $aux_logo;
             }//end if
 
-            $model->favicon = UploadedFile::getInstance($model,'favicon');
-            if(!empty($model->favicon)){
-                $faviconName    = $model->favicon->name;
-                $model->favicon->saveAs('uploads/favicon/'.$faviconName);
-                $model->favicon    = 'uploads/favicon/'.$faviconName;
+            if(empty($aux_favicon)){
+                $model->favicon = UploadedFile::getInstance($model,'favicon');
+                if(!empty($model->favicon)){
+                    $faviconName    = $model->favicon->name;
+                    $model->favicon->saveAs('uploads/favicon/'.$faviconName);
+                    $model->favicon    = 'uploads/favicon/'.$faviconName;
+                }//end if
+            }else{
+                $model->favicon = $aux_favicon;
             }//end if
 
             if(!$model->validate()){

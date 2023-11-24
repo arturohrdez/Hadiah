@@ -25,16 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'slogan',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
             </div>
             <div class="card-body row">
+                <?php echo $form->field($model, 'img')->hiddenInput()->label(false); ?>
                 <?php echo $form->field($model, 'logo',['options'=>['class'=>'col-lg-6 col-md-12 mt-3 bg-light']])->fileInput()->label('<div>Logo: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del Logo: 770px X 770px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
-                <div id="preview_logo" class="col-lg-6 col-md-12 mt-3" align="center">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt iure quam amet, ullam. Accusamus iste rem eveniet reiciendis doloremque! Est consequatur eveniet error nostrum ipsam voluptatum, facere eaque, voluptas quia.
-                </div>
+                <div id="preview_logo" class="col-lg-6 col-md-12 mt-3" align="center"></div>
             </div>
             <div class="card-body row">
+                <?php echo $form->field($model, 'img_favicon')->hiddenInput()->label(false); ?>
                 <?php echo $form->field($model, 'favicon',['options'=>['class'=>'col-lg-6 col-md-12 mt-3 bg-light']])->fileInput()->label('<div>Favicon: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
-                <div id="preview_logo" class="col-lg-6 col-md-12 mt-3" align="center">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt iure quam amet, ullam. Accusamus iste rem eveniet reiciendis doloremque! Est consequatur eveniet error nostrum ipsam voluptatum, facere eaque, voluptas quia.
-                </div>
+                <div id="preview_favicon" class="col-lg-6 col-md-12 mt-3" align="center"></div>
             </div>
             <div class="card-body row">
                 <div class="col-12">
@@ -44,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'instagram',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
                 <?php echo $form->field($model, 'facebook',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
                 <?php echo $form->field($model, 'youtube',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
+                <?php echo $form->field($model, 'tiktok',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
                 <?php echo $form->field($model, 'video',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
             </div>
             <div class=" card-footer" align="right">
@@ -53,3 +52,62 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<?php
+$script = <<< JS
+
+    $(function(e){
+        var previewLogo = '/$model->logo';
+        image = document.createElement('img');
+        image.src = previewLogo;
+        image.classList.add('img-fluid');
+        preview_logo.innerHTML = '';
+        preview_logo.append(image);
+        
+        var previewFavicon = '/$model->favicon';
+        image = document.createElement('img');
+        image.src = previewFavicon;
+        image.classList.add('img-fluid');
+        preview_favicon.innerHTML = '';
+        preview_favicon.append(image);
+    });
+
+    document.getElementById("config-logo").onchange = function(e) {
+        if(e.target.files[0] === undefined){
+            document.getElementById('preview_logo').innerHTML = "";
+        }else{
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(){
+                let preview = document.getElementById('preview_logo'),
+                    image = document.createElement('img');
+
+                image.src = reader.result;
+                image.classList.add('img-fluid');
+
+                preview.innerHTML = '';
+                preview.append(image);
+            };
+        }
+    }
+
+    document.getElementById("config-favicon").onchange = function(e) {
+        if(e.target.files[0] === undefined){
+            document.getElementById('preview_favicon').innerHTML = "";
+        }else{
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(){
+                let preview = document.getElementById('preview_favicon'),
+                    image = document.createElement('img');
+
+                image.src = reader.result;
+                image.classList.add('img-fluid');
+
+                preview.innerHTML = '';
+                preview.append(image);
+            };
+        }
+    }
+JS;
+$this->registerJs($script);
