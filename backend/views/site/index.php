@@ -8,7 +8,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Rifas',
-                'text'  => 'Administra la creación y edicioń de Rifas',
+                'text'  => 'Administra la creación y edicioń de Rifas.',
                 'icon'  => 'fa fa-bolt',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
@@ -19,18 +19,17 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Ganadores',
-                'text'  => 'Muestra la lista de ganadores que podras filtrar por rifa y tipo de ganador',
+                'text'  => 'Muestra la lista de ganadores que podras filtrar por rifa y tipo de ganador.',
                 'icon'  => 'fas fa-trophy',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/ganadores/index'])
             ]) ?>
         </div>
-
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Boletos Activos',
-                'text'  => 'Listado de boletos apartados y vendidos',
+                'text'  => 'Listado de boletos apartados y vendidos.',
                 'icon'  => 'fas fa-ticket-alt',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
@@ -52,11 +51,22 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Despreciados',
-                'text'  => 'Listado de boletos despreciados',
+                'text'  => 'Listado de boletos despreciados.',
                 'icon'  => 'fa fa-ban',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/ticketstorage/index'])
+            ]) ?>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Buscador',
+                'text'  => 'Busca boletos en específico y verifica la información.',
+                'icon'  => 'fas fa-search',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/tickets/search'])
             ]) ?>
         </div>
 
@@ -70,6 +80,16 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'linkUrl' => Url::to(['/tickets/sales'])
             ])*/ ?>
         </div> -->
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Generales',
+                'text'  => 'Configuración de logos, redes sociales y más.',
+                'icon'  => 'fas fa-tools',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to('/site/config')
+            ]) ?>
+        </div>
     </div>
     
     <!-- <div class="row">

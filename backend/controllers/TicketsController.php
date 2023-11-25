@@ -27,7 +27,7 @@ class TicketsController extends Controller
         return [
             'access'=>[
                 'class'=> AccessControl::className(),
-                'only' => ['index','create','update','delete','sales','view','createtickets','searchticket','ticketremove','pagar','sendwp','expirate'],
+                'only' => ['index','create','update','delete','sales','view','listtickets','createtickets','searchticket','ticketremove','pagar','sendwp','expirate','search'],
                 'rules' => [
                     [
                         'allow' =>true,
@@ -240,6 +240,7 @@ class TicketsController extends Controller
 
 
     public function actionSales(){
+        die("No Allowed");
         $modelRifas = Rifas::find()->where(['status' => 1])->orderBy(['date_init' => SORT_ASC])->all();
         return $this->render('sales',[
             'modelRifas' => $modelRifas,
@@ -384,6 +385,14 @@ class TicketsController extends Controller
         }//end if
 
         return ["status"=>false];
+    }//end function
+
+    public function actionListtickets(){
+        $rifa_id = Yii::$app->request->get()["rifa_id"];
+        echo '<pre>'; 
+        print_r($rifa_id); 
+        echo '</pre>';
+        die();
     }//end function
 
     public function actionTicketremove(){
@@ -619,6 +628,14 @@ Encuentra todos tus bolestos PAGADOS aquí:
     
         $link = "https://wa.me/+52{$phone}/?text=".urlencode($custom_msg);
         return $this->redirect($link);
+    }//end function
+
+    public function actionSearch(){
+        $modelRifas = Rifas::find()->orderBy(['date_init' => SORT_ASC])->all();
+
+        return $this->render('search',[
+            'modelRifas' => $modelRifas,
+        ]);
     }//end function
 
     /**

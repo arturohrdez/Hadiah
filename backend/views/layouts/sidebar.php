@@ -47,6 +47,7 @@ use yii\helpers\Url;
             $items[] = ['label' => 'Activos', 'icon' => 'fas fa-ticket-alt', 'url' => [Url::to('/tickets/index')], 'target' => ''];
             $items[] = ['label' => 'Vencidos', 'icon' => 'far fa-calendar-times', 'url' => [Url::to('/tickets/expirate')], 'target' => ''];
             $items[] = ['label' => 'Despreciados', 'icon' => 'fa fa-ban', 'url' => [Url::to('/ticketstorage/index')], 'target' => ''];
+            $items[] = ['label' => 'Buscador', 'icon' => 'fas fa-search', 'url' => [Url::to('/tickets/search')], 'target' => ''];
             $items[] = ['label' => 'CONFIGURACIONES', 'header' => true];
             $items[] = ['label' => 'Generales', 'icon' => 'fas fa-tools', 'url' => [Url::to('/site/config')], 'target' => ''];
             //$items[] = ['label' => 'Punto de Venta', 'icon' => 'fas fa-cart-arrow-down', 'url' => [Url::to('/tickets/sales')], 'target' => ''];
