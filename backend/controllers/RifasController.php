@@ -84,7 +84,18 @@ class RifasController extends Controller
             'model' => $this->findModel($id),
             'sales' => $sales
         ]);
-    }
+    }//end function
+
+    public function actionSearchticket(){
+        $rifa_id = Yii::$app->request->post()["id"];
+        $tn_s    = Yii::$app->request->post()["tn_s"];
+
+        $modelT  = Tickets::find()->where(['ticket' => $tn_s])->andWhere(["rifa_id"=>$rifa_id])->one();
+        return $this->renderAjax('_searchticket', [
+            'modelT' => $modelT,
+            'ticket' => $tn_s
+        ]);
+    }//end function
 
     /**
      * Creates a new Rifas model.

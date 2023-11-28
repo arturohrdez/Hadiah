@@ -6,6 +6,8 @@ use yii\helpers\ArrayHelper;
 
 $this->title = 'Buscador de tickets';
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 
 <div class="container-fluid">
@@ -37,18 +39,26 @@ $this->params['breadcrumbs'][] = $this->title;
     								<div></div>
     							</div>
 
-                                <div id="listTickets" class="text-center mt-2" style="display: none;">
-                                    <?php
-                                        echo Select2::widget([
-                                            'id'            => 'tickets_number',
-                                            'name'          => 'tickets_number',
-                                            'data'          => [],
-                                            'options'       => ['placeholder' => '--Seleccione una opción--'],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                            ],
-                                        ]);
-                                    ?>
+                                <div id="divTicketSearch" class="text-center mt-2" style="display: none;">
+                                	<div class="row bg-gradient-info">
+    									<div class="col-12 fs-1 text-center text-white p-2">
+    										<div class="alert font-weight-bold">
+    											<h5>
+    												INGRESE UN BOLETO ENTRE <br> <span id="init" class="right badge badge-danger"></span> <span class="right badge badge-danger">Y</span> <span id="end" class="right badge badge-danger"></span>
+    											</h5>
+    										</div>
+    									</div>
+    								</div>
+                                	<div class="row">
+                                		<div class="col-12">
+                                			<?php echo  Html::input('number','ticket_search',null, $options=['class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'id'=>'ticket_s','placeholder'=>'NÚMERO DE BOLETO','autocomplete'=>'off']) ?>
+                                		</div>
+                                	</div>
+                                	<div class="row"> 
+                                		<div class="col-12">
+											<?php echo  Html::button(" <i class='fas fa-search'></i> BUSCAR", ['id' => 'btn_searchticket','class'=>'btn btn-warning mt-2','style'=>'font-weight: bold; display: none;']); ?>
+										</div>
+                                	</div>
                                 </div>
     						</div>
     						<div class=" card-footer" align="right">
@@ -63,11 +73,8 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php 
-$URL_rifas       = Url::to(['rifas/view']);
-$URL_listtickets = Url::to(['tickets/listtickets']);
-//$URL_tickets = Url::to(['tickets/createtickets']);
-//$URL_searcht = Url::to(['tickets/searchticket']);
-//$URL_remove = Url::to(['tickets/ticketremove']);
+$URL_rifas        = Url::to(['rifas/view']);
+$URL_searchTicket = Url::to(['rifas/searchticket']);
 ?>
 
 <?php
@@ -87,9 +94,9 @@ $script = <<< JS
 		if(n != "" && a > 0){
 			f = i.padStart(d,"0");
 			$(this).val(f);
-			$("#btn_addticket").show();
+			$("#btn_searchticket").show();
 		}else{
-			$("#btn_addticket").hide();
+			$("#btn_searchticket").hide();
 		}//end if
 	});
 
@@ -107,26 +114,65 @@ $script = <<< JS
 				beforeSend: function(data){
 					$("#rifaDetail").show();
 					$("#rifaDetail").html('<div class="spinner-border text-danger mt-3" role="status"><span class="visually-hidden"></span></div>');
-					//$("#listTickets").show();
 				},
 				success: function(response) {
 					$("#rifaDetail").html(response);
-				},
-                complete: function(){
-                    $.ajax({
-                        url     : "{$URL_listtickets}",
-                        type    : 'GET',
-                        dataType: 'HTML',
-                        data    : {"rifa_id":rifa_id},
-                        beforeSend: function(data){},
-                        success: function(response) {},
-                    });
-                    //console.log(response);
-                    //alert("entra");
-                }
+					let i = $("#t_init").val();
+					let n = $("#t_digit").val();
+					let f = i.padStart(n,"0");
+					
+					$("#init").html(f);
+					$("#end").text($("#t_end").val());
+					$("#divTicketSearch").show();
+				}
 			});
 		}
 		//alert("entra -->"+rifa_id);
+	});
+
+	$("#btn_searchticket").on("click",function(){
+		let tn_s    = $("#ticket_s").val();
+		let max     = $("#t_end").val();
+		let rifa_id = $("#rifa_id").val();
+
+		if(tn_s != ""){
+			if(tn_s > max){
+				$.fancybox.open({
+		            type: 'html',
+		            content: '<div class="row"><div clas="col-12"><div class="alert alert-danger">El número de boleto es mayor a '+max+'</div></div></div>',
+		            autoSize: true,
+		        });
+				return false;
+			}//end if
+
+			$.ajax({
+				url : "{$URL_searchTicket}",
+				type: 'POST',
+				dataType: 'HTML',
+				data: {"id":rifa_id,"tn_s":tn_s},
+				beforeSend: function(data){},
+				success: function(response) {
+					$.fancybox.open({
+					    // Otras configuraciones...
+					    type: 'html',
+					    content: response,
+					    bgColor: '#ff0000'
+					});
+				}
+			});
+
+
+			console.log(max);
+			console.log(tn_s);
+		}//end if
+
+		/*$.fancybox.open({
+            // Configuración de FancyBox
+            // Por ejemplo, puedes especificar el contenido que se mostrará en la ventana emergente
+            type: 'html',
+            content: '<div clas="col-12"><h2>Contenido de FancyBox</h2></div>',
+            autoSize: true,
+        });*/
 	});
 
 JS;

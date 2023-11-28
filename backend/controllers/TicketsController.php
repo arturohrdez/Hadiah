@@ -387,14 +387,6 @@ class TicketsController extends Controller
         return ["status"=>false];
     }//end function
 
-    public function actionListtickets(){
-        $rifa_id = Yii::$app->request->get()["rifa_id"];
-        echo '<pre>'; 
-        print_r($rifa_id); 
-        echo '</pre>';
-        die();
-    }//end function
-
     public function actionTicketremove(){
         $tn               = Yii::$app->request->post()["tn"];
         $tickets_play_all = Yii::$app->session->get('tickets_play_all_B');
