@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     					</div>
     					<div class="col-12 pt-3">
     						<div class="tickets-form card-body">
-    							<?php echo Html::label("RIFAS", $for = 'rifa_id', ['class' => 'form-label']); ?>
+    							<?php echo Html::label("SELECCIONA UNA RIFA", $for = 'rifa_id', ['class' => 'form-label']); ?>
     							<?php
     								echo Select2::widget([
     									'id'=>'rifa_id',

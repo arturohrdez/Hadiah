@@ -1,10 +1,13 @@
 <?php
 use yii\helpers\Url;
-$this->title = 'Panel';
+$this->title = 'Dashboard';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-12 p-2">
+            <h4>RIFAS</h4>
+        </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Rifas',
@@ -25,6 +28,12 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'linkText' => 'Ver Más',
                 'linkUrl' => Url::to(['/ganadores/index'])
             ]) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 p-2">
+            <h4>BOLETOS</h4>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
@@ -69,6 +78,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'linkUrl' => Url::to(['/tickets/search'])
             ]) ?>
         </div>
+    </div>
 
         <!-- <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?/*= \hail812\adminlte\widgets\SmallBox::widget([
@@ -80,6 +90,10 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'linkUrl' => Url::to(['/tickets/sales'])
             ])*/ ?>
         </div> -->
+    <div class="row">
+        <div class="col-12 p-2">
+            <h4>CONFIGURACIONES</h4>
+        </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Generales',
@@ -87,7 +101,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'icon'  => 'fas fa-tools',
                 'theme' => 'gradient-dark',
                 'linkText' => 'Ver Más',
-                'linkUrl' => Url::to('/site/config')
+                'linkUrl' => Url::to(['/site/config'])
             ]) ?>
         </div>
     </div>
