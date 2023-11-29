@@ -34,21 +34,29 @@ if($searchConfig > 0){
         $class_background = "";
         $style_background = "background-image: url('/".$loginBackground."'); background-size:cover; background-repeat: no-repeat; ";
     }
+}else{
+    $class_background = "bg-gradient-primary";
+    $style_background = "";
 }//end if
+
+
 ?>
 <body class="hold-transition login-page <?php echo $class_background; ?>" style="<?php echo $style_background; ?>">
 <?php  $this->beginBody() ?>
 <div class="login-box">
-    <div class="login-logo">
-        <a href="<?=Yii::$app->homeUrl?>">
-            <b class="text-white">HADIAH</b> 
-            </br> 
-            <span class="text-white">Sistema de Rifas</span>
-        </a>
+    <!-- <a href="<?=Yii::$app->homeUrl?>">
+        <b class="text-white">HADIAH</b> 
+        </br> 
+        <span class="text-white">Sistema de Rifas</span>
+    </a> -->
+    <div class="card card-outline card-danger">
+        <div class="card-header text-center">
+            <div class="h1 text-dark"><b>HADIAH</b></div>
+            <div class="h4 text-dark">Sistema de Rifas</div>
+        </div>
+        <?= $content ?>
     </div>
-    <!-- /.login-logo -->
 
-    <?= $content ?>
 </div>
 <!-- /.login-box -->
 
