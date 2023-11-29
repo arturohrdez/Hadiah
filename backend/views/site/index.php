@@ -6,7 +6,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <canvas id="barChart" width="400" height="100"></canvas>
+            <canvas id="barChart" class="col-12" height="400"></canvas>
         </div>
     </div> 
     <div class="row">
@@ -242,10 +242,12 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 </div>
 
 <?php 
-$data = [
-    'labels' => ['Label 1', 'Label 2', 'Label 3','Label 4','Label 5','Label 6'],
-    'data' => [10,20,30,50,100,50],
-];
+/* $data = [
+    'labels' => [],
+    'data' => [],
+]; */
+
+
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js');
 $this->registerJs("
     var ctx = document.getElementById('barChart').getContext('2d');
@@ -255,13 +257,14 @@ $this->registerJs("
             labels: " . json_encode($data['labels']) . ",
             datasets: [{
                 label: '% DE BOLETOS VENDIDOS',
-                data: " . json_encode($data['data']) . "
+                data: " . json_encode($data['items']) . "
             }]
         },
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    max: 100
                 }
             }
         }

@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use app\models\Config;
+use backend\models\Tickets;
 use common\models\LoginForm;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -63,9 +64,32 @@ class SiteController extends Controller
      *
      * @return string
      */
+    public function calcularPorcentaje($total, $porcentaje){
+        $res = ($porcentaje / $total) * 100;
+        return round($res,2);
+    }
+
     public function actionIndex()
     {
-        return $this->render('index');
+        //Datos para graficar
+        $searchTickets = Tickets::find()
+                    ->select(["rifas.id as rifa_id","count(tickets.id) as total"])
+                    ->joinWith(['rifa'])
+                    ->where(['rifas.status' => 1,"tickets.status" => "P"])
+                    ->groupBy(["rifas.id"])
+                    ->asArray()->all();
+        
+        $result = ['labels' => [],'data' => [],];
+        if(!is_null($searchTickets)){
+            foreach ($searchTickets as $item) {
+                $labels[] = $item["rifa"]["name"];
+                $items[]   = $this->calcularPorcentaje($item["rifa"]["ticket_end"],$item["total"]);
+            }//end foreach
+            $result = ['labels' => $labels,'items' => $items];
+        }//end if
+
+        return $this->render('index', ["data" => $result]);
+        //return $this->render('index');
     }
 
     public function actionConfig(){
