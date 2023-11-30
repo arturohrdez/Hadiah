@@ -6,7 +6,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <canvas id="barChart" class="col-12" height="400"></canvas>
+            <canvas id="barChart" class="col-12 bg-gradient-dark" height="250"></canvas>
         </div>
     </div> 
     <div class="row">
@@ -257,14 +257,32 @@ $this->registerJs("
             labels: " . json_encode($data['labels']) . ",
             datasets: [{
                 label: '% DE BOLETOS VENDIDOS',
-                data: " . json_encode($data['items']) . "
+                data: " . json_encode($data['items']) . ",
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
             }]
         },
         options: {
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 100
+                    max: 100,
+                    ticks: {
+                        color: '#FFF' // Color del texto en el eje Y
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#FFF' // Color del texto en el eje Y
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#FFF' // Color del texto de la leyenda
+                    }
                 }
             }
         }
