@@ -5,6 +5,9 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-12 text-center">
+            <span class="h1">REPORTE DE BOLETOS VENDIDOS</span>
+        </div>
         <div class="col-12">
             <canvas id="barChart" class="col-12 bg-gradient-dark" height="250"></canvas>
         </div>

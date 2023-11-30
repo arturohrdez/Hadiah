@@ -90,7 +90,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     "style" => "text-align: center",
                                 ],
                                 'value'     =>function($model){
-                                    //return Yii::$app->formatter->asDateTime($model->date_payment);
                                     return date('d/m/Y H:i:s',strtotime($model->date));
                                 }
                             ],
@@ -101,8 +100,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     "style" => "text-align: center",
                                 ],
                                 'value'     =>function($model){
-                                    //return Yii::$app->formatter->asDateTime($model->date_payment);
-                                    return date('d/m/Y H:i:s',strtotime($model->date_payment));
+                                    if(!empty($model->date_payment)){
+                                        return date('d/m/Y H:i:s',strtotime($model->date_payment));
+                                    }
                                 }
                             ],
                             [
