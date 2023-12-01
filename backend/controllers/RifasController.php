@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Yii;
-use app\models\Ganadores;
+use backend\models\Ganadores;
 use backend\models\Promos;
 use backend\models\Rifas;
 use backend\models\RifasSearch;

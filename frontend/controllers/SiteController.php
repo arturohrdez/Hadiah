@@ -35,7 +35,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
@@ -51,7 +51,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -414,7 +414,7 @@ class SiteController extends Controller
         $tn           = $post["tn"];
 
         $model   = Rifas::find()->where(["id" => $rifaId])->one();
-        self::createTickets($model->ticket_init,$model->ticket_end,$model->id);
+        self::createTickets($model->ticket_init,$model->ticket_end,$model->id,null);
         $tickets = Yii::$app->session->get('tickets');
         //$uuid    = Yii::$app->session->get('uuid');
 
@@ -792,7 +792,7 @@ class SiteController extends Controller
                         }//end foreach
 
                         $transaction->commit();
-                    }catch(Exception $e){
+                    }catch(\Throwable $e){
                         $transaction->rollBack();
                     }//end try
 
