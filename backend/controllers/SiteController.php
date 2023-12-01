@@ -79,8 +79,8 @@ class SiteController extends Controller
                     ->groupBy(["rifas.id"])
                     ->asArray()->all();
         
-        $result = ['labels' => [],'data' => [],];
-        if(!is_null($searchTickets)){
+        $result = ['labels' => [],'items' => []];
+        if(!empty($searchTickets)){
             foreach ($searchTickets as $item) {
                 $labels[] = $item["rifa"]["name"];
                 $items[]   = $this->calcularPorcentaje($item["rifa"]["ticket_end"],$item["total"]);
