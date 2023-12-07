@@ -40,7 +40,7 @@ class Config extends \yii\db\ActiveRecord
             [['logo'],'required','on'=>'create'],
             [['sitename'], 'required'],
             [['slogan', 'logo', 'favicon'], 'string'],
-            [['logo'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 777,'maxWidth'=>777,'minHeight'=>777,'maxHeight'=>777,'maxSize'=>1024 * 1024 * 2],
+            [['logo'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 500,'maxWidth'=>777,'minHeight'=>500,'maxHeight'=>777,'maxSize'=>1024 * 1024 * 2],
             [['favicon'],'image','extensions'=>'ico','minWidth' => 48,'maxWidth'=>48,'minHeight'=>48,'maxHeight'=>48,'maxSize'=>1024 * 1024 * 2],
             [['backgroundimg'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 900,'maxWidth'=>1980,'minHeight'=>900,'maxHeight'=>1980,'maxSize'=>1024 * 1024 * 2],
 

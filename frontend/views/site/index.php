@@ -30,7 +30,8 @@ if(!empty($rifasBanner)){
                 $rifa_image       = $rifa->main_image;
                 $rifa_date        = $rifa->date_init;
             ?>
-            <div class="carousel-item <?php echo ($i == 0) ? "active" : ""; ?>" style="background-image: url('<?php echo Url::base()."/backend/web/".$rifa_image; ?>')">
+            <div class="carousel-item <?php echo ($i == 0) ? "active" : ""; ?>" style="background-image: url('<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>')">
+            <!--<div class="carousel-item <?php //echo ($i == 0) ? "active" : ""; ?>" style="background-image: url('<?php //echo Url::base()."/backend/web/".$rifa_image; ?>')">-->
                 <div class="carousel-container">
                     <div class="container">
                         <h2 class="animate__animated animate__fadeInDown">
@@ -167,7 +168,8 @@ if(!empty($rifasActivas)){
             <div class="col-lg-6 mt-4">
                 <div class="member d-flex align-items-start">
                     <div class="pic">
-                        <img src="<?php echo Url::base()."/backend/web/".$rifa_image; ?>" class="img-fluid" alt="">
+                        <!--<img src="<?php //echo Url::base()."/backend/web/".$rifa_image; ?>" class="img-fluid" alt="">-->
+                        <img src="<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>" class="img-fluid" alt="">
                     </div>
                     <div class="member-info">
                         <h4><?php echo $rifa_title;?></h4>
