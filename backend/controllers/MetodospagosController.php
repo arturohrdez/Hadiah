@@ -7,6 +7,7 @@ use backend\models\Metodospagos;
 use app\models\MetodospagosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
@@ -20,8 +21,19 @@ class MetodospagosController extends Controller
     public function behaviors()
     {
         return [
+            'access'=>[
+                'class'=> AccessControl::class,
+                'only' => ['index','create','update','delete','view','export'],
+                'rules' => [
+                    [
+                        'allow' =>true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
+
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
