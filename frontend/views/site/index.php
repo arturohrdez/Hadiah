@@ -299,7 +299,7 @@ if(!empty($rifasActivas)){
                 if(!is_null($sitevideo_)){
             ?>
             <p class="text-center mt-5">
-                <iframe width="560" height="315" src="<?php echo $sitevideo_ ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $sitevideo_ ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </p>
             <?php 
             }//end if
