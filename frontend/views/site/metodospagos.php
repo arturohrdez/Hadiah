@@ -43,57 +43,41 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabM
         			CUENTAS DE PAGO
         		</div>
         		<div class="col-12">
-        			<table class="table table-striped mt-5">
-        				<thead class="thead-dark">
-        					<tr>
-        						<th scope="col">BANCO</th>
-        						<th scope="col">NOMBRE</th>
-        						<th scope="col">NÚMERO DE TARJETA</th>
-        						<th scope="col">NÚMERO DE CUENTA</th>
-        						<th scope="col">CLABE</th>
-        					</tr>
-        				</thead>
-        				<tbody>
-                            <?php
-                            if(!empty($model)){
-                                foreach ($model as $item) {
-                                    ?>
-                                    <tr class="fw-bold">
-                                        <td><?php echo $item->banco;?></td>
-                                        <td><?php echo $item->nombre;?></td>
-                                        <td><?php echo $item->tarjeta;?></td>
-                                        <td><?php echo $item->cuenta;?></td>
-                                        <td><?php echo $item->clabe;?></td>
-                                    </tr>
-                                    <?php
-                                }
-                            }//end if
-                            ?>
-        					<!-- <tr class="fw-bold">
-        						<td>BBVA</td>
-        						<td>LAURA HERNANDEZ LUNA</td>
-        						<td>4152314077111014</td>
-        					</tr> -->
-        				</tbody>
-        			</table>
-                    <!-- <table class="table mt-5">
-                        <thead>
-                            <tr>
-                                <th scope="col">BANCO</th>
-                                <th scope="col">NOMBRE</th>
-                                <th scope="col">NÚMERO DE CUENTA</th>
-                                <th scope="col">CLABE INTERBANCARIA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="fw-bold">
-                                <td>BBVA</td>
-                                <td>JESUS ENRIQUE ROMERO VÁZQUEZ</td>
-                                <td>0483767329</td>
-                                <td>012650004837673293</td>
-                            </tr>
-                        </tbody>
-                    </table> -->
+                    <div class="table-responsive">
+                        <table class="table table-striped mt-5">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">BANCO</th>
+                                    <th scope="col">NOMBRE</th>
+                                    <th scope="col">NÚMERO DE TARJETA</th>
+                                    <th scope="col">NÚMERO DE CUENTA</th>
+                                    <th scope="col">CLABE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if(!empty($model)){
+                                    foreach ($model as $item) {
+                                        ?>
+                                        <tr class="fw-bold">
+                                            <td><?php echo $item->banco;?></td>
+                                            <td><?php echo $item->nombre;?></td>
+                                            <td><?php echo $item->tarjeta;?></td>
+                                            <td><?php echo $item->cuenta;?></td>
+                                            <td><?php echo $item->clabe;?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                }//end if
+                                ?>
+                                <!-- <tr class="fw-bold">
+                                    <td>BBVA</td>
+                                    <td>LAURA HERNANDEZ LUNA</td>
+                                    <td>4152314077111014</td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
         		</div>
         	</div>
         	<div class="col-12 fs-3 text-center">
