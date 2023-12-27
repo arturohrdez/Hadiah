@@ -4,7 +4,18 @@
 use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
-$this->title = 'RIFAS PABMAN - Métodos de Pago';
+
+use backend\models\Config;
+$searchConfig = Config::find()->count();
+if($searchConfig > 0){
+    $modelConfig = Config::find()->one();
+}else{
+    $modelConfig = new Config();
+}//end if 
+$sitename_      = empty($modelConfig->sitename) ? "RIFAS" : $modelConfig->sitename;
+$sitelogo_      = empty($modelConfig->logo) ? null : $modelConfig->logo;
+
+$this->title = $sitename_.' - Métodos de Pago';
 
 $this->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
 $this->registerMetaTag(['property' => 'og:type', 'content' => '']);
@@ -69,7 +80,9 @@ $this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabM
         		</div>
         	</div>
         	<div class="col-12 fs-3 text-center">
-        		<?php echo Html::img('@web/images/bannerpabman.jpeg',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?>
+        		<?php 
+                    echo Html::img(Yii::$app->params["baseUrlBack"].$sitelogo_,['alt'=>$sitename_,'class'=>'img-fluid col-6 mt-5',]); 
+                ?>
         	</div>
         </div>
     </div>
