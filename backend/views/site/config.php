@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="card-body row">
                 <?php echo $form->field($model, 'img_background')->hiddenInput()->label(false); ?>
-                <?php echo $form->field($model, 'backgroundimg',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Login (Imagen de fondo): </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+                <?php echo $form->field($model, 'backgroundimg',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Login (Imagen de fondo): </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 1980px X 1980px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
                 <div id="preview_backlogin" class="col-lg-6 col-md-12 mt-3" align="center"></div>
             </div>
             <div class="card-body row">

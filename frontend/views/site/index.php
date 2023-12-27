@@ -4,13 +4,23 @@
 use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
-$this->title = 'RIFAS PABMAN';
+$sitename_      = empty($siteConfig->sitename) ? "RIFAS" : $siteConfig->sitename;
+$siteslogan_    = empty($siteConfig->slogan) ? "---------------" : $siteConfig->slogan;
+$sitelogo_      = empty($siteConfig->logo) ? null : $siteConfig->logo;
+$sitewhatsapp_  = empty($siteConfig->whatsapp) ? null : $siteConfig->whatsapp;
+$siteinstagram_ = empty($siteConfig->instagram) ? null : $siteConfig->instagram;
+$sitefacebook_  = empty($siteConfig->facebook) ? null : $siteConfig->facebook;
+$siteyoutube_   = empty($siteConfig->youtube) ? null : $siteConfig->youtube;
+$sitetiktok_    = empty($siteConfig->tiktok) ? null : $siteConfig->tiktok;
+$sitevideo_     = empty($siteConfig->video) ? null : $siteConfig->video;
 
-$this->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
+$this->title = $sitename_." - ".$siteslogan_;
+
+$this->registerMetaTag(['property' => 'og:title', 'content' => $sitename_]);
 $this->registerMetaTag(['property' => 'og:type', 'content' => '']);
 $this->registerMetaTag(['property' => 'og:image', 'content' => Url::to('/frontend/web/images/pabmanlogo.jpeg', true)]);
 $this->registerMetaTag(['property' => 'og:url', 'content' => Url::to('/',true)]);
-$this->registerMetaTag(['property' => 'og:description', 'content' => 'Rifas PabMan - Apuesta poco y ganas mucho.']);
+$this->registerMetaTag(['property' => 'og:description', 'content' => $sitename_.' - '.$siteslogan_]);
 ?>
 
 <!-- ======= Hero Section ======= -->
@@ -77,11 +87,15 @@ if(!empty($rifasBanner)){
         </div>
         <div class="row">
             <div class="col-12 fs-3 text-justify">
-                Bienvenido(a) a la web oficial de <span class="text-danger fw-bold">🍀RIFAS PABMAN🍀</span>, somos una asociación de amigos con sede en la ciudad de Puebla, México; con nosotros tienes la oportunidad de ganar muchos premios. <span class="text-danger fw-bold">¡APUESTA POCO Y GANA MUCHO!</span>
+                Bienvenido(a) a la web oficial de <span class="text-danger fw-bold">🍀<?php echo $sitename_;?>🍀</span>, somos una asociación de amigos con sede en la ciudad de Puebla, México; con nosotros tienes la oportunidad de ganar muchos premios. 
+                <span class="text-danger fw-bold"><?php echo $siteslogan_;?></span>
                 
                 <div class="text-center">
-                    <?php echo Html::img('@web/images/pabmanlogo.jpeg',['alt'=>'Banner PABMAN','class'=>'img-fluid col-6 mt-3',]); ?>
-                    <!-- <?php// echo Html::img('@web/images/bannerpabman.jpeg',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?> -->
+                    <?php 
+                        echo Html::img(Yii::$app->params["baseUrlBack"].$sitelogo_,['alt'=>$sitename_,'class'=>'img-fluid col-6 mt-3',]); 
+                        //echo Html::img('@web/images/pabmanlogo.jpeg',['alt'=>'Banner PABMAN','class'=>'img-fluid col-6 mt-3',]); 
+                    ?>
+                    <!-- <?//php echo Html::img('@web/images/bannerpabman.jpeg',['alt'=>'LOGO PABMAN','class'=>'img-fluid col-6',]); ?> -->
                 </div>
             </div>
         </div>
@@ -133,7 +147,7 @@ if(!empty($rifasBanner)){
             </div>
             <div class="col-lg-7">
                 <div class="text-justify fs-6">
-                    En nuestra página oficial de <a href="<?php echo Yii::$app->params["social-networks"]["facebook"] ?>" target="_blank">Facebook</a> puedes encontrar todos y cada uno de nuestros sorteos anteriores, así como las transmisiones en vivo con Lotería Nacional y las entregas de premios a los ganadores!
+                    En nuestra página oficial de <a href="<?php echo $sitefacebook_ ?>" target="_blank">Facebook</a> puedes encontrar todos y cada uno de nuestros sorteos anteriores, así como las transmisiones en vivo con Lotería Nacional y las entregas de premios a los ganadores!
                     Se elige un nuevo ganador realizando la misma dinámica en otra fecha cercana (se anunciará la nueva fecha).
                 </div>
             </div>
@@ -218,7 +232,7 @@ if(!empty($rifasActivas)){
                 SORTEOS ENTRE AMIGOS EN BASE A LOTERIA NACIONAL
             </p>
             <p class="text-center fs-5">
-                ¡APUESTA POCO Y GANA MUCHO!
+                <?php echo $siteslogan_;?>
             </p>
         </div>
         <br>
@@ -239,7 +253,11 @@ if(!empty($rifasActivas)){
         </div>
         <div class="row col-lg-12 pt-4 pt-lg-0">
             <p class="text-center fs-4">
-                <?= Html::a("WHATSAPP: (222) 270 7260", $url = Yii::$app->params["social-networks"]["whatsapp"], ['target' => '_blank']); ?>
+                <?php
+                    if(!is_null($sitewhatsapp_)){
+                        echo Html::a("WHATSAPP: ".$sitewhatsapp_, $url = "https://wa.me/+521".$sitewhatsapp_, ['target' => '_blank']); 
+                    }
+                ?>
             </p>
         </div>
         <div class="row col-lg-12 pt-3">
@@ -247,10 +265,45 @@ if(!empty($rifasActivas)){
                 Envíanos tus preguntas a
             </p>
             <p class="fs-1 text-center">
-                <?= Html::a("<i class='bi bi-whatsapp'></i>", $url = Yii::$app->params["social-networks"]["whatsapp"], ['target' => '_blank']); ?>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <?= Html::a("<i class='bi bi-facebook'></i>", $url = Yii::$app->params["social-networks"]["facebook"], ['target' => '_blank']); ?>
+                <?php
+                    if(!is_null($sitewhatsapp_)){ 
+                        echo Html::a("<i class='bi bi-whatsapp'></i>", $url = $url = "https://wa.me/+521".$sitewhatsapp_, ['target' => '_blank']); 
+                    }//end if
+                    ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                <?php
+                    if(!is_null($sitefacebook_)){ 
+                        echo Html::a("<i class='bi bi-facebook'></i>", $url = $sitefacebook_, ['target' => '_blank']); 
+                    }//end if
+                    ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                <?php
+                    if(!is_null($siteinstagram_)){
+                        echo Html::a("<i class='bi bi-instagram'></i>",$url = $siteinstagram_,['target' => '_blank']);
+                    } 
+                    ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                <?php
+                    if(!is_null($sitetiktok_)){
+                        echo Html::a("<i class='bi bi-tiktok'></i>",$url = $sitetiktok_,['target' => '_blank']);
+                    } 
+                    ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                <?php
+                    if(!is_null($siteyoutube_)){
+                        echo Html::a("<i class='bi bi-youtube'></i>",$url = $siteyoutube_,['target' => '_blank']);
+                    } 
+                    ?>
             </p>
+            <?php
+                if(!is_null($sitevideo_)){
+            ?>
+            <p class="text-center mt-5">
+                <iframe width="560" height="315" src="<?php echo $sitevideo_ ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </p>
+            <?php 
+            }//end if
+            ?>
         </div>
     </div>
 </section>

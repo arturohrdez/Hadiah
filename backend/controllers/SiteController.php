@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use app\models\Config;
+use backend\models\Config;
 use backend\models\Tickets;
 use common\models\LoginForm;
 use yii\filters\AccessControl;

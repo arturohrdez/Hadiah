@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use backend\models\Rifas;
 use backend\models\Tickets;
+use backend\models\Config;
 use common\models\LoginForm;
 use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
@@ -81,13 +82,20 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {   
+    public function actionIndex(){
+        $searchConfig = Config::find()->count();
+        if($searchConfig > 0){
+            $modelConfig = Config::find()->one();
+        }else{
+            $modelConfig = new Config();
+        }//end if 
+
         $modelRifasBanner  = Rifas::find()->where(['<>','status', 0])->andWhere(['banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
-        $modelRifasActivas = Rifas::find()->where(['<>','status', 0])->orderBy(['date_init' => SORT_ASC])->all(); 
+        $modelRifasActivas = Rifas::find()->where(['<>','status', 0])->orderBy(['date_init' => SORT_ASC])->all();
         return $this->render('index',[
-            'rifasBanner'  =>$modelRifasBanner,
-            'rifasActivas' =>$modelRifasActivas,
+            'rifasBanner'  => $modelRifasBanner,
+            'rifasActivas' => $modelRifasActivas,
+            'siteConfig'   => $modelConfig
         ]);
     }
 

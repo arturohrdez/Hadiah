@@ -1,5 +1,5 @@
 <?php
-use app\models\Config;
+use backend\models\Config;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
