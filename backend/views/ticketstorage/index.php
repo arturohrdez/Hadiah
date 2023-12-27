@@ -28,17 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-12">
             <div class="card card-danger card-outline">
-                <div class="card-header">
-                    <!-- <div class="col-6 float-right pb-3">
-                        <?php// Html::button('<i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Agregar Ticketstorage', ['value' => Url::to('create'), 'class' => 'btn bg-gradient-danger float-right','id'=>'btnAddForm']) ?>
-                    </div> -->
-                </div>
                 <div class="card-body pad table-responsive">
-
 
                     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                    <?php Pjax::begin(['id' => 'my-pjax-ticketstorage']); ?>
+                    <?php //Pjax::begin(['id' => 'my-pjax-ticketstorage']); ?>
                     <?php echo GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -140,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\bootstrap4\LinkPager',
                         ]
                     ]); ?>
-                    <?php Pjax::end(); ?>
+                    <?php //Pjax::end(); ?>
 
 
                 </div>

@@ -914,7 +914,7 @@ class SiteController extends Controller
 ↘️⬇️↙️
 {$terms_rifa}
 ------------
-*CUENTAS DE PAGO AQUÍ:* https://rifaspabman.com.mx/site/pagos
+*CUENTAS DE PAGO AQUÍ:* http://localhost/index.php/site/pagos
 El siguiente paso es enviar foto del comprobante de pago por aquí.
 *¡MUCHA SUERTE!*
 DA CLICK EN ENVIAR➡️
