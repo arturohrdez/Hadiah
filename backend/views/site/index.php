@@ -112,6 +112,16 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'linkUrl' => Url::to(['/site/config'])
             ]) ?>
         </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Métodos de pagos',
+                'text'  => 'Administra la información de tus métodos de pagos.',
+                'icon'  => 'fas fa-money-check-alt',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/metodospagos/index'])
+            ]) ?>
+        </div>
     </div>
     
     <!-- <div class="row">
