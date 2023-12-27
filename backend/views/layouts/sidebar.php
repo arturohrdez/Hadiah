@@ -50,6 +50,7 @@ use yii\helpers\Url;
             $items[] = ['label' => 'Buscador', 'icon' => 'fas fa-search', 'url' => [Url::to('/tickets/search')], 'target' => ''];
             $items[] = ['label' => 'CONFIGURACIONES', 'header' => true];
             $items[] = ['label' => 'Generales', 'icon' => 'fas fa-tools', 'url' => [Url::to('/site/config')], 'target' => ''];
+            $items[] = ['label' => 'Metodos de pagos', 'icon' => 'fas fa-money-check-alt', 'url' => [Url::to('/metodospagos/index')], 'target' => ''];
             //$items[] = ['label' => 'Punto de Venta', 'icon' => 'fas fa-cart-arrow-down', 'url' => [Url::to('/tickets/sales')], 'target' => ''];
             
             echo \hail812\adminlte\widgets\Menu::widget([
