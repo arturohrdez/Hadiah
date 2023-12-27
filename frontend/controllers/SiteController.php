@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Rifas;
 use backend\models\Tickets;
 use backend\models\Config;
+use backend\models\Metodospagos;
 use common\models\LoginForm;
 use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
@@ -99,9 +100,11 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionPagos()
-    {   
-        return $this->render('metodospagos');
+    public function actionPagos(){
+        $modelmetodospagos = Metodospagos::find()->where(['status'=>1])->all();
+        return $this->render('metodospagos',[
+            "model" => $modelmetodospagos
+        ]);
     }
 
     /**
