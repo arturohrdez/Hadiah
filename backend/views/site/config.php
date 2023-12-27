@@ -51,11 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'logo',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Logo: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del Logo: 770px X 770px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
                 <div id="preview_logo" class="col-lg-5 col-md-12" align="center"></div>
             </div>
-            <div class="card-body row">
-                <?php echo $form->field($model, 'img_favicon')->hiddenInput()->label(false); ?>
-                <?php echo $form->field($model, 'favicon',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Favicon: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
+            <!-- <div class="card-body row">
+                <?php //echo $form->field($model, 'img_favicon')->hiddenInput()->label(false); ?>
+                <?php //echo $form->field($model, 'favicon',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Favicon: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 48px X 48px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
                 <div id="preview_favicon" class="col-lg-6 col-md-12 mt-3" align="center"></div>
-            </div>
+            </div> -->
             <div class="card-body row">
                 <?php echo $form->field($model, 'img_background')->hiddenInput()->label(false); ?>
                 <?php echo $form->field($model, 'backgroundimg',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Login (Imagen de fondo): </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del favicon: 1980px X 1980px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
