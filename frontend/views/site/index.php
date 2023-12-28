@@ -100,10 +100,8 @@ if(!empty($rifasBanner)){
             </div>
         </div>
     </div>
-    <div class="row">
-        <hr>
-    </div>
 </section>
+<hr>
 <!-- End About Section -->
 
 <section id="faq" class="faq">
@@ -156,10 +154,9 @@ if(!empty($rifasBanner)){
             <p class="fs-4 text-center">Encuentra transmisión en vivo de los sorteos en nuestra página de Facebook en las fechas indicadas a las 20:00 hrs CDMX. ¡No te lo pierdas!</p>
         </div>
     </div>
-    <div class="row mt-3">
-        <hr>
-    </div>
 </section>
+<hr>
+
 <?php 
 if(!empty($rifasActivas)){
 ?>
@@ -211,10 +208,8 @@ if(!empty($rifasActivas)){
             ?>
         </div>
     </div>
-    <div class="row mt-5">
-        <hr>
-    </div>
 </section>
+<hr>
 <?php 
 }//end if
 ?>
@@ -224,23 +219,12 @@ if(!empty($rifasActivas)){
     <div class="container">
         <div class="row col-lg-12">
             <h2 class="text-center text-danger fs-1">
-                ACERCA DE NOSOTROS
+                <?php echo $siteslogan_;?>
             </h2>
         </div>
-        <div class="row col-lg-12 pt-4 pt-lg-0">
-            <p class="text-center fs-5">
-                SORTEOS ENTRE AMIGOS EN BASE A LOTERIA NACIONAL
-            </p>
-            <p class="text-center fs-5">
-                <?php echo $siteslogan_;?>
-            </p>
-        </div>
-        <br>
-    </div>
-    <div class="row">
-        <hr>
     </div>
 </section>
+<hr>
 <!-- End About Section -->
 
 <!-- ======= Contact Us Section ======= -->
