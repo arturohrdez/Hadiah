@@ -47,6 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'slogan',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
             </div>
             <div class="card-body row">
+                <?php echo $form->field($model, 'quienessomos',['options'=>['class'=>'col-12 mt-3']])->textarea(['rows'=>'7']);?>
+            </div>
+            <div class="card-body row">
                 <?php echo $form->field($model, 'img')->hiddenInput()->label(false); ?>
                 <?php echo $form->field($model, 'logo',['options'=>['class'=>'col-lg-6 col-md-12 mt-3']])->fileInput()->label('<div>Logo: </div> <div class=" alert-warning" style="padding:4px; border-radius: 2px;"><small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Tamaño del Logo: 770px X 770px (Ancho x Alto)</small></div>',['class'=>'col-12']) ?>
                 <div id="preview_logo" class="col-lg-5 col-md-12" align="center"></div>

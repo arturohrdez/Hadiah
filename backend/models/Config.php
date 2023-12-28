@@ -38,7 +38,7 @@ class Config extends \yii\db\ActiveRecord
     {
         return [
             [['logo'],'required','on'=>'create'],
-            [['sitename'], 'required'],
+            [['sitename','quienessomos'], 'required'],
             [['slogan', 'logo', 'favicon'], 'string'],
             [['logo'],'image','extensions'=>'jpeg,jpg,png','minWidth' => 500,'maxWidth'=>777,'minHeight'=>500,'maxHeight'=>777,'maxSize'=>1024 * 1024 * 2],
             [['favicon'],'image','extensions'=>'ico','minWidth' => 48,'maxWidth'=>48,'minHeight'=>48,'maxHeight'=>48,'maxSize'=>1024 * 1024 * 2],
@@ -61,6 +61,7 @@ class Config extends \yii\db\ActiveRecord
         return [
             'id'            => 'ID',
             'sitename'      => 'Nombre del sitio',
+            'quienessomos'  => 'Quienes somos',
             'slogan'        => 'Slogan',
             'logo'          => 'Logo',
             'favicon'       => 'Favicon',

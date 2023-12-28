@@ -4,15 +4,16 @@
 use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
-$sitename_      = empty($siteConfig->sitename) ? "RIFAS" : $siteConfig->sitename;
-$siteslogan_    = empty($siteConfig->slogan) ? "---------------" : $siteConfig->slogan;
-$sitelogo_      = empty($siteConfig->logo) ? null : $siteConfig->logo;
-$sitewhatsapp_  = empty($siteConfig->whatsapp) ? null : $siteConfig->whatsapp;
-$siteinstagram_ = empty($siteConfig->instagram) ? null : $siteConfig->instagram;
-$sitefacebook_  = empty($siteConfig->facebook) ? null : $siteConfig->facebook;
-$siteyoutube_   = empty($siteConfig->youtube) ? null : $siteConfig->youtube;
-$sitetiktok_    = empty($siteConfig->tiktok) ? null : $siteConfig->tiktok;
-$sitevideo_     = empty($siteConfig->video) ? null : $siteConfig->video;
+$sitename_         = empty($siteConfig->sitename) ? "RIFAS" : $siteConfig->sitename;
+$siteslogan_       = empty($siteConfig->slogan) ? "---------------" : $siteConfig->slogan;
+$sitequienessomos_ = empty($siteConfig->quienessomos) ? "---------------" : $siteConfig->quienessomos;
+$sitelogo_         = empty($siteConfig->logo) ? null : $siteConfig->logo;
+$sitewhatsapp_     = empty($siteConfig->whatsapp) ? null : $siteConfig->whatsapp;
+$siteinstagram_    = empty($siteConfig->instagram) ? null : $siteConfig->instagram;
+$sitefacebook_     = empty($siteConfig->facebook) ? null : $siteConfig->facebook;
+$siteyoutube_      = empty($siteConfig->youtube) ? null : $siteConfig->youtube;
+$sitetiktok_       = empty($siteConfig->tiktok) ? null : $siteConfig->tiktok;
+$sitevideo_        = empty($siteConfig->video) ? null : $siteConfig->video;
 
 $this->title = $sitename_." - ".$siteslogan_;
 
@@ -87,8 +88,9 @@ if(!empty($rifasBanner)){
         </div>
         <div class="row">
             <div class="col-12 fs-3 text-justify">
-                Bienvenido(a) a la web oficial de <span class="text-danger fw-bold">🍀<?php echo $sitename_;?>🍀</span>, somos una asociación de amigos con sede en la ciudad de Puebla, México; con nosotros tienes la oportunidad de ganar muchos premios. 
-                <span class="text-danger fw-bold"><?php echo $siteslogan_;?></span>
+                <?php echo $sitequienessomos_?>
+                <!-- Bienvenido(a) a la web oficial de <span class="text-danger fw-bold">🍀<?//php echo $sitename_;?>🍀</span>, somos una asociación de amigos con sede en la ciudad de Puebla, México; con nosotros tienes la oportunidad de ganar muchos premios. 
+                <span class="text-danger fw-bold"><?php //echo $siteslogan_;?></span> -->
                 
                 <div class="text-center">
                     <?php 
