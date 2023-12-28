@@ -23,7 +23,8 @@
         "kartik-v/yii2-widget-datetimepicker": "*",
         "ezyang/htmlpurifier": "^4.16",
         "ptrnov/yii2-fusionchart": "*",
-        "phpoffice/phpspreadsheet": "^1.28"
+        "phpoffice/phpspreadsheet": "^1.28",
+        "2amigos/yii2-ckeditor-widget" : "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

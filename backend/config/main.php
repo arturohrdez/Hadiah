@@ -20,6 +20,16 @@ return [
     ],
     'bootstrap' => ['debug'],*/
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'dosamigos\ckeditor\CKEditorAsset' => [
+                    'depends' => [
+                        'yii\web\YiiAsset',
+                        //'yii\bootstrap\BootstrapAsset',
+                    ],
+                ],
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
             //'baseUrl' => '/toko/admin',

@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\ButtonGroup;
+use dosamigos\ckeditor\CKEditor;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\RifasSearch */
@@ -47,7 +49,39 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'slogan',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
             </div>
             <div class="card-body row">
-                <?php echo $form->field($model, 'quienessomos',['options'=>['class'=>'col-12 mt-3']])->textarea(['rows'=>'7']);?>
+            <?php 
+                echo $form->field($model, 'quienessomos',['options'=>['class'=>'col-12 mt-3']])->widget(CKEditor::class, [
+                    'options' => ['rows' => 8],
+                    'preset' => 'full', // Puedes ajustar esto según tus necesidades
+                    'clientOptions' => [
+                        'toolbar' => [
+                            [
+                                'name' => 'styles',
+                                'items' => ['Styles', 'Format'],
+                            ],
+                            [
+                                'name' => 'basicstyles',
+                                'items' => ['Bold', 'Italic', 'Strike', '-', 'RemoveFormat'],
+                            ],
+                            [
+                                'name' => 'paragraph',
+                                'items' => ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'],
+                            ],
+                            [
+                                'name' => 'links',
+                                'items' => ['Link', 'Unlink'],
+                            ],
+                            [
+                                'name' => 'tools',
+                                'items' => ['Maximize'],
+                            ],
+                            [
+                                'name' => 'editing',
+                                'items' => ['Scayt'],
+                            ],
+                        ],
+                    ]
+                ]) ?>
             </div>
             <div class="card-body row">
                 <?php echo $form->field($model, 'img')->hiddenInput()->label(false); ?>
@@ -85,7 +119,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 $script = <<< JS
-
     $(function(e){
         var previewLogo = '/$model->logo';
         image = document.createElement('img');
