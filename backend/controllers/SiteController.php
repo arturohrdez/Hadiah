@@ -107,7 +107,8 @@ class SiteController extends Controller
         if($model->load(Yii::$app->request->post())) {
             //Aux IMG
             $aux_logo      = Yii::$app->request->post()["Config"]["img"];
-            $aux_favicon   = Yii::$app->request->post()["Config"]["img_favicon"];
+            //$aux_favicon   = Yii::$app->request->post()["Config"]["img_favicon"];
+            $aux_favicon   = null;
             $aux_backlogin = Yii::$app->request->post()["Config"]["img_background"];
 
             if(empty($aux_logo)){
