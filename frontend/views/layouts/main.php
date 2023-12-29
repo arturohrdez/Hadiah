@@ -52,7 +52,7 @@ AppAsset::register($this);
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a href="/" class="active fs-6">Inicio</a></li>
+                <li><a href="/" class="fs-6">Inicio</a></li>
                 <li><a href="/#quienessomos" class="fs-6">Quienes Somos</a></li>
                 <li><a href="/#faq" class="fs-6">Preguntas Frecuentes</a></li>
                 <li><a href="/#about" class="fs-6">Nosotros</a></li>

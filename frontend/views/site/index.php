@@ -152,9 +152,6 @@ if(!empty($rifasBanner)){
                 </div>
             </div>
         </div><!-- End F.A.Q Item-->
-        <div class="row">
-            <p class="fs-4 text-center">Encuentra transmisión en vivo de los sorteos en nuestra página de Facebook en las fechas indicadas a las 20:00 hrs CDMX. ¡No te lo pierdas!</p>
-        </div>
     </div>
 </section>
 <hr>
