@@ -16,10 +16,10 @@ $sitetiktok_       = empty($siteConfig->tiktok) ? null : $siteConfig->tiktok;
 $sitevideo_        = empty($siteConfig->video) ? null : $siteConfig->video;
 
 //COLORS
-$sitetheme_          = "";
-$sitetitlecolor_     = "";
-$sitebuttonbgcolor_  = "";
-$sitebuttontxtcolor_ = "";
+$sitetheme_          = $siteConfig->theme;
+$sitetitlecolor_     = $siteConfig->titlecolor;
+$sitebuttonbgcolor_  = $siteConfig->bgbuttoncolor;
+$sitebuttontxtcolor_ = $siteConfig->txtbuttoncolor;
 
 $this->title = $sitename_." - ".$siteslogan_;
 
@@ -207,7 +207,7 @@ if(!empty($rifasActivas)){
                 $rifa_date  = $rifa->date_init;
             ?>
             <div class="col-lg-6 mt-4 ">
-                <div class="member d-flex align-items-start <?php echo ($sitetheme_ == 'dark') ? "bg-secondary" : ""; ?>">
+                <div class="member d-flex align-items-start <?php echo ($sitetheme_ == 'dark') ? "bg-dark" : ""; ?>">
                     <div class="pic">
                         <!--<img src="<?php //echo Url::base()."/backend/web/".$rifa_image; ?>" class="img-fluid" alt="">-->
                         <img src="<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>" class="img-fluid" alt="">
@@ -226,7 +226,7 @@ if(!empty($rifasActivas)){
                             
                         </p>
                         <div class="mt-2">
-                            <a class="btn <?php echo !empty($sitebuttontxtcolor_) ? $sitebuttontxtcolor_." " : " "; echo !empty($sitebuttonbgcolor_) ? $sitebuttonbgcolor_ : ""; ?>" href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>">
+                            <a class="btn <?php echo !empty($sitebuttontxtcolor_) ? $sitebuttontxtcolor_." " : "text-light "; echo !empty($sitebuttonbgcolor_) ? $sitebuttonbgcolor_ : "bg-danger"; ?>" href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>">
                                 Comprar Boleto
                             </a>
                         </div>

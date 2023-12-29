@@ -19,12 +19,12 @@ if($searchConfig > 0){
     $modelConfig = new Config();
 }//end if 
 $sitename_        = empty($modelConfig->sitename) ? "RIFAS" : $modelConfig->sitename;
-$sitetheme_          = "";
-$sitenavbarcolor_    = "";
-$sitetitlecolor_     = "";
-$sitefontcolor_      = "";
-$sitebuttonbgcolor_  = "";
-$sitebuttontxtcolor_ = "";
+$sitetheme_          = $modelConfig->theme;
+$sitetitlecolor_     = $modelConfig->titlecolor;
+$sitefontcolor_      = $modelConfig->fontcolor;
+$sitenavbarcolor_    = $modelConfig->navbarcolor;
+$sitebuttonbgcolor_  = $modelConfig->bgbuttoncolor;
+$sitebuttontxtcolor_ = $modelConfig->txtbuttoncolor;
 
 AppAsset::register($this);
 ?>

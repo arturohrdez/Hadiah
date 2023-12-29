@@ -400,9 +400,17 @@ class SiteController extends Controller
         \Yii::$app->session->set('tickets_list', $tickets_list);
         \Yii::$app->session->set('tickets_div', $tickets_div);
 
+        //Buscar configuración
+        $searchConfig = Config::find()->count();
+        if($searchConfig > 0){
+            $modelConfig = Config::find()->one();
+        }else{
+            $modelConfig = new Config();
+        }//end if
         return $this->render('rifaDetail', [
             'model' => $model,
             'pages' => $pages,
+            'siteConfig' => $modelConfig
         ]);
     }//end function
 

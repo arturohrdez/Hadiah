@@ -50,6 +50,8 @@ class Config extends \yii\db\ActiveRecord
             [['whatsapp'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'El número debe contener solo dígitos.'],
 
             [['instagram', 'facebook', 'youtube','tiktok' ,'video','img','img_favicon','img_background'], 'string', 'max' => 250],
+            [['titlecolor', 'fontcolor','navbarcolor' ,'bgbuttoncolor','txtbuttoncolor'], 'string', 'max' => 45],
+            [['theme'], 'string', 'max' => 20],
         ];
     }
 
@@ -59,19 +61,26 @@ class Config extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'            => 'ID',
-            'sitename'      => 'Nombre del sitio',
-            'quienessomos'  => 'Quienes somos',
-            'slogan'        => 'Slogan',
-            'logo'          => 'Logo',
-            'favicon'       => 'Favicon',
-            'backgroundimg' => 'Imagen Login',
-            'whatsapp'      => 'Whatsapp',
-            'instagram'     => 'Instagram',
-            'facebook'      => 'Facebook',
-            'youtube'       => 'Youtube',
-            'tiktok'        => 'Tik Tok',
-            'video'         => 'Video de presentación',
+            'id'             => 'ID',
+            'sitename'       => 'Nombre del sitio',
+            'quienessomos'   => 'Quienes somos',
+            'slogan'         => 'Slogan',
+            'logo'           => 'Logo',
+            'favicon'        => 'Favicon',
+            'backgroundimg'  => 'Imagen Login',
+            'whatsapp'       => 'Whatsapp',
+            'instagram'      => 'Instagram',
+            'facebook'       => 'Facebook',
+            'youtube'        => 'Youtube',
+            'tiktok'         => 'Tik Tok',
+            'video'          => 'Video de presentación',
+            'titlecolor'     => 'Color para Títulos',
+            'fontcolor'      => 'Color de Fuente',
+            'navbarcolor'    => 'Color opciones Menú',
+            'bgbuttoncolor'  => 'Color del Fondo (Botón)',
+            'txtbuttoncolor' => 'Color Texto (Botón)',
+            'theme'          => 'Tema'
+
         ];
     }
 }

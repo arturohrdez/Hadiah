@@ -109,6 +109,40 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'tiktok',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
                 <?php echo $form->field($model, 'video',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->textInput(['maxlength' => true]) ?>
             </div>
+
+            <div class="card-body row">
+                <div class="col-12">
+                    <h2>Tema / Customización</h2>
+                </div>
+                <?php
+                $arr_text_colors = [
+                    'text-light'     => 'Blanco',
+                    'text-dark'      => 'Negro',
+                    'text-primary'   => 'Azúl',
+                    'text-success'   => 'Verde',
+                    'text-warning'   => 'Amarillo',
+                    'text-danger'    => 'Rojo',
+                    'text-secondary' => 'Gris',
+                    'text-info'      => 'Aqua',
+                ]; 
+                $arr_bg_colors = [
+                    'bg-light'     => 'Blanco',
+                    'bg-dark'      => 'Negro',
+                    'bg-primary'   => 'Azúl',
+                    'bg-success'   => 'Verde',
+                    'bg-warning'   => 'Amarillo',
+                    'bg-danger'    => 'Rojo',
+                    'bg-secondary' => 'Gris',
+                    'bg-info'      => 'Aqua',
+                ]; 
+                ?>
+                <?php echo $form->field($model, 'theme',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList([ 'light' => 'Claro','dark' => 'Oscuro', ], ['prompt' => 'Seleccione una opción'])?>
+                <?php echo $form->field($model, 'titlecolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
+                <?php echo $form->field($model, 'navbarcolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
+                <?php echo $form->field($model, 'fontcolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
+                <?php echo $form->field($model, 'bgbuttoncolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_bg_colors, ['prompt' => 'Seleccione una opción'])?>
+                <?php echo $form->field($model, 'txtbuttoncolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
+            </div>
             <div class=" card-footer" align="right">
                 <?php echo Html::submitButton('<i class="fas fa-check-circle"></i> Guardar Información', ['class' => 'btn btn-success']) ?>
             </div>

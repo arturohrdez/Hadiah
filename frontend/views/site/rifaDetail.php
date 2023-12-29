@@ -18,25 +18,20 @@ echo newerton\fancybox3\FancyBox::widget([
     ]
 ]);
 
-?>
-<section id="breadcrumbs" class="breadcrumbs ">
-	<div class="container">
-		<div class="d-flex justify-content-between align-items-center text-danger">
-			<h2><?php echo $model->name; ?></h2>
-			<ol>
-				<li><a href="/">Home</a></li>
-				<li>Comprar Boletos</li>
-			</ol>
-		</div>
-	</div>
-</section>
+//COLORS
+$sitetheme_          = $siteConfig->theme;
+$sitetitlecolor_     = $siteConfig->titlecolor;
+$sitefontcolor_      = $siteConfig->fontcolor;
 
-<section id="blog" class="blog">
+?>
+
+
+<section id="blog" class="blog mt-5">
 	<div class="container" data-aos="fade-up">
 		<div class="row">
 			<div class="col-lg-12 entries">
 				<article class="entry">
-					<div class="row text-danger text-center pt-3 pb-3" style="border: 3px; border-style: dashed double;">
+					<div class="row <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?> text-center pt-3 pb-3" style="border: 3px; border-style: dashed double;">
 						<h1 class="fw-bold">
 							<?php echo $model->name; ?>
 						</h1>
@@ -52,7 +47,7 @@ echo newerton\fancybox3\FancyBox::widget([
 						<!--<img src="<?php //echo Url::base()."/backend/web/".$model->main_image; ?>" alt="" class="img-fluid">-->
 						<img src="<?php echo Yii::$app->params["baseUrlBack"].$model->main_image; ?>" alt="" class="img-fluid">
 					</div>
-					<div class="row text-primary mt-5" style="border: 3px; border-style: dashed double;">
+					<div class="row <?php echo !empty($sitefontcolor_) ? $sitefontcolor_ : "text-primary";  ?> mt-5" style="border: 3px; border-style: dashed double;">
 						<div class="text-center fw-bold fs-4 pt-3">
 							<?php echo nl2br($model->terms); ?>
 						</div>
