@@ -15,6 +15,12 @@ $siteyoutube_      = empty($siteConfig->youtube) ? null : $siteConfig->youtube;
 $sitetiktok_       = empty($siteConfig->tiktok) ? null : $siteConfig->tiktok;
 $sitevideo_        = empty($siteConfig->video) ? null : $siteConfig->video;
 
+//COLORS
+$sitetheme_          = "";
+$sitetitlecolor_     = "";
+$sitebuttonbgcolor_  = "";
+$sitebuttontxtcolor_ = "";
+
 $this->title = $sitename_." - ".$siteslogan_;
 
 $this->registerMetaTag(['property' => 'og:title', 'content' => $sitename_]);
@@ -23,6 +29,7 @@ $this->registerMetaTag(['property' => 'og:image', 'content' => Url::to('/fronten
 $this->registerMetaTag(['property' => 'og:url', 'content' => Url::to('/',true)]);
 $this->registerMetaTag(['property' => 'og:description', 'content' => $sitename_.' - '.$siteslogan_]);
 ?>
+
 
 <!-- ======= Hero Section ======= -->
 <?php 
@@ -55,7 +62,7 @@ if(!empty($rifasBanner)){
                                 echo $diassemana[date('w',strtotime($rifa_date))]." ".date('d',strtotime($rifa_date))." de ".$meses[date('n',strtotime($rifa_date))-1]. " de ".date('Y',strtotime($rifa_date)) ; 
                             ?>
                         </p>
-                        <a href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>" class="btn-get-started animate__animated animate__fadeInUp">Comprar Boletos</a>
+                        <a href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>" class="btn-get-started <?php echo !empty($sitebuttontxtcolor_) ? $sitebuttontxtcolor_." " : " "; echo !empty($sitebuttonbgcolor_) ? $sitebuttonbgcolor_ : ""; ?> animate__animated animate__fadeInUp">Comprar Boletos</a>
                     </div>
                 </div>
             </div>
@@ -82,7 +89,7 @@ if(!empty($rifasBanner)){
 <section id="quienessomos" class="about">
     <div class="container">
         <div class="row col-lg-12 pb-5">
-            <h2 class="text-center text-danger fs-1">
+            <h2 class="text-center fs-1 <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?>">
                 QUIENES SOMOS
             </h2>
         </div>
@@ -112,7 +119,7 @@ if(!empty($faqs)){
 <section id="faq" class="faq">
     <div class="container">
         <div class="section-title">
-            <p class="text-center text-danger fs-1">Preguntas Frecuentes</p>
+            <p class="text-center <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?> fs-1">Preguntas Frecuentes</p>
         </div>
         <div class="row faq-item d-flex align-items-stretch">
             <?php
@@ -123,7 +130,7 @@ if(!empty($faqs)){
                 <h4 class="fs-4"><?php echo $faq->pregunta; ?></h4>
             </div>
             <div class="col-lg-7">
-                <div class="text-justify fs-6">
+                <div class="text-justify fs-7">
                     <?php echo nl2br($faq->respuesta); ?>
                 </div>
             </div>
@@ -187,7 +194,7 @@ if(!empty($rifasActivas)){
     <div class="container">
         <div class="row">
             <div class="section-title">
-                <p class="text-center text-danger fs-1">Rifas Activas</p>
+                <p class="text-center <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?> fs-1">Rifas Activas</p>
             </div>
         </div>
         <div class="row">
@@ -199,14 +206,14 @@ if(!empty($rifasActivas)){
                 $rifa_image = $rifa->main_image;
                 $rifa_date  = $rifa->date_init;
             ?>
-            <div class="col-lg-6 mt-4">
-                <div class="member d-flex align-items-start">
+            <div class="col-lg-6 mt-4 ">
+                <div class="member d-flex align-items-start <?php echo ($sitetheme_ == 'dark') ? "bg-secondary" : ""; ?>">
                     <div class="pic">
                         <!--<img src="<?php //echo Url::base()."/backend/web/".$rifa_image; ?>" class="img-fluid" alt="">-->
                         <img src="<?php echo Yii::$app->params["baseUrlBack"].$rifa_image; ?>" class="img-fluid" alt="">
                     </div>
                     <div class="member-info">
-                        <h4><?php echo $rifa_title;?></h4>
+                        <h4 class="<?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : ""; ?>"><?php echo $rifa_title;?></h4>
                         <span>
                             <?php
                                 $diassemana = Yii::$app->params["diassemana"];
@@ -219,7 +226,7 @@ if(!empty($rifasActivas)){
                             
                         </p>
                         <div class="mt-2">
-                            <a class="btn btn-outline-danger" href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>">
+                            <a class="btn <?php echo !empty($sitebuttontxtcolor_) ? $sitebuttontxtcolor_." " : " "; echo !empty($sitebuttonbgcolor_) ? $sitebuttonbgcolor_ : ""; ?>" href="<?php echo Url::to(['site/rifa','id'=>$rifa_id]) ?>">
                                 Comprar Boleto
                             </a>
                         </div>
@@ -241,7 +248,7 @@ if(!empty($rifasActivas)){
 <section id="about" class="about">
     <div class="container">
         <div class="row col-lg-12">
-            <h2 class="text-center text-danger fs-1">
+            <h2 class="text-center <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?> fs-1">
                 <?php echo $siteslogan_;?>
             </h2>
         </div>
@@ -254,7 +261,7 @@ if(!empty($rifasActivas)){
 <section id="contactus" class="about">
     <div class="container">
         <div class="row col-lg-12">
-            <h2 class="text-center text-danger fs-1">
+            <h2 class="text-center <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?> fs-1">
                 CONTACTÁNOS
             </h2>
         </div>

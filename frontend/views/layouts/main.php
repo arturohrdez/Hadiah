@@ -18,7 +18,13 @@ if($searchConfig > 0){
 }else{
     $modelConfig = new Config();
 }//end if 
-$sitename_      = empty($modelConfig->sitename) ? "RIFAS" : $modelConfig->sitename;
+$sitename_        = empty($modelConfig->sitename) ? "RIFAS" : $modelConfig->sitename;
+$sitetheme_          = "";
+$sitenavbarcolor_    = "";
+$sitetitlecolor_     = "";
+$sitefontcolor_      = "";
+$sitebuttonbgcolor_  = "";
+$sitebuttontxtcolor_ = "";
 
 AppAsset::register($this);
 ?>
@@ -40,11 +46,11 @@ AppAsset::register($this);
 
     <link rel="shortcut icon" href="<?php echo Yii::$app->request->baseUrl ?>favicon.ico" type="image/x-icon">
 </head>
-<body>
+<body class="<?php echo ($sitetheme_ == 'dark') ? "bg-dark" : ""; ?> <?php echo !empty($sitefontcolor_) ? $sitefontcolor_ : "";  ?>">
 <?php $this->beginBody() ?>
-<header id="header" class="fixed-top d-flex align-items-center">
+<header id="header" class="fixed-top d-flex align-items-center <?php echo ($sitetheme_ == 'dark') ? "bg-dark" : ""; ?>">
     <div class="container d-flex align-items-center">
-        <h1 class="logo me-auto"><a href="/" class="text-danger">🍀 <?php echo $sitename_;?> 🍀</a></h1>
+        <h1 class="logo me-auto <?php echo !empty($sitetitlecolor_) ? $sitetitlecolor_ : "text-danger"; ?>">🍀 <?php echo $sitename_;?> 🍀</h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="/" class="logo me-auto">
              <?php // echo Html::img('@web/images/pabmanlogo.png',['alt'=>'LOGO PABMAN','class'=>'',]); ?>
@@ -52,12 +58,12 @@ AppAsset::register($this);
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a href="/" class="fs-6">Inicio</a></li>
-                <li><a href="/#quienessomos" class="fs-6">Quienes Somos</a></li>
-                <li><a href="/#faq" class="fs-6">Preguntas Frecuentes</a></li>
-                <li><a href="/#about" class="fs-6">Nosotros</a></li>
-                <li><a href="/#contactus" class="fs-6">Contacto</a></li>
-                <li><a href="/#team" class="getstarted fs-6">Comprar Boletos</a></li>
+                <li><a href="/" class="lnk-navbar fs-6 <?php echo !empty($sitenavbarcolor_) ? $sitenavbarcolor_ : "";  ?>">Inicio</a></li>
+                <li><a href="/#quienessomos" class="lnk-navbar fs-6 <?php echo !empty($sitenavbarcolor_) ? $sitenavbarcolor_ : "";  ?>">Quienes Somos</a></li>
+                <li><a href="/#faq" class="lnk-navbar fs-6 <?php echo !empty($sitenavbarcolor_) ? $sitenavbarcolor_ : "";  ?>">Preguntas Frecuentes</a></li>
+                <li><a href="/#about" class="lnk-navbar fs-6 <?php echo !empty($sitenavbarcolor_) ? $sitenavbarcolor_ : "";  ?>">Nosotros</a></li>
+                <li><a href="/#contactus" class="lnk-navbar fs-6 <?php echo !empty($sitenavbarcolor_) ? $sitenavbarcolor_ : "";  ?>">Contacto</a></li>
+                <li><a href="/#team" class="getstarted <?php echo !empty($sitebuttontxtcolor_) ? $sitebuttontxtcolor_." " : " "; echo !empty($sitebuttonbgcolor_) ? $sitebuttonbgcolor_ : ""; ?> fs-6">Comprar Boletos</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
@@ -88,3 +94,4 @@ AppAsset::register($this);
 </body>
 </html>
 <?php $this->endPage();
+
