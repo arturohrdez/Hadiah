@@ -114,6 +114,16 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
         </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => 'Preguntas frecuentes',
+                'text'  => 'Configuración de preguntas frecuentes.',
+                'icon'  => 'far fa-question-circle',
+                'theme' => 'gradient-dark',
+                'linkText' => 'Ver Más',
+                'linkUrl' => Url::to(['/faqs/index'])
+            ]) ?>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
                 'title' => 'Métodos de pagos',
                 'text'  => 'Administra la información de tus métodos de pagos.',
                 'icon'  => 'fas fa-money-check-alt',

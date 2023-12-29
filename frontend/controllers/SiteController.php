@@ -7,6 +7,7 @@ use backend\models\Rifas;
 use backend\models\Tickets;
 use backend\models\Config;
 use backend\models\Metodospagos;
+use backend\models\Faqs;
 use common\models\LoginForm;
 use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
@@ -91,12 +92,20 @@ class SiteController extends Controller
             $modelConfig = new Config();
         }//end if 
 
+        $searchFaqs = Faqs::find()->count();
+        if($searchConfig > 0){
+            $modelFaqs = Faqs::find()->where(['status'=>1])->all();
+        }else{
+            $modelFaqs = new Faqs();
+        }
+
         $modelRifasBanner  = Rifas::find()->where(['<>','status', 0])->andWhere(['banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
         $modelRifasActivas = Rifas::find()->where(['<>','status', 0])->orderBy(['date_init' => SORT_ASC])->all();
         return $this->render('index',[
             'rifasBanner'  => $modelRifasBanner,
             'rifasActivas' => $modelRifasActivas,
-            'siteConfig'   => $modelConfig
+            'siteConfig'   => $modelConfig,
+            'faqs'         => $modelFaqs
         ]);
     }
 

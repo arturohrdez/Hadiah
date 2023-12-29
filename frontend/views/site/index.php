@@ -106,27 +106,46 @@ if(!empty($rifasBanner)){
 <hr>
 <!-- End About Section -->
 
+<?php
+if(!empty($faqs)){
+?>
 <section id="faq" class="faq">
     <div class="container">
         <div class="section-title">
             <p class="text-center text-danger fs-1">Preguntas Frecuentes</p>
         </div>
         <div class="row faq-item d-flex align-items-stretch">
+            <?php
+            foreach ($faqs as $faq) {
+            ?>
             <div class="col-lg-5">
+                <i class="bx bx-help-circle"></i>
+                <h4 class="fs-4"><?php echo $faq->pregunta; ?></h4>
+            </div>
+            <div class="col-lg-7">
+                <div class="text-justify fs-6">
+                    <?php echo nl2br($faq->respuesta); ?>
+                </div>
+            </div>
+
+            <?php
+            }//end if
+            ?>
+            <!-- <div class="col-lg-5">
                 <i class="bx bx-help-circle"></i>
                 <h4 class="fs-4">¿CÓMO SE ELIGE A LOS GANADORES?</h4>
             </div>
             <div class="col-lg-7">
                 <div class="text-justify fs-6">
-                    Todos nuestros sorteos se realizan en base a la <?= Html::a('Lotería Nacional para la Asistencia', $url = "https://www.lotenal.gob.mx/", ['target' => '_blank']); ?> Pública mexicana.
+                    Todos nuestros sorteos se realizan en base a la <?//= Html::a('Lotería Nacional para la Asistencia', $url = "https://www.lotenal.gob.mx/", ['target' => '_blank']); ?> Pública mexicana.
                     <br>
                     <br>
                     El ganador de la Rifa será el participante cuyo número de boleto coincida con las últimas cifras del primer premio ganador de la Lotería Nacional (las fechas serán publicadas en nuestra página oficial).
                 </div>
-            </div>
+            </div> -->
         </div><!-- End F.A.Q Item-->
 
-        <div class="row faq-item d-flex align-items-stretch">
+        <!-- <div class="row faq-item d-flex align-items-stretch">
             <div class="col-lg-5">
                 <i class="bx bx-help-circle"></i>
                 <h4 class="fs-4">¿QUÉ SUCEDE CUANDO EL NÚMERO GANADOR ES UN BOLETO NO VENDIDO?</h4>
@@ -138,9 +157,10 @@ if(!empty($rifasBanner)){
                     Esto significa que, ¡Tendrías el doble de oportunidades de ganar con tu mismo boleto!
                 </div>
             </div>
-        </div><!-- End F.A.Q Item-->
+        </div> -->
+        <!-- End F.A.Q Item-->
 
-        <div class="row faq-item d-flex align-items-stretch">
+        <!-- <div class="row faq-item d-flex align-items-stretch">
             <div class="col-lg-5">
                 <i class="bx bx-help-circle"></i>
                 <h4 class="fs-4">¿DÓNDE SE PUBLICA A LOS GANADORES?</h4>
@@ -151,10 +171,14 @@ if(!empty($rifasBanner)){
                     Se elige un nuevo ganador realizando la misma dinámica en otra fecha cercana (se anunciará la nueva fecha).
                 </div>
             </div>
-        </div><!-- End F.A.Q Item-->
+        </div> -->
+        <!-- End F.A.Q Item-->
     </div>
 </section>
 <hr>
+<?php 
+}//end if
+?>
 
 <?php 
 if(!empty($rifasActivas)){

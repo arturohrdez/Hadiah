@@ -70,14 +70,14 @@ AppAsset::register($this);
 <footer id="footer">
     <div class="container">
         <div class="copyright">
-            &copy; Copyright <strong><span><?php echo $sitename_;?></span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span><?php echo $sitename_;?></span></strong>. Todos los derechos reservados.
         </div>
         <div class="credits">
             <!-- All the links in the footer should remain intact. -->
             <!-- You can delete the links only if you purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/sailor-free-bootstrap-theme/ -->
-            Designed by <a href="/">AHR</a>
+            Desarrollador por <a href="/" class="text-white">Websis - Tu aliado en sistemas.</a>
         </div>
     </div>
 </footer>
