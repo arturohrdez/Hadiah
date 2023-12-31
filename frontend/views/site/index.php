@@ -20,6 +20,7 @@ $sitetheme_          = $siteConfig->theme;
 $sitetitlecolor_     = $siteConfig->titlecolor;
 $sitebuttonbgcolor_  = $siteConfig->bgbuttoncolor;
 $sitebuttontxtcolor_ = $siteConfig->txtbuttoncolor;
+$sitecolorredes_     = $siteConfig->colorredes;
 
 $this->title = $sitename_." - ".$siteslogan_;
 
@@ -268,8 +269,9 @@ if(!empty($rifasActivas)){
         <div class="row col-lg-12 pt-4 pt-lg-0">
             <p class="text-center fs-4">
                 <?php
+                    $class_icons_social = !empty($sitecolorredes_) ? $sitecolorredes_ : "text-danger";
                     if(!is_null($sitewhatsapp_)){
-                        echo Html::a("WHATSAPP: ".$sitewhatsapp_, $url = "https://wa.me/+521".$sitewhatsapp_, ['target' => '_blank']); 
+                        echo Html::a("WHATSAPP: ".$sitewhatsapp_, $url = "https://wa.me/+521".$sitewhatsapp_, ['target' => '_blank','class'=>$class_icons_social]); 
                     }
                 ?>
             </p>
@@ -281,31 +283,31 @@ if(!empty($rifasActivas)){
             <p class="fs-1 text-center">
                 <?php
                     if(!is_null($sitewhatsapp_)){ 
-                        echo Html::a("<i class='bi bi-whatsapp'></i>", $url = $url = "https://wa.me/+521".$sitewhatsapp_, ['target' => '_blank']); 
+                        echo Html::a("<i class='bi bi-whatsapp'></i>", $url = $url = "https://wa.me/+521".$sitewhatsapp_, ['target' => '_blank', 'class'=>$class_icons_social]); 
                     }//end if
                     ?>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 <?php
                     if(!is_null($sitefacebook_)){ 
-                        echo Html::a("<i class='bi bi-facebook'></i>", $url = $sitefacebook_, ['target' => '_blank']); 
+                        echo Html::a("<i class='bi bi-facebook'></i>", $url = $sitefacebook_, ['target' => '_blank', 'class'=>$class_icons_social]); 
                     }//end if
                     ?>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 <?php
                     if(!is_null($siteinstagram_)){
-                        echo Html::a("<i class='bi bi-instagram'></i>",$url = $siteinstagram_,['target' => '_blank']);
+                        echo Html::a("<i class='bi bi-instagram'></i>",$url = $siteinstagram_,['target' => '_blank', 'class'=>$class_icons_social]);
                     } 
                     ?>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 <?php
                     if(!is_null($sitetiktok_)){
-                        echo Html::a("<i class='bi bi-tiktok'></i>",$url = $sitetiktok_,['target' => '_blank']);
+                        echo Html::a("<i class='bi bi-tiktok'></i>",$url = $sitetiktok_,['target' => '_blank', 'class'=>$class_icons_social]);
                     } 
                     ?>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 <?php
                     if(!is_null($siteyoutube_)){
-                        echo Html::a("<i class='bi bi-youtube'></i>",$url = $siteyoutube_,['target' => '_blank']);
+                        echo Html::a("<i class='bi bi-youtube'></i>",$url = $siteyoutube_,['target' => '_blank', 'class'=>$class_icons_social]);
                     } 
                     ?>
             </p>

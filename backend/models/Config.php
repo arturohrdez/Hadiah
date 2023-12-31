@@ -50,7 +50,7 @@ class Config extends \yii\db\ActiveRecord
             [['whatsapp'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'El número debe contener solo dígitos.'],
 
             [['instagram', 'facebook', 'youtube','tiktok' ,'video','img','img_favicon','img_background'], 'string', 'max' => 250],
-            [['titlecolor', 'fontcolor','navbarcolor' ,'bgbuttoncolor','txtbuttoncolor'], 'string', 'max' => 45],
+            [['titlecolor', 'fontcolor','navbarcolor' ,'bgbuttoncolor','txtbuttoncolor','colorredes'], 'string', 'max' => 45],
             [['theme'], 'string', 'max' => 20],
         ];
     }
@@ -79,6 +79,7 @@ class Config extends \yii\db\ActiveRecord
             'navbarcolor'    => 'Color opciones Menú',
             'bgbuttoncolor'  => 'Color del Fondo (Botón)',
             'txtbuttoncolor' => 'Color Texto (Botón)',
+            'colorredes'     => 'Color Iconos Redes Sociales',
             'theme'          => 'Tema'
 
         ];

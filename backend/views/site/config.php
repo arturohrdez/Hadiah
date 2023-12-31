@@ -142,6 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'fontcolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
                 <?php echo $form->field($model, 'bgbuttoncolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_bg_colors, ['prompt' => 'Seleccione una opción'])?>
                 <?php echo $form->field($model, 'txtbuttoncolor',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
+                <?php echo $form->field($model, 'colorredes',['options'=>['class'=>'col-lg-6 col-12 mt-3']])->dropDownList($arr_text_colors, ['prompt' => 'Seleccione una opción'])?>
             </div>
             <div class=" card-footer" align="right">
                 <?php echo Html::submitButton('<i class="fas fa-check-circle"></i> Guardar Información', ['class' => 'btn btn-success']) ?>
