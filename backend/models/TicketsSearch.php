@@ -78,6 +78,7 @@ class TicketsSearch extends Tickets
             ->andFilterWhere(['like', 'tickets.type', $this->type])
             ->andFilterWhere(['=', 'tickets.type_sale', $this->type_sale])
             ->andFilterWhere(['like', 'tickets.date', $this->date])
+            ->andFilterWhere(['like', 'tickets.date_end', $this->date_end])
             ->andFilterWhere(['like', 'tickets.date_payment', $this->date_payment])
             ->andFilterWhere(['=', 'tickets.status', $this->status])
             ->andFilterWhere(['=', 'tickets.expiration', $this->expiration]);
