@@ -26,7 +26,7 @@ class TicketsController extends Controller
     {
         return [
             'access'=>[
-                'class'=> AccessControl::className(),
+                'class'=> AccessControl::class,
                 'only' => ['index','create','update','delete','sales','view','listtickets','createtickets','searchticket','ticketremove','pagar','sendwp','expirate','search'],
                 'rules' => [
                     [
@@ -36,7 +36,7 @@ class TicketsController extends Controller
                 ]
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -230,7 +230,7 @@ class TicketsController extends Controller
 
             $transaction->commit();
 
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $transaction->rollBack();
             Yii::error('Error en la transacción: ' . $e->getMessage());
             return false;

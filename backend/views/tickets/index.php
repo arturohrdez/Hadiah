@@ -166,6 +166,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => 'Fecha Expiración',
+                                'attribute' => 'date_end',
+                                'format'    => 'html',
+                                'contentOptions' => [
+                                    "style" => "text-align: center",
+                                ],
+                                'value'     =>function($model){
+                                    //return Yii::$app->formatter->asDateTime($model->date);
+                                    return date('d/m/Y H:i:s',strtotime($model->date_end));
+                                },
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute' => 'date_end',
+                                    'options' => ['class' => 'form-control'],
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd',
+                                        'todayHighlight' => true
+                                    ]                                    
+                                ]),
+                            ],
+                            [
                                 'label' => 'Fecha Pago',
                                 'attribute' => 'date_payment',
                                 'format'    => 'html',
@@ -194,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'state',
                             //'type',
                             //'status',
-                            [
+                            /*[
                                 'label'          => 'Vendido',
                                 'attribute'      => 'type_sale',
                                 'contentOptions' => ['style'=>'text-align: center'],
@@ -206,8 +228,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }//end if
                                 },
                                 'filter' =>  Html::activeDropDownList($searchModel,'type_sale',['online'=>'En línea','store'=>'Tienda Física'],['class' => 'form-control','prompt'=>'Todos'])
-                            ],
-                            [
+                            ],*/
+                            /*[
                                 'label' => 'Transacción / Referencia',
                                 'attribute' => 'transaction_number',
                                 'format'    => 'html',
@@ -221,8 +243,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->transaction_number;
                                     }
                                 }
-                            ],
-                            [
+                            ],*/
+                               [
                                 'label'          => 'Estatus',
                                 'attribute'      => 'status',
                                 'format'         => 'html',
