@@ -311,16 +311,20 @@ if(!empty($rifasActivas)){
                     } 
                     ?>
             </p>
-            <?php
-                if(!is_null($sitevideo_)){
-            ?>
-            <p class="text-center mt-5">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $sitevideo_ ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </p>
-            <?php 
-            }//end if
-            ?>
         </div>
+        <?php
+            if(!is_null($sitevideo_)){
+        ?>
+        <div class="row justify-content-center pt-3">
+            <div class="col-6 ">
+                <div class="embed-responsive embed-responsive-21by9">
+                    <iframe width="560" height="315" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $sitevideo_ ?>" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        <?php 
+        }//end if
+        ?>
     </div>
 </section>
 <!-- End Contact Us Section -->
