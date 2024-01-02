@@ -65,7 +65,7 @@ class Rifas extends \yii\db\ActiveRecord
             'id'          => 'ID',
             'name'        => 'Titulo',
             'description' => 'Descripción',
-            'terms'       => 'Terminos y Condiciones',
+            'terms'       => 'Términos y Condiciones',
             'ticket_init' => 'Primer Boleto',
             'ticket_end'  => 'Último Boleto',
             'phone'       => 'Teléfono',
