@@ -96,7 +96,7 @@ class SiteController extends Controller
         if($searchConfig > 0){
             $modelFaqs = Faqs::find()->where(['status'=>1])->all();
         }else{
-            $modelFaqs = new Faqs();
+            $modelFaqs = null;
         }
 
         $modelRifasBanner  = Rifas::find()->where(['<>','status', 0])->andWhere(['banner'=>1])->orderBy(['date_init' => SORT_ASC])->limit(5)->all();
