@@ -224,11 +224,7 @@ if (\Yii::$app->session->has('oportunities')) {
 </script> -->
 <?php 
 $script = <<< JS
-	$(function(e){
-		console.log("entra");
-		showTickets();
-	});
-
+	showTickets();
 	function showTickets(){
 		$.ajax({
 			url : "$URL_showtickets",

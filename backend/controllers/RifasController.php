@@ -190,6 +190,11 @@ class RifasController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             //Crea template para la boletera
+            /*$modelBoletera = Boletera::find()->where(["rifa_id"=>$model->id])->one();
+            if(!is_null($modelBoletera)){
+                $modelBoletera->delete();
+            }//end if*/
+
             $html_tamplate = self::createTEmplate($model->ticket_init,$model->ticket_end);
 
             if(!empty($model->date_init)){
@@ -219,10 +224,10 @@ class RifasController extends Controller
             }//end if
 
             #--Boletera
-            $modelBoletera = new Boletera();
+            /*$modelBoletera = new Boletera();
             $modelBoletera->rifa_id = $model->id;
             $modelBoletera->template = $html_tamplate;
-            $modelBoletera->save();
+            $modelBoletera->save();*/
 
             Yii::$app->session->setFlash('success', "Se actualizo correctamente la Rifa :  <strong>".$model->name."</strong>");
             return $this->redirect(['index']);
