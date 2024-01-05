@@ -85,7 +85,7 @@ class Rifas extends \yii\db\ActiveRecord
      */
     public function getPromos()
     {
-        return $this->hasMany(Promos::className(), ['rifa_id' => 'id']);
+        return $this->hasMany(Promos::class, ['rifa_id' => 'id']);
     }
 
     /**
@@ -95,6 +95,17 @@ class Rifas extends \yii\db\ActiveRecord
      */
     public function getTickets()
     {
-        return $this->hasMany(Tickets::className(), ['rifa_id' => 'id']);
+        return $this->hasMany(Tickets::class, ['rifa_id' => 'id']);
+    }
+    
+    
+    /**
+     * Gets query for [[Boletera]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBoleteras()
+    {
+        return $this->hasMany(Boletera::class, ['rifa_id' => 'id']);
     }
 }

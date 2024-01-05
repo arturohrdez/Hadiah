@@ -120,7 +120,7 @@ $sitefontcolor_      = $siteConfig->fontcolor;
 
 					<?php 
 					//Pagniación
-					if($pages > 1){
+					/*if($pages > 1){
 					?>
 					<div id="paginatorH" class="row bg-success pt-3 pb-3 overflow-auto" style="display: none;">
 						<div id="sPagesH" class="col-12 text-center pb-2" style="display: none;">
@@ -145,7 +145,7 @@ $sitefontcolor_      = $siteConfig->fontcolor;
 						</div>
 					</div>
 					<?php 
-					}//end if
+					}*///end if
 					?>
 				</article>
 			</div>
@@ -169,9 +169,9 @@ if (\Yii::$app->session->has('oportunities')) {
 }//end if
 ?>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	function ticketRemove(t){
-		var oportunidades = '<?php echo $oportunidades;?>';
+		var oportunidades = '<?php //echo $oportunidades;?>';
 
 		var tn = ticketParse(t);
 		let ticket_r = elements_selected.indexOf(tn);
@@ -179,7 +179,7 @@ if (\Yii::$app->session->has('oportunities')) {
 			if(oportunidades > 0){
 				let tr = elements_random[ticket_r][tn];
 				$.ajax({
-					url : "<?php echo $URL_remove;?>",
+					url : "<?php //echo $URL_remove;?>",
 					type: "POST",
 					async: true,
 					data: {'tn':tn,'tr':tr},
@@ -221,15 +221,32 @@ if (\Yii::$app->session->has('oportunities')) {
 
 		}//end if
 	}//end function
-</script>
+</script> -->
 <?php 
 $script = <<< JS
 	$(function(e){
-		$("#tn_sel").val("");
-		$("#tn_rand").val("");
+		console.log("entra");
 		showTickets();
 	});
 
+	function showTickets(){
+		$.ajax({
+			url : "$URL_showtickets",
+			type: "GET",
+			data: {'rifa_id':{$model->id}},
+			dataType: "html",
+			beforeSend: function(){
+				$("#loading_tickets_list").show();
+			},
+			success: function (data) {
+				$("#ticket_s").show();
+				$("#list_tickets").html(data);
+				return false;
+			}
+		});
+	}//end function
+
+	/* 
 	function showTickets(){
 		$.ajax({
 			url : "$URL_showtickets",
@@ -403,6 +420,6 @@ $script = <<< JS
 				}
 			});
 		}//end if
-	});
+	}); */
 JS;
 $this->registerJs($script);

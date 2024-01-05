@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Boletera;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -32,7 +33,7 @@ class RifasController extends Controller
     {
         return [
             'access'=>[
-                'class'=> AccessControl::className(),
+                'class'=> AccessControl::class,
                 'only' => ['index','create','update','delete','view','export'],
                 'rules' => [
                     [
@@ -43,13 +44,14 @@ class RifasController extends Controller
             ],
 
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
         ];
     }
+    
 
     /**
      * Lists all Rifas models.
@@ -97,6 +99,27 @@ class RifasController extends Controller
         ]);
     }//end function
 
+
+    /**
+     * 
+     * HELPERS
+     * 
+     * */
+    public static function addcero($digitos,$number){
+        return (string) str_pad($number, $digitos, "0", STR_PAD_LEFT);
+    }//end function
+
+    public static function createTemplate($init,$end){
+        $digitos = strlen($end);
+        $html_template = "";
+        for ($i=$init; $i <= $end ; $i++) {
+            $ticket           = self::addcero($digitos,$i);
+            $html_template .= '<div class="col-lg-1 col-sm-2 col-3"><a id="tn_'.$ticket.'" class="mb-3 btn btn-outline-light btn_ticket" data-tn="'.$ticket.'">'.$ticket.'</a></div>';
+        }//end foreach
+
+        return $html_template;
+    }//end function
+
     /**
      * Creates a new Rifas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -110,6 +133,9 @@ class RifasController extends Controller
         $modelPromos = new Promos();
 
         if ($model->load(Yii::$app->request->post())) {
+            //Crea template para la boletera
+            $html_tamplate = self::createTEmplate($model->ticket_init,$model->ticket_end);
+
             if(!empty($model->date_init)){
                 $model->date_init = date('Y-m-d',strtotime($model->date_init));
             }else{
@@ -132,6 +158,12 @@ class RifasController extends Controller
                 $modelPromos->rifa_id = $model->id;
                 $modelPromos->save();
             }//end if
+
+            #--Boletera
+            $modelBoletera = new Boletera();
+            $modelBoletera->rifa_id = $model->id;
+            $modelBoletera->template = $html_tamplate;
+            $modelBoletera->save();
             
 
             Yii::$app->session->setFlash('success', "Se registro correctamente la Rifa :  <strong>".$model->name."</strong>");
@@ -157,6 +189,9 @@ class RifasController extends Controller
         $modelPromos   = !empty($model->promos) ? $model->promos[0] : new Promos;
 
         if ($model->load(Yii::$app->request->post())) {
+            //Crea template para la boletera
+            $html_tamplate = self::createTEmplate($model->ticket_init,$model->ticket_end);
+
             if(!empty($model->date_init)){
                 $model->date_init = date('Y-m-d',strtotime($model->date_init));
             }else{
@@ -182,6 +217,12 @@ class RifasController extends Controller
                     $modelPromos->delete();
                 }//end if
             }//end if
+
+            #--Boletera
+            $modelBoletera = new Boletera();
+            $modelBoletera->rifa_id = $model->id;
+            $modelBoletera->template = $html_tamplate;
+            $modelBoletera->save();
 
             Yii::$app->session->setFlash('success', "Se actualizo correctamente la Rifa :  <strong>".$model->name."</strong>");
             return $this->redirect(['index']);

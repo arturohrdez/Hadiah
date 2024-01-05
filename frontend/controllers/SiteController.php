@@ -358,16 +358,19 @@ class SiteController extends Controller
      * 
      * */
     public function actionRifa(){
-        \Yii::$app->session->set('countClick',0);
-        \Yii::$app->session->set('tickets_play_all',[]);
-        \Yii::$app->session->set('tickets_list', []);
-        \Yii::$app->session->set('tickets_div', []);
+        Yii::$app->session->set('countClick',0);
+        Yii::$app->session->set('tickets_play_all',[]);
+        Yii::$app->session->set('tickets_list', []);
+        Yii::$app->session->set('tickets_div', []);
         /*$uuid = Yii::$app->session->get('uuid');
         if(empty($uuid)){
             Yii::$app->session->set('uuid', Uuid::v4());
         }//end if*/
         $rifaId = Yii::$app->request->get()["id"];
         $model  = Rifas::find()->where(["id" => $rifaId])->one();
+
+        //Template
+        //$boletera = $model->boleteras[0]->attributes["template"];
 
         //Rifa no activas
         if(is_null($model) || $model->status != 1){
@@ -378,9 +381,9 @@ class SiteController extends Controller
 
         //Valida si existen oportunidades
         if(!empty($model->promos)){
-            \Yii::$app->session->set('oportunities',$model->promos[0]->get_ticket);
+            Yii::$app->session->set('oportunities',$model->promos[0]->get_ticket);
         }else{
-            \Yii::$app->session->set('oportunities',0);
+            Yii::$app->session->set('oportunities',0);
         }//end if
 
         $init  = $model->ticket_init;
@@ -397,8 +400,8 @@ class SiteController extends Controller
         $pages = count($tickets_div);
 
         //Tickets Sessions 
-        \Yii::$app->session->set('tickets_list', $tickets_list);
-        \Yii::$app->session->set('tickets_div', $tickets_div);
+        Yii::$app->session->set('tickets_list', $tickets_list);
+        Yii::$app->session->set('tickets_div', $tickets_div);
 
         //Buscar configuración
         $searchConfig = Config::find()->count();
@@ -408,13 +411,22 @@ class SiteController extends Controller
             $modelConfig = new Config();
         }//end if
         return $this->render('rifaDetail', [
-            'model' => $model,
-            'pages' => $pages,
+            'model'      => $model,
+            'pages'      => $pages,
             'siteConfig' => $modelConfig
         ]);
     }//end function
 
-    public function actionShowtickets($page,$tickets_end){
+    public function actionShowtickets($rifa_id){
+        $model  = Rifas::find()->where(["id" => $rifa_id])->one();
+        //Template
+        $boletera = $model->boleteras[0]->attributes["template"];
+        return $boletera;
+    }//end function
+
+
+
+    /* public function actionShowtickets($page,$tickets_end){
         //Todos los tickets disponibles y en memoría
         $tickets  = \Yii::$app->session->get('tickets_div');
         $page_end = count($tickets) - 1;
@@ -430,7 +442,7 @@ class SiteController extends Controller
             'page_end'     => $page_end,
             'tickets_end'  => $tickets_end
         ]);
-    }//end function
+    }//end function */
 
     public function actionPromos(){
         //Count Clicks
